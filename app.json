@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "EventX-React-Native",
-    "slug": "EventX-React-Native",
+    "slug": "eventx-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,6 +28,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "29657a98-b850-4614-ac0e-384916fa7b8c"
+      }
+    },
+    "owner": "haroon-tahir"
   }
 }
