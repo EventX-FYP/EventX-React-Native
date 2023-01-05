@@ -1,29 +1,46 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { Navigate } from "../../helper";
+import { SafeAreaView, StyleSheet, Image, TextInput } from "react-native";
+import { Text } from "react-native-ui-lib";
+import { images } from "../../assets";
+import { AppHelper } from "../../helper/AppHelper/AppHelper";
 
 export const Login = ({ navigation }) => {
-
     return (
         <SafeAreaView style={styles.container}>
-            <Text>Login Page</Text>
-            <StatusBar style="auto" />
-            <Text>Welcome To EventX</Text>
-            <Button style={styles.button} title="Signup" onPress={() => navigation.navigate(Navigate('Signup'))} />
+            <Image source={images.SVG1} style={styles.image}/>
+            <Text style={styles.login}>Login</Text>
+            <TextInput placeholder="Enter Email" style={styles.input} keyboardType="email-address"/>
+            <TextInput placeholder="Enter Password" style={styles.input} keyboardType="visible-password" keyboardAppearance="light" />
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        display: "flex",
-        flexDirection: "column",
         flex: 1,
-        backgroundColor: "#fff",
         alignItems: "center",
-        justifyContent: "center",
+        paddingTop: 50,
+        paddingBottom: 20,
+        backgroundColor: AppHelper.material.green50,
+        justifyContent: "space-between"
     },
-    button: {
-        marginTop: 20,
+    image: {
+        width: 200,
+        height: 170,
+        resizeMode: "stretch"
+    },
+    login: {
+        fontSize: 30,
+        fontWeight: "bold",
+        color: AppHelper.material.green700
+    },
+    input: {
+        width: "80%",
+        height: 50,
+        backgroundColor: AppHelper.material.green50,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: AppHelper.material.green700,
+        padding: 10,
+        fontSize: 20
     }
 });
