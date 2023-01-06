@@ -1,5 +1,5 @@
 export const AppHelper = {
-    primary: "#FF0000",
+    primary: "#63C132",
     secondary: "#00FF00",
     tertiary: "#0000FF",
     black: "#000000",

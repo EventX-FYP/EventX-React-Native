@@ -1,15 +1,16 @@
-import { SafeAreaView, StyleSheet, Image, TextInput } from "react-native";
-import { Text } from "react-native-ui-lib";
+import { SafeAreaView, StyleSheet, Image, TextInput, } from "react-native";
+import { Text, Button } from "react-native-ui-lib";
 import { images } from "../../assets";
 import { AppHelper } from "../../helper/AppHelper/AppHelper";
 
 export const Login = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
-            <Image source={images.SVG1} style={styles.image}/>
+            <Image source={images.LoginSVG} style={styles.image}/>
             <Text style={styles.login}>Login</Text>
-            <TextInput placeholder="Enter Email" style={styles.input} keyboardType="email-address"/>
+            <TextInput placeholder="Enter Email" style={styles.input} />
             <TextInput placeholder="Enter Password" style={styles.input} keyboardType="visible-password" keyboardAppearance="light" />
+            <Button label="Login" size={Button.sizes.large} backgroundColor={AppHelper.material.green700} />
         </SafeAreaView>
     );
 }
