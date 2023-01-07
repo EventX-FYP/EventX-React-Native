@@ -1,4 +1,6 @@
-# Installing All Packages
+# EventX
+
+## Installing All Packages
 
 - `yarn install`
 
