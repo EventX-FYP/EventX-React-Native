@@ -19,8 +19,8 @@ export const UserType = ({ navigation }) => {
         </View>
 
         <View style={styles.card}>
-          <Image style={styles.cardimg} source={images.seller} />
-          <Text style={styles.cardtextfont}>Seller</Text>
+          <Image style={styles.cardimg} source={images.buyer} />
+          <Text style={styles.cardtextfont}>Buyer</Text>
         </View>
       </View>
     </SafeAreaView>
