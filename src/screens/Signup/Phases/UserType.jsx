@@ -13,23 +13,16 @@ export const UserType = ({ navigation }) => {
       </View>
 
       <View style={styles.cardholder}>
-            <View style={styles.card}>
-                <Image style={styles.cardimg} source={images.seller} />
-                <Text style={styles.cardtextfont}>Seller</Text>
-            </View>
+        <View style={styles.card}>
+          <Image style={styles.cardimg} source={images.seller} />
+          <Text style={styles.cardtextfont}>Seller</Text>
+        </View>
 
-            <View style={styles.card}>
-                <Image style={styles.cardimg} source={images.seller} />
-                <Text style={styles.cardtextfont}>Seller</Text>
-            </View>
+        <View style={styles.card}>
+          <Image style={styles.cardimg} source={images.seller} />
+          <Text style={styles.cardtextfont}>Seller</Text>
+        </View>
       </View>
-
-      <View style={styles.card}>
-        <Image style={styles.cardimg} source={images.seller} />
-        <Text style={styles.cardtextfont}>Seller</Text>
-      </View>
-
-  
     </SafeAreaView>
   )
 }
@@ -65,10 +58,10 @@ const styles = StyleSheet.create({
   },
   cardholder: {
     flexDirection: 'row',
-    justifyContent:"space-evenly",
-    alignItems:"center",
-    width:"100%",
-    padding:5
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    width: '100%',
+    padding: 5,
   },
   cardimg: {
     width: 100,
