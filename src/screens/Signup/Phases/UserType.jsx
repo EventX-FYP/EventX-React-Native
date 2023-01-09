@@ -4,6 +4,7 @@ import { Text, View, StyleSheet, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Size } from 'react-native-ui-lib/src/components/skeletonView'
 import { images } from '../../../assets'
+import {TouchableOpacity} from 'react-native';
 
 export const UserType = ({ navigation }) => {
   return (
@@ -12,16 +13,25 @@ export const UserType = ({ navigation }) => {
         <Text style={styles.usertype}>User Type</Text>
       </View>
 
+      
       <View style={styles.cardholder}>
-        <View style={styles.card}>
+        
+      <TouchableOpacity onPress={() => navigation.navigate("GeneralInfo")}>
+      <View style={styles.card}>
           <Image style={styles.cardimg} source={images.seller} />
           <Text style={styles.cardtextfont}>Seller</Text>
         </View>
+      </TouchableOpacity>
 
-        <View style={styles.card}>
+
+      <TouchableOpacity onPress={() => navigation.navigate("GeneralInfo")}>
+      <View style={styles.card}>
           <Image style={styles.cardimg} source={images.buyer} />
           <Text style={styles.cardtextfont}>Buyer</Text>
         </View>
+      </TouchableOpacity>
+
+        
       </View>
     </SafeAreaView>
   )
