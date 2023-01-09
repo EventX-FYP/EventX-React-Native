@@ -17,16 +17,16 @@ export const UserType = ({ navigation }) => {
       <View style={styles.cardholder}>
         
       <TouchableOpacity onPress={() => navigation.navigate("GeneralInfo")}>
-      <View style={styles.card}>
-          <Image style={styles.cardimg} source={images.seller} />
+        <View style={styles.card}>
+          <Image style={styles.cardimg} source={images.Seller} />
           <Text style={styles.cardtextfont}>Seller</Text>
         </View>
       </TouchableOpacity>
 
 
       <TouchableOpacity onPress={() => navigation.navigate("GeneralInfo")}>
-      <View style={styles.card}>
-          <Image style={styles.cardimg} source={images.buyer} />
+        <View style={styles.card}>
+          <Image style={styles.cardimg} source={images.Buyer} />
           <Text style={styles.cardtextfont}>Buyer</Text>
         </View>
       </TouchableOpacity>
