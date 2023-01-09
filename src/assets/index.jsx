@@ -10,4 +10,5 @@ export const images = {
     GoogleIcon: require('./brand-icons/google-icon.png'),
     Seller: require('./seller.png'),
     Buyer: require('./buyer.png'),
+    GeneralInfoWave: require('./generalinfowave.png')
 };
