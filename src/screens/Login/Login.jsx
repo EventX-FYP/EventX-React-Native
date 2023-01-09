@@ -1,21 +1,19 @@
-import { SafeAreaView, StyleSheet, Image, TextInput, View } from "react-native";
+import { SafeAreaView, StyleSheet, Image, View } from "react-native";
 import { Text, Button } from "react-native-ui-lib";
 import { images } from "../../assets";
 import { AppHelper } from "../../helper/AppHelper/AppHelper";
 import React from "react";
 import { TextField } from "react-native-ui-lib/src/incubator";
+import { StatusBar } from "react-native";
 
 
 export const Login = ({ navigation }) => {
     const [auth, setAuth] = React.useState({ email: "", password: "" });
     const [error, setError] = React.useState({ email: "", password: "" });
 
-    React.useEffect(() => {
-        console.log(auth);
-    }, [auth]);
-
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar />
             <Image source={images.LoginIcon} style={styles.image} />
             <View style={styles.infoContainer}>
                 <View style={styles.inputContainer}>
@@ -25,17 +23,17 @@ export const Login = ({ navigation }) => {
                 </View>
                 <View style={styles.loginContainer}>
                     <View style={styles.buttonContainer}>
-                        <Button label="Login" style={styles.button} onPress={() => navigation.navigate("Signup")} />
+                        <Button label="Login" style={styles.button} />
                         <View style={styles.horizontalLine}>
                             <View style={{ borderBottomColor: AppHelper.material.green300, borderBottomWidth: 1, width: "40%" }} />
                             <Text style={{ color: AppHelper.material.green400 }}>Or</Text>
                             <View style={{ borderBottomColor: AppHelper.material.green300, borderBottomWidth: 1, width: "40%" }} />
                         </View>
-                        <Button label="Login With Google" color={AppHelper.black} animateLayout style={styles.googleButton} onPress={() => navigation.navigate("Signup")} iconSource={images.GoogleIcon} iconStyle={styles.googleIcon}/>
+                        <Button label="Login With Google" color={AppHelper.black} style={styles.googleButton} iconSource={images.GoogleIcon} iconStyle={styles.googleIcon}/>
                     </View>
                     <View style={styles.SignupContainer}>
                         <Text>Don't have an account?  </Text>
-                        <Button label="Signup" onPress={() => navigation.navigate("UserType")} link outline color={AppHelper.material.green400}/>
+                        <Button label="Signup" onPress={() => navigation.navigate("Signup")} link outline color={AppHelper.material.green400}/>
                     </View>
                 </View>
             </View>
@@ -58,7 +56,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: "center",
-        paddingTop: 50,
         paddingBottom: 20,
         backgroundColor: AppHelper.material.green50,
         justifyContent: "space-between"

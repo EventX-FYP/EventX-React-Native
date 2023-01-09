@@ -14,12 +14,12 @@ export const UserType = ({ navigation }) => {
 
       <View style={styles.cardholder}>
         <View style={styles.card}>
-          <Image style={styles.cardimg} source={images.seller} />
+          <Image style={styles.cardimg} source={images.Seller} />
           <Text style={styles.cardtextfont}>Seller</Text>
         </View>
 
         <View style={styles.card}>
-          <Image style={styles.cardimg} source={images.buyer} />
+          <Image style={styles.cardimg} source={images.Buyer} />
           <Text style={styles.cardtextfont}>Buyer</Text>
         </View>
       </View>
