@@ -6,10 +6,10 @@ import { images } from '../../../assets'
 
 export const GeneralInfo = ({ navigation }) => {
     return (
-        <View style={styles.container}>
-            <Text>General info</Text>
+        <SafeAreaView style={styles.container}>
+            <Image style= {styles.wave} source={images.GeneralInfoWave}></Image>
             
-        </View>
+        </SafeAreaView>
     );
 }
 
@@ -17,9 +17,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: "center",
-        paddingTop: 50,
-        paddingBottom: 20,
         backgroundColor: AppHelper.material.green50,
-        justifyContent: "space-between"
     },
+    wave:{
+        height:"25%",
+        resizeMode:"stretch"
+    }
 });
