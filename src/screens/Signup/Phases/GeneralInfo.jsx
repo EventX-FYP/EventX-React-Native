@@ -5,16 +5,34 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../../assets'
 import { RadioButton, RadioGroup } from 'react-native-ui-lib'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 export const GeneralInfo = ({ navigation }) => {
+
+  const [DateVal, SetDateVal] = useState(new Date(Date.now()))
+  const [isPickerShow, setIsPickerShow] = useState(false);
+
+  const showPicker = () => {
+    setIsPickerShow(true);
+  };
+
+  const onChange = (event, value) => {
+    SetDateVal(value);
+    if (Platform.OS === 'android') {
+      setIsPickerShow(false);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Image style={styles.wave} source={images.GeneralInfoWave}></Image>
 
 
       <View style={styles.ContentContainer}>
-      <Text style={styles.heading} >Personal Information</Text>
+
+        <Text style={styles.heading} >Personal Information</Text>
+
         <View style={styles.RowContainer}>
           <TextInput placeholder="First Name" style={styles.UserInput}></TextInput>
           <TextInput placeholder="Last Name" style={styles.UserInput}></TextInput>
@@ -23,17 +41,28 @@ export const GeneralInfo = ({ navigation }) => {
         <View style={styles.rdgrpContainer}>
           <Text style={styles.Heading}>Gender</Text>
           <RadioGroup style={styles.radiogrp}>
-            <RadioButton value={"Male"} label={"Male"} />
-            <RadioButton value={"Female"} label={"Female"}/>
+            <RadioButton style={styles.Radiobtn} value={"Male"} label={"Male"} />
+            <RadioButton style={styles.Radiobtn} value={"Female"} label={"Female"}/>
           </RadioGroup>
         </View>
 
         <View style={styles.BirthdayRow}>
           <Text style={styles.BirthdayHeading}>Birthday</Text>
-          <TouchableOpacity>
-            <Text style={styles.BirthdayButtonStyle}> / / /</Text>
+          <TouchableOpacity onPress={showPicker}>
+            <Text style={styles.BirthdayButtonStyle}>{DateVal.toISOString().split('T')[0]}</Text>
           </TouchableOpacity>
         </View>
+
+          {isPickerShow && (
+          <DateTimePicker
+            value={DateVal}
+            mode={'date'}
+            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            is24Hour={true}
+            onChange={onChange}
+            style={styles.datePicker}
+          />
+        )}
 
         <Text style={styles.heading} >Contact Information</Text>
 
@@ -42,6 +71,11 @@ export const GeneralInfo = ({ navigation }) => {
           <TextInput style={styles.UserInput} keyboardType="number-pad"></TextInput>
         </View>
 
+        <View style={styles.DonebtnView}>
+          <Text style={styles.donebtn} >Done</Text>
+        </View>
+      
+            
       </View>
 
     </SafeAreaView>
@@ -52,12 +86,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: AppHelper.material.green50,
+    
   },
   ContentContainer: {
     paddingStart: 25,
     paddingEnd: 15,
     justifyContent: 'space-evenly',
-    flex:1
+    flex:1,
+    
   },
   wave: {
     height: '25%',
@@ -66,7 +102,7 @@ const styles = StyleSheet.create({
   RowContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems:"center"
+    alignItems:"center",
   },
   UserInput: {
     backgroundColor: 'white',
@@ -89,6 +125,9 @@ const styles = StyleSheet.create({
     justifyContent:"space-evenly",
     flex:1
   },
+  Radiobtn:{
+    borderColor:"black"
+  },
   heading:{
     fontSize:35,
   },
@@ -107,6 +146,19 @@ const styles = StyleSheet.create({
     paddingVertical:5,
     paddingHorizontal:15,
     fontSize:15
+  },
+  DonebtnView:{
+    flexDirection:"row",
+    backgroundColor: AppHelper.material.green600,
+    justifyContent:"center",
+    paddingVertical:10,
+    borderRadius:5
+  },
+  donebtn:{
+    
+    flexDirection:"row",
+    fontSize:18,
+    color:"white"
   }
 
 })
