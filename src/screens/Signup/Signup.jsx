@@ -12,7 +12,7 @@ export const Signup = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar />
+            <StatusBar backgroundColor={AppHelper.material.green500}/>
             <Image source={images.SignupIcon} style={styles.signup_image}/>
             <View style={styles.signupContainer}>
                 <View style={styles.inputContainer}>
