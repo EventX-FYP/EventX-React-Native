@@ -244,6 +244,7 @@ export const AppHelper = {
         lightGreenA200: "#b2ff59",
         lightGreenA400: "#76ff03",
         lightGreenA700: "#64dd17",
+        wavecolorgreen: "#63C132",
         lime50: "#f9fbe7",
         lime100: "#f0f4c3",
         lime200: "#e6ee9c",
