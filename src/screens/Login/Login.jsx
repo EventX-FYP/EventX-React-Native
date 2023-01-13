@@ -34,7 +34,7 @@ export const Login = ({ navigation }) => {
                     </View>
                     <View style={styles.SignupContainer}>
                         <Text>Don't have an account?  </Text>
-                        <Button label="Signup" onPress={() => navigation.navigate("Phases")} link outline color={AppHelper.material.green400}/>
+                        <Button label="Signup" onPress={() => navigation.navigate("GeneralInfo")} link outline color={AppHelper.material.green400}/>
                     </View>
                 </View>
             </View>
