@@ -6,12 +6,15 @@ import { images } from '../../../assets'
 import { RadioButton, RadioGroup } from 'react-native-ui-lib'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import { Dropdown } from 'react-native-element-dropdown';
 
 export const GeneralInfo = ({ navigation }) => {
 
   const [DateVal, SetDateVal] = useState(new Date(Date.now()))
   const [isPickerShow, setIsPickerShow] = useState(false);
+
+  const [isFocus, setIsFocus] = useState(false);
+  const [value, setValue] = useState(null);
 
   const showPicker = () => {
     setIsPickerShow(true);
@@ -23,6 +26,21 @@ export const GeneralInfo = ({ navigation }) => {
       setIsPickerShow(false);
     }
   };
+
+  const Countries = [
+    { label: 'Pakistan', value: 'Pakistan' },
+    { label: 'India', value: 'India' },
+    { label: 'America', value: 'America' },
+    { label: 'Afghanistan', value: 'Afghanistan' },
+    { label: 'Item 1', value: '1' },
+    { label: 'Item 2', value: '2' },
+    { label: 'Item 3', value: '3' },
+    { label: 'Item 4', value: '4' },
+    { label: 'Item 5', value: '5' },
+    { label: 'Item 6', value: '6' },
+    { label: 'Item 7', value: '7' },
+    { label: 'Item 8', value: '8' },
+  ];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,6 +64,30 @@ export const GeneralInfo = ({ navigation }) => {
           </RadioGroup>
         </View>
 
+        <View style={styles.RowContainer}>
+
+        <Dropdown
+          style={[styles.UserInput, isFocus && { borderColor: 'green' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          data={Countries}
+          search
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Select Country' : '...'}
+          searchPlaceholder="Search Country.."
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValue(item.value);
+            setIsFocus(false);
+          }}
+          />
+        </View>
+
         <View style={styles.BirthdayRow}>
           <Text style={styles.BirthdayHeading}>Birthday</Text>
           <TouchableOpacity onPress={showPicker}>
@@ -66,10 +108,16 @@ export const GeneralInfo = ({ navigation }) => {
 
         <Text style={styles.heading} >Contact Information</Text>
 
+
+
         <View style={styles.RowContainer}>
           <Text style={styles.Heading}>Phone Number</Text>
           <TextInput style={styles.UserInput} keyboardType="number-pad"></TextInput>
         </View>
+
+        <View style={styles.UserAddress}>
+        <TextInput placeholder="Address" style={styles.UserAddressInput}></TextInput>
+        </View>   
 
         <View style={styles.DonebtnView}>
           <Text style={styles.donebtn} >Done</Text>
@@ -159,6 +207,35 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     fontSize:18,
     color:"white"
-  }
+  },
+  UserAddress:{
+    flexDirection:"row",
+  },
+  UserAddressInput:{
+    backgroundColor: 'white',
+    height: 40,
+    width: '100%',
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingStart: 12,
+  },
+  label: {
+   
+    backgroundColor: 'white',
+    left: 22,
+    top: 8,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
 
 })
