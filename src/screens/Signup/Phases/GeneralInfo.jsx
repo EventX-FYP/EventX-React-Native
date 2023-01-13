@@ -64,29 +64,7 @@ export const GeneralInfo = ({ navigation }) => {
           </RadioGroup>
         </View>
 
-        <View style={styles.RowContainer}>
-
-        <Dropdown
-          style={[styles.UserInput, isFocus && { borderColor: 'green' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          data={Countries}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'Select Country' : '...'}
-          searchPlaceholder="Search Country.."
-          value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
-          }}
-          />
-        </View>
+        
 
         <View style={styles.BirthdayRow}>
           <Text style={styles.BirthdayHeading}>Birthday</Text>
@@ -113,6 +91,51 @@ export const GeneralInfo = ({ navigation }) => {
         <View style={styles.RowContainer}>
           <Text style={styles.Heading}>Phone Number</Text>
           <TextInput style={styles.UserInput} keyboardType="number-pad"></TextInput>
+        </View>
+
+        <View style={styles.RowContainer}>
+
+        <Dropdown
+          style={[styles.UserInput, isFocus && { borderColor: 'green' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          data={Countries}
+          search
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Select Country' : '...'}
+          searchPlaceholder="Search Country.."
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValue(item.value);
+            setIsFocus(false);
+          }}
+          />
+
+<Dropdown
+          style={[styles.UserInput, isFocus && { borderColor: 'green' }]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          data={Countries}
+          search
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder={!isFocus ? 'Select Country' : '...'}
+          searchPlaceholder="Search Country.."
+          value={value}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValue(item.value);
+            setIsFocus(false);
+          }}
+          />
         </View>
 
         <View style={styles.UserAddress}>
