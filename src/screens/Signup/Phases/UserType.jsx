@@ -30,7 +30,7 @@ export const UserType = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppHelper.material.green50,
+    backgroundColor: AppHelper.material.white,
     alignItems: 'center',
   },
   usertype: {

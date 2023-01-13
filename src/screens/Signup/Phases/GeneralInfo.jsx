@@ -85,7 +85,7 @@ export const GeneralInfo = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppHelper.material.green50,
+    backgroundColor: AppHelper.material.white,
     
   },
   ContentContainer: {

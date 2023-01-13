@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
   infoContainer: {
       width: "80%",
       height: "70%",
-      backgroundColor: AppHelper.material.white,
       justifyContent: "space-between",
   },
   container: {

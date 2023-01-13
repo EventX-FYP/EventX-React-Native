@@ -4,6 +4,7 @@ import { Button, Card, Image, Text, Wizard } from 'react-native-ui-lib'
 import { styles, userPortfolioStyles, userTypeStyles } from './styles'
 import { AppHelper } from '../../../helper/AppHelper/AppHelper'
 import { images } from '../../../assets'
+import { TextField } from 'react-native-ui-lib/src/incubator'
 
 export const Phases = ({ navigation }) => {
   const renderUserType = () => {
@@ -26,10 +27,17 @@ export const Phases = ({ navigation }) => {
   const renderUserPortfolio = () => {
     return (
       <View style={userPortfolioStyles.container}>
-        <View style={userPortfolioStyles.pictureContainer}>
-          <Image/>
+        <Text style={userPortfolioStyles.textHeader}>Add Packages</Text>
+        <View style={userPortfolioStyles.uploadPictureContainer}>
+          <Image style={userPortfolioStyles.uploadPicture} source={typeof state.photo !== 'undefined' ? { uri: state.photo } : images.Buyer} />
         </View>
-        <Text>Render User Portfolio</Text>
+        <View style={userPortfolioStyles.inputContainer}>
+          <View style={userPortfolioStyles.defaultInput}>
+            <TextField style={userPortfolioStyles.input} placeholder={'Package Name'}  />
+            <TextField style={userPortfolioStyles.input} placeholder={'Price'} />
+          </View>
+          <TextField placeholder={'Description'}/>
+        </View>
       </View>
     )
   }
@@ -92,6 +100,7 @@ export const Phases = ({ navigation }) => {
     activeIndex: 0,
     completedStepIndex: undefined,
     userType: undefined,
+    photo: undefined,
   })
 
   return (

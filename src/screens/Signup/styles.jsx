@@ -3,7 +3,7 @@ import { AppHelper } from "../../helper/AppHelper/AppHelper";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppHelper.material.green50,
+    backgroundColor: AppHelper.material.white,
     alignItems: "center",
     justifyContent: "space-around",
     paddingBottom: 20,
