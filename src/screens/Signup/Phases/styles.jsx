@@ -84,10 +84,10 @@ export const userTypeStyles = StyleSheet.create({
   },
 })
 
-export const userPortfolioStyles = StyleSheet.create({
+export const userPackagesStyles = StyleSheet.create({
   container: {
-    flex: 1,
-    height: '100%',
+    display: 'flex',
+    height: '90%',
     width: '100%',
     flexDirection: 'column',
     paddingTop: 20,
@@ -105,10 +105,11 @@ export const userPortfolioStyles = StyleSheet.create({
     borderWidth: 1.4,
   },
   inputContainer: {
-    flex: 1,
+    display: 'flex',
     flexDirection: 'column',
     paddingLeft: 10,
     paddingRight: 10,
+    justifyContent: 'space-between',
     width: "100%",
   },
   defaultInput: {
@@ -117,16 +118,44 @@ export const userPortfolioStyles = StyleSheet.create({
     width: "100%",
   },
   input: {
-    height: 40,
+    borderColor: AppHelper.material.green200,
     borderWidth: 1,
-    borderColor: AppHelper.material.minBlack,
-    borderRadius: 5,
-    width: "100%"
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    minHeight: 45,
+    marginVertical: 5,
   },
   textHeader: {
     fontSize: 28,
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  focusedInputText: {
+    colorFocused: AppHelper.material.green500,
+    color: AppHelper.material.green200,
+  },
+  textarea: {
+    borderColor: AppHelper.material.green200,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    minHeight: 100,
+    marginVertical: 5,
+  },
+  button: {
+    margin: 10,
+    borderRadius: 10,
+    backgroundColor: AppHelper.material.green500,
+  },
+  listPackages: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxHeight: '30%',
+    borderColor: AppHelper.gray2,
+    borderWidth: 1,
+    padding: 10,
+    marginHorizontal: 10,
+    borderRadius: 10,
+  }
 
 })

@@ -1,10 +1,14 @@
 import React from 'react'
-import { SafeAreaView, View, StatusBar } from 'react-native'
+import { SafeAreaView, View, StatusBar, ScrollView } from 'react-native'
 import { Button, Card, Image, Text, Wizard } from 'react-native-ui-lib'
-import { styles, userPortfolioStyles, userTypeStyles } from './styles'
+import { styles, userPackagesStyles, userTypeStyles } from './styles'
 import { AppHelper } from '../../../helper/AppHelper/AppHelper'
 import { images } from '../../../assets'
-import { TextField } from 'react-native-ui-lib/src/incubator'
+import { useSelector, useDispatch } from 'react-redux'
+import { SIGN_IN } from '../../../store/types'
+import { FloatingLabelInput, FloatingLabelProps } from 'react-native-floating-label-input'
+import { PackageCard } from '../../../components'
+import { ADD_PACKAGE } from '../../../store/types'
 
 export const Phases = ({ navigation }) => {
   const renderUserType = () => {
@@ -26,25 +30,54 @@ export const Phases = ({ navigation }) => {
   }
   const renderUserPortfolio = () => {
     return (
-      <View style={userPortfolioStyles.container}>
-        <Text style={userPortfolioStyles.textHeader}>Add Packages</Text>
-        <View style={userPortfolioStyles.uploadPictureContainer}>
-          <Image style={userPortfolioStyles.uploadPicture} source={typeof state.photo !== 'undefined' ? { uri: state.photo } : images.Buyer} />
+      <View style={userPackagesStyles.container}>
+        <Text style={userPackagesStyles.textHeader}>Add Packages</Text>
+        <View style={userPackagesStyles.uploadPictureContainer}>
+          <Image style={userPackagesStyles.uploadPicture} source={typeof state.photo !== 'undefined' ? { uri: state.photo } : images.Buyer} />
         </View>
-        <View style={userPortfolioStyles.inputContainer}>
-          <View style={userPortfolioStyles.defaultInput}>
-            <TextField style={userPortfolioStyles.input} placeholder={'Package Name'}  />
-            <TextField style={userPortfolioStyles.input} placeholder={'Price'} />
+        <View style={userPackagesStyles.inputContainer}>
+          <FloatingLabelInput
+            label={'Package Name'}
+            value={_package.name}
+            onChangeText={value => setPackage({ ..._package, name: value })}
+            containerStyles={userPackagesStyles.input}
+            customLabelStyles={userPackagesStyles.focusedInputText}
+            labelStyles={userPackagesStyles.focusedInputText}/>
+          
+          <FloatingLabelInput
+            label={'Package Price'}
+            mask="999999"
+            hint="Price (Rs.)"
+            value={_package.price}
+            onChangeText={value => setPackage({ ..._package, price: value })}
+            containerStyles={userPackagesStyles.input}
+            customLabelStyles={userPackagesStyles.focusedInputText}
+            />
+          
+          <FloatingLabelInput
+            label={'Package Description'}
+            value={_package.description}
+            onChangeText={value => setPackage({ ..._package, description: value })}
+            containerStyles={userPackagesStyles.input}
+            customLabelStyles={userPackagesStyles.focusedInputText}
+            multiline={true}
+            />
+        </View>
+        <View>
+          <Button style={userPackagesStyles.button} onPress={handleSubmitPackage} label="Print Package" />
+        </View>
+          <View style={userPackagesStyles.listPackages}>
+            <ScrollView>
+              {packages.map((item, index) => <PackageCard key={index} name={item.name} price={item.price} description={item.description} image={item.image} />)}
+            </ScrollView>
           </View>
-          <TextField placeholder={'Description'}/>
-        </View>
       </View>
     )
   }
   const renderUserInformation = () => {
     return (
       <View>
-        <Text>Render User Information</Text>
+        <Text>Information</Text>
       </View>
     )
   }
@@ -96,6 +129,19 @@ export const Phases = ({ navigation }) => {
     })
   }
 
+  const handleSubmitPackage = () => {
+    if (_package.name === '' || _package.price === '' || _package.description === '') {
+      return
+    }
+    dispatch({ type: ADD_PACKAGE, payload: _package })
+    setPackage({
+      name: '',
+      price: '',
+      description: '',
+      image: images.Buyer,
+    })
+  }
+
   const [state, setState] = React.useState({
     activeIndex: 0,
     completedStepIndex: undefined,
@@ -103,12 +149,23 @@ export const Phases = ({ navigation }) => {
     photo: undefined,
   })
 
+  const [_package, setPackage] = React.useState({
+    name: '',
+    price: '',
+    description: '',
+    image: images.Buyer,
+  })
+
+  
+  const packages = useSelector(state => state.package);
+  const dispatch = useDispatch();
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar animated={true} barStyle={'dark-content'} showHideTransition={'fade'} backgroundColor={AppHelper.material.green500} />
       <Wizard activeIndex={state.activeIndex} containerStyle={styles.wizard}>
         <Wizard.Step label="Type" state={handleState(0)} />
-        <Wizard.Step label="Portfolio" state={handleState(1)} />
+        <Wizard.Step label="Package" state={handleState(1)} />
         <Wizard.Step label="Information" state={handleState(2)} />
       </Wizard>
       <View style={styles.wizardStepContent}>
