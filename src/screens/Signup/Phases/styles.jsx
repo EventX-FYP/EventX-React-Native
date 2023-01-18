@@ -82,7 +82,13 @@ export const userTypeStyles = StyleSheet.create({
     height: 200,
     backgroundColor: AppHelper.material.green500,
   },
-})
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  }
+});
 
 export const userPackagesStyles = StyleSheet.create({
   container: {
@@ -95,11 +101,11 @@ export const userPackagesStyles = StyleSheet.create({
   uploadPictureContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: '30%',
+    height: '20%',
   },
   uploadPicture: {
-    width: 150,
-    height: 150,
+    width: 110,
+    height: 110,
     borderRadius: 10,
     borderColor: AppHelper.material.green200,
     borderWidth: 1.4,
@@ -111,36 +117,17 @@ export const userPackagesStyles = StyleSheet.create({
     paddingRight: 10,
     justifyContent: 'space-between',
     width: "100%",
+    height: '37%',
   },
   defaultInput: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: "100%",
   },
-  input: {
-    borderColor: AppHelper.material.green200,
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    minHeight: 45,
-    marginVertical: 5,
-  },
   textHeader: {
     fontSize: 28,
     fontWeight: 'bold',
     textAlign: 'center',
-  },
-  focusedInputText: {
-    colorFocused: AppHelper.material.green500,
-    color: AppHelper.material.green200,
-  },
-  textarea: {
-    borderColor: AppHelper.material.green200,
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    minHeight: 100,
-    marginVertical: 5,
   },
   button: {
     margin: 10,
@@ -156,6 +143,48 @@ export const userPackagesStyles = StyleSheet.create({
     padding: 10,
     marginHorizontal: 10,
     borderRadius: 10,
+  },
+  inputRow: {
+    height: 70,
+    justifyContent: 'space-between',
   }
 
-})
+});
+
+export const userCategoriesStyles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    height: '98%',
+    width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    paddingTop: 20,
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+  options: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    width: "auto",
+    padding: 10,
+    borderColor: AppHelper.gray2,
+  },
+  option: {
+    margin: 5,
+  },
+  selected: {
+    backgroundColor: AppHelper.material.green400,
+  },
+  selectedText: {
+    color: AppHelper.white,
+  },
+  button: {
+    marginHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: AppHelper.material.green500,
+
+  }
+
+});

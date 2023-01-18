@@ -1,17 +1,106 @@
 import React from 'react'
 import { SafeAreaView, View, StatusBar, ScrollView } from 'react-native'
-import { Button, Card, Image, Text, Wizard } from 'react-native-ui-lib'
-import { styles, userPackagesStyles, userTypeStyles } from './styles'
+import { Button, Card, Chip, Image, Modal, Text, Wizard } from 'react-native-ui-lib'
+import { styles, userCategoriesStyles, userPackagesStyles, userTypeStyles } from './styles'
 import { AppHelper } from '../../../helper/AppHelper/AppHelper'
 import { images } from '../../../assets'
 import { useSelector, useDispatch } from 'react-redux'
-import { SIGN_IN } from '../../../store/types'
-import { FloatingLabelInput, FloatingLabelProps } from 'react-native-floating-label-input'
 import { PackageCard } from '../../../components'
 import { ADD_PACKAGE } from '../../../store/types'
+import { fontStyles, inputStyles } from '../../../styles/generalStyles'
+import TextField from 'react-native-ui-lib/src/incubator/TextField'
 
 export const Phases = ({ navigation }) => {
+  const dispatch = useDispatch()
+  const packages = useSelector(state => state.package);
+
+  const [categories, setCategories] = React.useState([
+    {
+      id: 1,
+      name: '👰 Wedding Planning',
+      selected: false,
+    },
+    {
+      id: 2,
+      name: '🎂 Birthday Planning',
+      selected: false,
+    },
+    {
+      id: 3,
+      name: '🎤 Concert Planning',
+      selected: false,
+    },
+    {
+      id: 4,
+      name: '👔 Corporate Planning',
+      selected: false,
+    },
+    {
+      id: 5,
+      name: '🎉 Party Planning',
+      selected: false,
+    },
+    {
+      id: 6,
+      name: '🏋️ Health and Fitness Planning',
+      selected: false,
+    },
+    {
+      id: 7,
+      name: '✈️ Travel Planning',
+      selected: false,
+    },
+    {
+      id: 8,
+      name: '📅 Weekly Planning',
+      selected: false,
+    },
+    {
+      id: 9,
+      name: '💰 Financial Planning',
+      selected: false,
+    },
+    {
+      id: 10,
+      name: '🏠 Home Planning',
+      selected: false,
+    },
+    {
+      id: 11,
+      name: '👩‍💻 Work Planning',
+      selected: false,
+    },
+    {
+      id: 12,
+      name: '👩‍👧 Personal/Life Planning',
+      selected: false,
+    },
+    {
+      id: 13,
+      name: '📱 Digital Planning',
+      selected: false,
+    },
+  ])
+
   const renderUserType = () => {
+    const modalToggler = () => {
+      setState({ ...state, modal: true, userType: 'P' })
+    }
+
+    const handleSelectChip = (e) => {
+      const category = categories.find(item => item.name === e.children[3].props.children)
+      category.selected = !category.selected
+      setCategories([...categories])
+    }
+
+    const handleConfirm = () => {
+      handleNextStep();
+      setCategories(categories.map(category => {
+        category.selected = false
+        return category
+      }))
+    }
+
     return (
       <View style={userTypeStyles.container}>
         <Text style={userTypeStyles.title}>Join as a client or planner</Text>
@@ -20,11 +109,34 @@ export const Phases = ({ navigation }) => {
             <Text style={state.userType === 'C' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>Client</Text>
             <Card.Section imageSource={images.Buyer} imageStyle={userTypeStyles.image} />
           </Card>
-          <Card style={state.userType === 'P' ? userTypeStyles.cardClicked : userTypeStyles.card} onPress={() => setState({ ...state, userType: 'P' })}>
+          <Card style={state.userType === 'P' ? userTypeStyles.cardClicked : userTypeStyles.card} onPress={modalToggler}>
             <Text style={state.userType === 'P' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>Planner</Text>
             <Card.Section imageSource={images.Seller} imageStyle={userTypeStyles.image} />
           </Card>
         </View>
+          <Modal visible={state.modal} style={userTypeStyles.centeredView}>
+            <View style={userCategoriesStyles.container}>
+              <View>
+                <Text style={[fontStyles[900], fontStyles.large22, userCategoriesStyles.textCenter]}>Select your categories</Text>
+                <View style={userCategoriesStyles.options}>
+                  {
+                    categories.map((category, index) => {
+                      return (
+                        <Chip
+                        key={index}
+                        label={category.name}
+                        labelStyle={category.selected && userCategoriesStyles.selectedText}
+                        containerStyle={[userCategoriesStyles.option, category.selected && userCategoriesStyles.selected]}
+                        onPress={handleSelectChip}
+                        />
+                        )
+                      })
+                    }
+                </View>
+              </View>
+              <Button label="Confirm" onPress={handleConfirm} style={userCategoriesStyles.button}/>
+            </View>
+          </Modal>
       </View>
     )
   }
@@ -36,41 +148,30 @@ export const Phases = ({ navigation }) => {
           <Image style={userPackagesStyles.uploadPicture} source={typeof state.photo !== 'undefined' ? { uri: state.photo } : images.Buyer} />
         </View>
         <View style={userPackagesStyles.inputContainer}>
-          <FloatingLabelInput
-            label={'Package Name'}
-            value={_package.name}
-            onChangeText={value => setPackage({ ..._package, name: value })}
-            containerStyles={userPackagesStyles.input}
-            customLabelStyles={userPackagesStyles.focusedInputText}
-            labelStyles={userPackagesStyles.focusedInputText}/>
-          
-          <FloatingLabelInput
-            label={'Package Price'}
-            mask="999999"
-            hint="Price (Rs.)"
-            value={_package.price}
-            onChangeText={value => setPackage({ ..._package, price: value })}
-            containerStyles={userPackagesStyles.input}
-            customLabelStyles={userPackagesStyles.focusedInputText}
-            />
-          
-          <FloatingLabelInput
-            label={'Package Description'}
-            value={_package.description}
-            onChangeText={value => setPackage({ ..._package, description: value })}
-            containerStyles={userPackagesStyles.input}
-            customLabelStyles={userPackagesStyles.focusedInputText}
-            multiline={true}
-            />
+          <View style={userPackagesStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Package Name</Text>
+            <TextField style={inputStyles.inputField} value={_package.name} onChangeText={value => setPackage({ ..._package, name: value })}/>
+          </View>
+          <View style={userPackagesStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Package Price</Text>
+            <TextField style={inputStyles.inputField} value={_package.price} onChangeText={value => setPackage({ ..._package, price: value })}/>
+          </View>
+          <View style={userPackagesStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Package Description</Text>
+            <TextField style={inputStyles.inputField} value={_package.description} onChangeText={value => setPackage({ ..._package, description: value })} />
+          </View>
         </View>
         <View>
-          <Button style={userPackagesStyles.button} onPress={handleSubmitPackage} label="Print Package" />
+          <Button style={userPackagesStyles.button} onPress={handleSubmitPackage} label="Add Package" />
         </View>
+        {
+          packages.length > 0 &&
           <View style={userPackagesStyles.listPackages}>
             <ScrollView>
               {packages.map((item, index) => <PackageCard key={index} name={item.name} price={item.price} description={item.description} image={item.image} />)}
             </ScrollView>
           </View>
+        }
       </View>
     )
   }
@@ -115,6 +216,7 @@ export const Phases = ({ navigation }) => {
       ...state,
       activeIndex: state.activeIndex + 1,
       completedStepIndex: state.activeIndex,
+      modal: false,
     })
   }
 
@@ -126,11 +228,12 @@ export const Phases = ({ navigation }) => {
     setState({
       ...state,
       activeIndex: state.activeIndex - 1,
+      modal: false
     })
   }
 
   const handleSubmitPackage = () => {
-    if (_package.name === '' || _package.price === '' || _package.description === '') {
+    if (_package.name === '' || _package.price === '' || _package.description === '' || _package.image === '') {
       return
     }
     dispatch({ type: ADD_PACKAGE, payload: _package })
@@ -147,6 +250,7 @@ export const Phases = ({ navigation }) => {
     completedStepIndex: undefined,
     userType: undefined,
     photo: undefined,
+    modal: false
   })
 
   const [_package, setPackage] = React.useState({
@@ -156,10 +260,7 @@ export const Phases = ({ navigation }) => {
     image: images.Buyer,
   })
 
-  
-  const packages = useSelector(state => state.package);
-  const dispatch = useDispatch();
-
+  const [isVisible, setIsVisible] = React.useState(false)
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar animated={true} barStyle={'dark-content'} showHideTransition={'fade'} backgroundColor={AppHelper.material.green500} />

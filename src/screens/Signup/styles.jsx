@@ -1,75 +1,85 @@
 import { StyleSheet } from "react-native";
 import { AppHelper } from "../../helper/AppHelper/AppHelper";
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: AppHelper.material.white,
-    alignItems: "center",
-    justifyContent: "space-around",
-    paddingBottom: 20,
-  },
-  scrollView: {
-    width: "100%",
-  },
-  signup_image: {
-    width: 200,
-    height: 200,
-    resizeMode: "stretch",
-  },
-  signupContainer: {
-    flex: 1,
-    width: "80%",
-    justifyContent: "space-between",
-  },
-  input: {
-    height: 40,
-    borderWidth: 1,
-    borderColor: AppHelper.material.minBlack,
-    borderRadius: 5,
-    padding: 10,
-  },
   inputContainer: {
     width: "100%",
-    height: "30%",
+    height: "45%",
     justifyContent: "space-between",
   },
-  label: {
-    fontSize: 28,
-    fontWeight: "bold",
+  infoContainer: {
+      width: "80%",
+      height: "70%",
+      justifyContent: "space-between",
   },
-  button: {
-    backgroundColor: AppHelper.material.green600,
-    borderRadius: 5,
+  container: {
+      flex: 1,
+      alignItems: "center",
+      paddingBottom: 20,
+      backgroundColor: AppHelper.material.white,
+      justifyContent: "space-between"
   },
-  googleButton: {
-    backgroundColor: AppHelper.material.white,
-    color: AppHelper.orange,
-    borderRadius: 5,
+  image: {
+      width: "50%",
+      height: "25%",
+      resizeMode: "stretch",
   },
-  horizontalLine: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  login: {
+      fontSize: 30,
+      fontWeight: "bold",
   },
   googleIcon: {
-    width: 15,
-    height: 15,
+      width: 15,
+      height: 15,
+      resizeMode: "stretch",
+  },
+  input: {
+      height: 40,
+      borderWidth: 1,
+      borderColor: AppHelper.material.minBlack,
+      borderRadius: 5,
+      padding: 10,
+  },
+  button: {
+      backgroundColor: AppHelper.material.green600,
+      borderRadius: 5,
+  },
+  googleButton: {
+      backgroundColor: AppHelper.light,
+      color: AppHelper.orange,
+      borderRadius: 5,
   },
   loginContainer: {
-    width: "100%",
-    height: "40%",
-    justifyContent: "space-between",
-  },
-  alreadyHaveAccount: {
-    width: "100%",
-    height: "10%",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+      width: "100%",
+      height: "40%",
+      justifyContent: "space-between",
   },
   buttonContainer: {
-    width: "100%",
-    height: "60%",
-    justifyContent: "space-between",
+      width: "100%",
+      height: "60%",
+      justifyContent: "space-between",
   },
+  horizontalLine: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+  },
+  SignupContainer: {
+      width: "100%",
+      height: "10%",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+  },
+  googleText: {
+        color: AppHelper.black,
+        fontWeight: "400",
+        fontSize: 15,
+        marginLeft: 10,
+  },
+  inputField: {
+        width: "100%",
+  },
+  bold: {
+        fontWeight: "500",
+  }
 });

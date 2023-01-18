@@ -3,7 +3,7 @@ import { AppHelper } from "../../helper/AppHelper/AppHelper";
 export const styles = StyleSheet.create({
   inputContainer: {
       width: "100%",
-      height: "30%",
+      height: "35%",
       justifyContent: "space-between",
   },
   infoContainer: {
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
   },
   input: {
       height: 40,
-      borderWidth: 1,
+      borderWidth: 0.5,
       borderColor: AppHelper.material.minBlack,
       borderRadius: 5,
       padding: 10,
@@ -70,4 +70,19 @@ export const styles = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
   },
+  googleText: {
+        color: AppHelper.black,
+        fontWeight: "medium",
+        fontSize: 15,
+        marginLeft: 10,
+  },
+  inputField: {
+        width: "100%",
+  },
+  bold: {
+        fontWeight: "500",
+  },
+    forgotPassword: {
+        alignSelf: "flex-end",
+    },
 });
