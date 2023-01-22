@@ -229,5 +229,49 @@ export const userGeneralInformationStyles = StyleSheet.create({
   icon: {
     width: 20,
     height: 20,
-  }
+  },
+  informationContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%',
+    width: '100%',
+    padding: 10,
+  },
+  genderContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    height: 70,
+  },
+  genderButton: {
+    display: 'flex',
+    width: '40%',
+    height: 50,
+    borderRadius: 10,
+    backgroundColor: AppHelper.material.green100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  genderButtonSelected: {
+    display: 'flex',
+    width: '40%',
+    height: 50,
+    borderRadius: 10,
+    backgroundColor: AppHelper.material.green500,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  genderButtonText: {
+    color: AppHelper.black,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  genderButtonTextSelected: {
+    color: AppHelper.white,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+
 });

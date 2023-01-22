@@ -259,73 +259,77 @@ export const Phases = ({ navigation }) => {
             <Image source={images.CameraIcon} style={userGeneralInformationStyles.icon}/>
           </Button>
         </View>
-        <View style={userGeneralInformationStyles.informationContainer}>
-          <View style={userGeneralInformationStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>Name</Text>
-            <TextField style={inputStyles.inputField} value={generalInformation.name} onChangeText={handleName}/>
-          </View>
-          <View style={userGeneralInformationStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>Date of Birth</Text>
-            <DateTimePicker style={inputStyles.inputField} dateFormat="DD-MMM-YYYY" placeholder="DD-MMM-YYYY" mode={'date'} value={generalInformation.dob} onChange={handleDateOfBirth}/>
-          </View>
-          <View style={userGeneralInformationStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>Gender</Text>
-            <View style={userGeneralInformationStyles.genderContainer}>
-              <RadioGroup onValueChange={handleGender}>
-                <RadioButton value={'Male'} label={'Male'} />
-                <RadioButton value={'Female'} label={'Female'} />
-              </RadioGroup>
+        <ScrollView>
+          <View style={userGeneralInformationStyles.informationContainer}>
+            <View style={userPackagesStyles.inputRow}>
+              <Text style={[fontStyles[700], fontStyles.large]}>Name</Text>
+              <TextField style={inputStyles.inputField} placeholder={'Enter Name'} value={generalInformation.name} onChangeText={handleName}/>
+            </View>
+            <View style={userPackagesStyles.inputRow}>
+              <Text style={[fontStyles[700], fontStyles.large]}>Date of Birth</Text>
+              <DateTimePicker style={inputStyles.inputField} dateFormat="DD-MMM-YYYY" placeholder="DD-MMM-YYYY" mode={'date'} value={generalInformation.dob} onChange={handleDateOfBirth}/>
+            </View>
+            <View style={userPackagesStyles.inputRow}>
+              <Text style={[fontStyles[700], fontStyles.large]}>Gender</Text>
+              <View style={userGeneralInformationStyles.genderContainer}>
+                <Card style={generalInformation.gender === 'Male' ? userGeneralInformationStyles.genderButtonSelected : userGeneralInformationStyles.genderButton} onPress={() => setGeneralInformation({ ...generalInformation, gender: 'Male' })}>
+                  <Text style={generalInformation.gender === 'Male' ? userGeneralInformationStyles.genderButtonTextSelected : userGeneralInformationStyles.genderButtonText}>Male</Text>
+                </Card>
+                <Card style={generalInformation.gender === 'Female' ? userGeneralInformationStyles.genderButtonSelected : userGeneralInformationStyles.genderButton} onPress={() => setGeneralInformation({ ...generalInformation, gender: 'Female' })}>
+                  <Text style={generalInformation.gender === 'Female' ? userGeneralInformationStyles.genderButtonTextSelected : userGeneralInformationStyles.genderButtonText}>Female</Text>
+                </Card>
+              </View>
+            </View>
+            <View style={userPackagesStyles.inputRow}>
+              <Text style={[fontStyles[700], fontStyles.large]}>Contact Number</Text>
+              <TextField style={inputStyles.inputField} placeholder={'Enter Contact Number'} value={generalInformation.contact} onChangeText={handleContact}/>
+            </View>
+            <View style={userPackagesStyles.inputRow}>
+              <Text style={[fontStyles[700], fontStyles.large]}>Country</Text>
+              <Picker 
+                placeholder={'Select Country'}
+                value={{ label: generalInformation.country.name, value: generalInformation.country.code }}
+                enableModalBlur={false}
+                topBarProps={{ title: 'Countries' }}
+                showSearch
+                searchPlaceholder={'Search Country'}
+                onChange={handleCountry}
+                mode={Picker.modes.SINGLE}
+                migrateTextField
+                style={inputStyles.inputField}>
+                {
+                  countries.map((item, index) => (
+                    <Picker.Item key={index} label={item.name} value={item.code} />
+                    ))
+                  }
+              </Picker>
+            </View>
+            <View style={userPackagesStyles.inputRow}>
+              <Text style={[fontStyles[700], fontStyles.large]}>City</Text>
+              <Picker 
+                placeholder={'Select City'}
+                value={{ label: generalInformation.city, value: generalInformation.city }}
+                enableModalBlur={false}
+                topBarProps={{ title: 'Cities' }}
+                showSearch
+                searchPlaceholder={'Search City'}
+                onChange={handleCity}
+                mode={Picker.modes.SINGLE}
+                migrateTextField
+                style={inputStyles.inputField}>
+                {
+                  cities.map((item, index) => (
+                    <Picker.Item key={index} label={item.name} value={''} />
+                    ))
+                  }
+              </Picker>
+            </View>
+            <View style={userPackagesStyles.inputRow}>
+              <Text style={[fontStyles[700], fontStyles.large]}>Address</Text>
+              <TextField style={inputStyles.inputField} placeholder={'Enter Address'} value={generalInformation.address} onChangeText={handleAddress}/>
             </View>
           </View>
-          <View style={userGeneralInformationStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>Contact Number</Text>
-            <TextField style={inputStyles.inputField} value={generalInformation.contact} onChangeText={handleContact}/>
-          </View>
-          <View style={userGeneralInformationStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>Country</Text>
-            <Picker 
-              placeholder={'Select Country'}
-              value={{ label: generalInformation.country.name, value: generalInformation.country.code }}
-              enableModalBlur={false}
-              topBarProps={{ title: 'Countries' }}
-              showSearch
-              searchPlaceholder={'Search Country'}
-              onChange={handleCountry}
-              mode={Picker.modes.SINGLE}
-              migrateTextField
-              style={inputStyles.inputField}>
-              {
-                countries.map((item, index) => (
-                  <Picker.Item key={index} label={item.name} value={item.code} />
-                ))
-              }
-            </Picker>
-          </View>
-          <View style={userGeneralInformationStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>City</Text>
-            <Picker 
-              placeholder={'Select City'}
-              value={{ label: generalInformation.city, value: generalInformation.city }}
-              enableModalBlur={false}
-              topBarProps={{ title: 'Cities' }}
-              showSearch
-              searchPlaceholder={'Search City'}
-              onChange={handleCity}
-              mode={Picker.modes.SINGLE}
-              migrateTextField
-              style={inputStyles.inputField}>
-              {
-                cities.map((item, index) => (
-                  <Picker.Item key={index} label={item.name} value={''} />
-                ))
-              }
-            </Picker>
-          </View>
-          <View style={userGeneralInformationStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>Address</Text>
-            <TextField style={inputStyles.inputField} value={generalInformation.address} onChangeText={handleAddress}/>
-          </View>
-        </View>
+        </ScrollView>
       </View>
     )
   }
@@ -335,7 +339,7 @@ export const Phases = ({ navigation }) => {
     switch (activeIndex) {
       case 0:
         return renderUserType();
-      case 1:
+        case 1:
         return renderUserPackage();
       case 2:
         return renderUserInformation();
@@ -424,9 +428,7 @@ export const Phases = ({ navigation }) => {
         <Wizard.Step label="Information" state={handleState(2)} />
       </Wizard>
       <View style={styles.wizardStepContent}>
-        <ScrollView contentContainerStyle={{ display: 'flex', height: '100%' }}>
-          {renderStep()}
-        </ScrollView>
+        {renderStep()}
         <View style={styles.buttonContainer}>
           <Button label="Go Back" onPress={handleGoBack} style={styles.button}/>
           <Button label="Next Step" onPress={handleNextStep} style={styles.button}/>
