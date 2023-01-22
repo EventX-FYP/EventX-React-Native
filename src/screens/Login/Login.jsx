@@ -14,7 +14,11 @@ export const Login = ({ navigation }) => {
     const [error, setError] = React.useState({ email: "", password: "" });
 
     const handleLoginButton = () => {
-        navigation.navigate("Phases");
+        navigation.navigate("Planner");
+    }
+
+    const handleSignupButton = () => {
+        navigation.navigate("Signup");
     }
 
     return (
@@ -49,7 +53,7 @@ export const Login = ({ navigation }) => {
                     </View>
                     <View style={styles.SignupContainer}>
                         <Text>Don't have an account?  </Text>
-                        <Button label="Signup" onPress={() => navigation.navigate("Signup")} link outline color={AppHelper.material.green400}/>
+                        <Button label="Signup" onPress={handleSignupButton} link outline color={AppHelper.material.green400}/>
                     </View>
                 </View>
             </View>
