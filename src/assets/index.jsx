@@ -12,5 +12,6 @@ export const images = {
     // Buyer: require('./buyer.png'),
     Seller: require('./transparent-icons/87.png'),
     Buyer: require('./transparent-icons/86.png'),
-    GeneralInfoWave: require('./generalinfowave.png')
+    GeneralInfoWave: require('./generalinfowave.png'),
+    CameraIcon: require('./icons/camera.png'),
 };

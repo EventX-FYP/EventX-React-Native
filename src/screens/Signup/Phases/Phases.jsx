@@ -1,17 +1,21 @@
 import React from 'react'
 import { SafeAreaView, View, StatusBar, ScrollView } from 'react-native'
-import { Button, Card, Chip, Image, Modal, Text, Wizard } from 'react-native-ui-lib'
-import { styles, userCategoriesStyles, userPackagesStyles, userTypeStyles } from './styles'
+import { Button, Card, RadioGroup, RadioButton, Chip, Image, Modal, Text, Wizard, DateTimePicker, Picker } from 'react-native-ui-lib'
+import { styles, userCategoriesStyles, userPackagesStyles, userTypeStyles, userGeneralInformationStyles } from './styles'
 import { AppHelper } from '../../../helper/AppHelper/AppHelper'
 import { images } from '../../../assets'
 import { useSelector, useDispatch } from 'react-redux'
 import { PackageCard } from '../../../components'
-import { ADD_PACKAGE } from '../../../store/types'
-import { fontStyles, inputStyles } from '../../../styles/generalStyles'
-import TextField from 'react-native-ui-lib/src/incubator/TextField'
+import { Packages } from '../../../store/types'
+import { fontStyles, inputStyles } from '../../../styles'
+import { TextField } from "react-native-ui-lib/src/incubator";
+import * as ImagePicker from 'expo-image-picker';
+import { COUNTRY_STATE_CITY_API_KEY } from '@env';
+import { CountryStateCityAPI } from '../../../helper/API/CountryStateCity'
 
 export const Phases = ({ navigation }) => {
   const dispatch = useDispatch()
+  const profile = useSelector(state => state.profile);
   const packages = useSelector(state => state.package);
 
   const [categories, setCategories] = React.useState([
@@ -82,6 +86,47 @@ export const Phases = ({ navigation }) => {
     },
   ])
 
+  const pickImagePackage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    })
+
+    if (!result.cancelled) {
+      setPackage({ ..._package, image: { uri: result.uri } })
+    }
+  }
+  const pickImageProfile = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    })
+
+    if (!result.cancelled) {
+      setGeneralInformation({ ...generalInformation, picture: result.uri })
+    }
+  }
+
+  React.useEffect(() => {
+    const getCountries = async () => {
+      await CountryStateCityAPI.fetchCountry(setCountries, COUNTRY_STATE_CITY_API_KEY)
+    }
+    getCountries()
+  }, [])
+
+  // Use Effect to fetch cities whenever country changes
+  React.useEffect(() => {
+    const getCities = async () => {
+      console.log(country)
+      await CountryStateCityAPI.fetchCities(setCities, country.code, '', COUNTRY_STATE_CITY_API_KEY)
+    }
+    getCities()
+  }, [country])
+  
   const renderUserType = () => {
     const modalToggler = () => {
       setState({ ...state, modal: true, userType: 'P' })
@@ -140,12 +185,13 @@ export const Phases = ({ navigation }) => {
       </View>
     )
   }
-  const renderUserPortfolio = () => {
+  const renderUserPackage = () => {
     return (
       <View style={userPackagesStyles.container}>
         <Text style={userPackagesStyles.textHeader}>Add Packages</Text>
         <View style={userPackagesStyles.uploadPictureContainer}>
-          <Image style={userPackagesStyles.uploadPicture} source={typeof state.photo !== 'undefined' ? { uri: state.photo } : images.Buyer} />
+          <Image style={userPackagesStyles.uploadPicture} source={_package.image} />
+          <Button label="Upload Picture" onPress={pickImagePackage} style={userPackagesStyles.uploadPictureButton}/>
         </View>
         <View style={userPackagesStyles.inputContainer}>
           <View style={userPackagesStyles.inputRow}>
@@ -176,9 +222,110 @@ export const Phases = ({ navigation }) => {
     )
   }
   const renderUserInformation = () => {
+    const handleDateOfBirth = (date) => {
+      setGeneralInformation({ ...generalInformation, dob: date })
+    }
+
+    const handleName = (value) => {
+      setGeneralInformation({ ...generalInformation, name: value })
+    }
+
+    const handleGender = (value) => {
+      setGeneralInformation({ ...generalInformation, gender: value })
+    }
+
+    const handleAddress = (value) => {
+      setGeneralInformation({ ...generalInformation, address: value })
+    }
+
+    const handleContact = (value) => {
+      setGeneralInformation({ ...generalInformation, contact: value })
+    }
+
+    const handleCountry = (value) => {
+      setGeneralInformation({ ...generalInformation, country: { name: value.label, code: value.value } })
+      setCountry({ name: value.label, code: value.value })
+    }
+
+    const handleCity = (value) => {
+      setGeneralInformation({ ...generalInformation, city: value.label })
+    }
+
     return (
-      <View>
-        <Text>Information</Text>
+      <View style={userGeneralInformationStyles.container}>
+        <View style={userGeneralInformationStyles.uploadImageContainer}>
+          <Image style={userGeneralInformationStyles.uploadImage} source={{ uri: generalInformation.picture }} />
+          <Button onPress={pickImageProfile} size={'xSmall'} style={userGeneralInformationStyles.uploadImageButtonIcon}>
+            <Image source={images.CameraIcon} style={userGeneralInformationStyles.icon}/>
+          </Button>
+        </View>
+        <View style={userGeneralInformationStyles.informationContainer}>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Name</Text>
+            <TextField style={inputStyles.inputField} value={generalInformation.name} onChangeText={handleName}/>
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Date of Birth</Text>
+            <DateTimePicker style={inputStyles.inputField} dateFormat="DD-MMM-YYYY" placeholder="DD-MMM-YYYY" mode={'date'} value={generalInformation.dob} onChange={handleDateOfBirth}/>
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Gender</Text>
+            <View style={userGeneralInformationStyles.genderContainer}>
+              <RadioGroup onValueChange={handleGender}>
+                <RadioButton value={'Male'} label={'Male'} />
+                <RadioButton value={'Female'} label={'Female'} />
+              </RadioGroup>
+            </View>
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Contact Number</Text>
+            <TextField style={inputStyles.inputField} value={generalInformation.contact} onChangeText={handleContact}/>
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Country</Text>
+            <Picker 
+              placeholder={'Select Country'}
+              value={{ label: generalInformation.country.name, value: generalInformation.country.code }}
+              enableModalBlur={false}
+              topBarProps={{ title: 'Countries' }}
+              showSearch
+              searchPlaceholder={'Search Country'}
+              onChange={handleCountry}
+              mode={Picker.modes.SINGLE}
+              migrateTextField
+              style={inputStyles.inputField}>
+              {
+                countries.map((item, index) => (
+                  <Picker.Item key={index} label={item.name} value={item.code} />
+                ))
+              }
+            </Picker>
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>City</Text>
+            <Picker 
+              placeholder={'Select City'}
+              value={{ label: generalInformation.city, value: generalInformation.city }}
+              enableModalBlur={false}
+              topBarProps={{ title: 'Cities' }}
+              showSearch
+              searchPlaceholder={'Search City'}
+              onChange={handleCity}
+              mode={Picker.modes.SINGLE}
+              migrateTextField
+              style={inputStyles.inputField}>
+              {
+                cities.map((item, index) => (
+                  <Picker.Item key={index} label={item.name} value={''} />
+                ))
+              }
+            </Picker>
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Address</Text>
+            <TextField style={inputStyles.inputField} value={generalInformation.address} onChangeText={handleAddress}/>
+          </View>
+        </View>
       </View>
     )
   }
@@ -189,7 +336,7 @@ export const Phases = ({ navigation }) => {
       case 0:
         return renderUserType();
       case 1:
-        return renderUserPortfolio();
+        return renderUserPackage();
       case 2:
         return renderUserInformation();
     }
@@ -236,20 +383,14 @@ export const Phases = ({ navigation }) => {
     if (_package.name === '' || _package.price === '' || _package.description === '' || _package.image === '') {
       return
     }
-    dispatch({ type: ADD_PACKAGE, payload: _package })
-    setPackage({
-      name: '',
-      price: '',
-      description: '',
-      image: images.Buyer,
-    })
+    dispatch({ type: Packages.ADD_PACKAGE, payload: _package })
+    setPackage({ name: '', price: '', description: '', image: images.Buyer })
   }
 
   const [state, setState] = React.useState({
     activeIndex: 0,
     completedStepIndex: undefined,
     userType: undefined,
-    photo: undefined,
     modal: false
   })
 
@@ -260,7 +401,20 @@ export const Phases = ({ navigation }) => {
     image: images.Buyer,
   })
 
-  const [isVisible, setIsVisible] = React.useState(false)
+  const [generalInformation, setGeneralInformation] = React.useState({
+    name: '',
+    gender: '',
+    dob: '',
+    contact: '',
+    country: { code: '', name: '' },
+    city: '',
+    address: '',
+    picture: '',
+  })
+  const [countries, setCountries] = React.useState([]);
+  const [cities, setCities] = React.useState([]);
+  const [states, setStates] = React.useState([]);
+  const [country, setCountry] = React.useState({ code: '', name: '' });
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar animated={true} barStyle={'dark-content'} showHideTransition={'fade'} backgroundColor={AppHelper.material.green500} />
@@ -270,11 +424,25 @@ export const Phases = ({ navigation }) => {
         <Wizard.Step label="Information" state={handleState(2)} />
       </Wizard>
       <View style={styles.wizardStepContent}>
-        {renderStep()}
+        <ScrollView contentContainerStyle={{ display: 'flex', height: '100%' }}>
+          {renderStep()}
+        </ScrollView>
         <View style={styles.buttonContainer}>
           <Button label="Go Back" onPress={handleGoBack} style={styles.button}/>
           <Button label="Next Step" onPress={handleNextStep} style={styles.button}/>
         </View>
+        {/* <TabController items={[{ label: 'Type' }, { label: 'Packages'}, { label: 'Profile' }]}>
+          <TabController.TabBar enableShadows/>
+          <TabController.TabPage index={0}>
+            {renderUserType()}
+          </TabController.TabPage>
+          <TabController.TabPage index={1}>
+            {renderUserPackage()}
+          </TabController.TabPage>
+          <TabController.TabPage index={2}>
+            {renderUserInformation()}
+          </TabController.TabPage>
+        </TabController> */}
       </View>
     </SafeAreaView>
   )

@@ -18,7 +18,7 @@ export const Signup = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar backgroundColor={AppHelper.material.green500} />
-            <Image source={images.LoginIcon} style={styles.image} />
+            <Image source={images.SignupIcon} style={styles.image} />
             <View style={styles.infoContainer}>
                 <View style={styles.inputContainer}>
                     <Text style={styles.login}>Signup</Text>

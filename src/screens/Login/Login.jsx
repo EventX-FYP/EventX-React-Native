@@ -6,7 +6,7 @@ import React from "react";
 import { TextField } from "react-native-ui-lib/src/incubator";
 import { StatusBar } from "react-native";
 import { styles } from "./styles";
-import { inputStyles } from "../../styles/generalStyles";
+import { inputStyles } from "../../styles";
 
 
 export const Login = ({ navigation }) => {

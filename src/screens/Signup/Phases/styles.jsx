@@ -188,3 +188,46 @@ export const userCategoriesStyles = StyleSheet.create({
   }
 
 });
+
+export const userGeneralInformationStyles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '90%',
+    width: '100%',
+    // justifyContent: 'space-between',
+    paddingTop: 20,
+  },
+  uploadImageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '20%',
+  },
+  uploadImage: {
+    width: 110,
+    height: 110,
+    borderRadius: 100,
+    borderColor: AppHelper.material.green200,
+    borderWidth: 1.4,
+  },
+  uploadImageButtonIcon: {
+    position: 'relative',
+    bottom: 22,
+    left: 30,
+    backgroundColor: AppHelper.material.green500,
+    borderRadius: 100,
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    height: 40,
+    maxWidth: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: AppHelper.material.lightWhite,
+    borderWidth: 2,
+    display: 'flex',
+  },
+  icon: {
+    width: 20,
+    height: 20,
+  }
+});
