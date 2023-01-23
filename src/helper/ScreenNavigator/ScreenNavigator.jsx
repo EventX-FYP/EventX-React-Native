@@ -1,9 +1,7 @@
-export const ScreenNavigator = () => {
-  return {
-    Login: "Login",
-    Signup: "Signup",
-    UserType: "UserType",
-    GeneralInformation: "GeneralInformation",
-    SignupPhases: "SignupPhases",
-  }
+export const ScreenNavigator = {
+  Login: "Login",
+  Signup: "Signup",
+  Phases: "Phases",
+  Planner: "Planner",
+  Client: "Client",
 }

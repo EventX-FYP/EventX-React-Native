@@ -6,13 +6,18 @@ import { styles } from "./styles";
 import { TextField } from "react-native-ui-lib/src/incubator";
 import React from "react";
 import { AppHelper } from "../../helper/AppHelper/AppHelper";
+import { ScreenNavigator } from "../../helper";
 
 export const Signup = ({ navigation }) => {
     const [auth, setAuth] = React.useState({ email: "", password: "", confirmPassword: "" });
     const [error, setError] = React.useState({ email: "Email is required", password: "Please enter password", confirmPassword: "Please enter confirm password" });
 
     const handleSignupButton = () => {
-        navigation.navigate("Phases");
+        navigation.navigate(ScreenNavigator.Phases);
+    }
+
+    const handleLoginButton = () => {
+        navigation.navigate(ScreenNavigator.Login);
     }
 
     return (
@@ -50,7 +55,7 @@ export const Signup = ({ navigation }) => {
                     </View>
                     <View style={styles.SignupContainer}>
                         <Text>Already have an account?  </Text>
-                        <Button label="Login" onPress={() => navigation.navigate("Login")} link outline color={AppHelper.material.green400}/>
+                        <Button label="Login" onPress={handleLoginButton} link outline color={AppHelper.material.green400}/>
                     </View>
                 </View>
             </View>

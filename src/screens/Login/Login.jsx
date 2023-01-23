@@ -7,18 +7,18 @@ import { TextField } from "react-native-ui-lib/src/incubator";
 import { StatusBar } from "react-native";
 import { styles } from "./styles";
 import { inputStyles } from "../../styles";
-
+import { ScreenNavigator } from "../../helper";
 
 export const Login = ({ navigation }) => {
     const [auth, setAuth] = React.useState({ email: "", password: "" });
     const [error, setError] = React.useState({ email: "", password: "" });
 
     const handleLoginButton = () => {
-        navigation.navigate("Planner");
+        navigation.navigate(ScreenNavigator.Client);
     }
 
     const handleSignupButton = () => {
-        navigation.navigate("Signup");
+        navigation.navigate(ScreenNavigator.Signup);
     }
 
     return (
