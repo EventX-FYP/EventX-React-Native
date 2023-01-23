@@ -14,4 +14,5 @@ export const images = {
     Buyer: require('./transparent-icons/86.png'),
     GeneralInfoWave: require('./generalinfowave.png'),
     CameraIcon: require('./icons/camera.png'),
+    CardTestPicture: require('./portrait/6.png')
 };

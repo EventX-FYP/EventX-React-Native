@@ -3,7 +3,7 @@ import { Home } from './Home/Home'
 
 export const Planner = ({ navigation }) => {
   const pages = [
-    { label: "Home" },
+    { label: "Planner Home" },
     { label: "Search" },
     { label: "Packages" },
     { label: "Notifications" },

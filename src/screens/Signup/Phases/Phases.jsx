@@ -1,22 +1,40 @@
 import React from 'react'
 import { SafeAreaView, View, StatusBar, ScrollView } from 'react-native'
-import { Button, Card, RadioGroup, RadioButton, Chip, Image, Modal, Text, Wizard, DateTimePicker, Picker } from 'react-native-ui-lib'
-import { styles, userCategoriesStyles, userPackagesStyles, userTypeStyles, userGeneralInformationStyles } from './styles'
+import {
+  Button,
+  Card,
+  RadioGroup,
+  RadioButton,
+  Chip,
+  Image,
+  Modal,
+  Text,
+  Wizard,
+  DateTimePicker,
+  Picker,
+} from 'react-native-ui-lib'
+import {
+  styles,
+  userCategoriesStyles,
+  userPackagesStyles,
+  userTypeStyles,
+  userGeneralInformationStyles,
+} from './styles'
 import { AppHelper } from '../../../helper/AppHelper/AppHelper'
 import { images } from '../../../assets'
 import { useSelector, useDispatch } from 'react-redux'
 import { PackageCard } from '../../../components'
 import { Packages } from '../../../store/types'
 import { fontStyles, inputStyles } from '../../../styles'
-import { TextField } from "react-native-ui-lib/src/incubator";
-import * as ImagePicker from 'expo-image-picker';
-import { COUNTRY_STATE_CITY_API_KEY } from '@env';
+import { TextField } from 'react-native-ui-lib/src/incubator'
+import * as ImagePicker from 'expo-image-picker'
+import { COUNTRY_STATE_CITY_API_KEY } from '@env'
 import { CountryStateCityAPI } from '../../../helper/API/CountryStateCity'
 
 export const Phases = ({ navigation }) => {
   const dispatch = useDispatch()
-  const profile = useSelector(state => state.profile);
-  const packages = useSelector(state => state.package);
+  const profile = useSelector((state) => state.profile)
+  const packages = useSelector((state) => state.package)
 
   const [categories, setCategories] = React.useState([
     {
@@ -112,76 +130,146 @@ export const Phases = ({ navigation }) => {
   }
 
   React.useEffect(() => {
-    const getCountries = async () => {
-      await CountryStateCityAPI.fetchCountry(setCountries, COUNTRY_STATE_CITY_API_KEY)
-    }
+    new Promise((resolve, reject) =>
+      setTimeout(() => {
+        CountryStateCityAPI.fetchCountry(
+          setCountries,
+          COUNTRY_STATE_CITY_API_KEY,
+        )
+        resolve('Done')
+      }, 3000),
+    )
+    const getCountries = async () => {}
     getCountries()
   }, [])
 
   // Use Effect to fetch cities whenever country changes
   React.useEffect(() => {
     const getCities = async () => {
-      console.log(country)
-      await CountryStateCityAPI.fetchCities(setCities, country.code, '', COUNTRY_STATE_CITY_API_KEY)
+      new Promise((resolve, reject) =>
+        setTimeout(() => {
+          CountryStateCityAPI.fetchCities(
+            setCities,
+            country.code,
+            '',
+            COUNTRY_STATE_CITY_API_KEY,
+          )
+        }, 3000),
+      )
     }
     getCities()
   }, [country])
-  
+
   const renderUserType = () => {
     const modalToggler = () => {
       setState({ ...state, modal: true, userType: 'P' })
     }
 
     const handleSelectChip = (e) => {
-      const category = categories.find(item => item.name === e.children[3].props.children)
+      const category = categories.find(
+        (item) => item.name === e.children[3].props.children,
+      )
       category.selected = !category.selected
       setCategories([...categories])
     }
 
     const handleConfirm = () => {
-      handleNextStep();
-      setCategories(categories.map(category => {
-        category.selected = false
-        return category
-      }))
+      handleNextStep()
+      setCategories(
+        categories.map((category) => {
+          category.selected = false
+          return category
+        }),
+      )
     }
 
     return (
       <View style={userTypeStyles.container}>
         <Text style={userTypeStyles.title}>Join as a client or planner</Text>
         <View style={userTypeStyles.options}>
-          <Card style={state.userType === 'C' ? userTypeStyles.cardClicked : userTypeStyles.card} onPress={() => setState({ ...state, userType: 'C' })}>
-            <Text style={state.userType === 'C' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>Client</Text>
-            <Card.Section imageSource={images.Buyer} imageStyle={userTypeStyles.image} />
+          <Card
+            style={
+              state.userType === 'C'
+                ? userTypeStyles.cardClicked
+                : userTypeStyles.card
+            }
+            onPress={() => setState({ ...state, userType: 'C' })}
+          >
+            <Text
+              style={
+                state.userType === 'C'
+                  ? userTypeStyles.cardTextWhite
+                  : userTypeStyles.cardText
+              }
+            >
+              Client
+            </Text>
+            <Card.Section
+              imageSource={images.Buyer}
+              imageStyle={userTypeStyles.image}
+            />
           </Card>
-          <Card style={state.userType === 'P' ? userTypeStyles.cardClicked : userTypeStyles.card} onPress={modalToggler}>
-            <Text style={state.userType === 'P' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>Planner</Text>
-            <Card.Section imageSource={images.Seller} imageStyle={userTypeStyles.image} />
+          <Card
+            style={
+              state.userType === 'P'
+                ? userTypeStyles.cardClicked
+                : userTypeStyles.card
+            }
+            onPress={modalToggler}
+          >
+            <Text
+              style={
+                state.userType === 'P'
+                  ? userTypeStyles.cardTextWhite
+                  : userTypeStyles.cardText
+              }
+            >
+              Planner
+            </Text>
+            <Card.Section
+              imageSource={images.Seller}
+              imageStyle={userTypeStyles.image}
+            />
           </Card>
         </View>
-          <Modal visible={state.modal} style={userTypeStyles.centeredView}>
-            <View style={userCategoriesStyles.container}>
-              <View>
-                <Text style={[fontStyles[900], fontStyles.large22, userCategoriesStyles.textCenter]}>Select your categories</Text>
-                <View style={userCategoriesStyles.options}>
-                  {
-                    categories.map((category, index) => {
-                      return (
-                        <Chip
-                        key={index}
-                        label={category.name}
-                        labelStyle={category.selected && userCategoriesStyles.selectedText}
-                        containerStyle={[userCategoriesStyles.option, category.selected && userCategoriesStyles.selected]}
-                        onPress={handleSelectChip}
-                        />
-                        )
-                      })
-                    }
-                </View>
+        <Modal visible={state.modal} style={userTypeStyles.centeredView}>
+          <View style={userCategoriesStyles.container}>
+            <View>
+              <Text
+                style={[
+                  fontStyles[900],
+                  fontStyles.large22,
+                  userCategoriesStyles.textCenter,
+                ]}
+              >
+                Select your categories
+              </Text>
+              <View style={userCategoriesStyles.options}>
+                {categories.map((category, index) => {
+                  return (
+                    <Chip
+                      key={index}
+                      label={category.name}
+                      labelStyle={
+                        category.selected && userCategoriesStyles.selectedText
+                      }
+                      containerStyle={[
+                        userCategoriesStyles.option,
+                        category.selected && userCategoriesStyles.selected,
+                      ]}
+                      onPress={handleSelectChip}
+                    />
+                  )
+                })}
               </View>
-              <Button label="Confirm" onPress={handleConfirm} style={userCategoriesStyles.button}/>
             </View>
-          </Modal>
+            <Button
+              label="Confirm"
+              onPress={handleConfirm}
+              style={userCategoriesStyles.button}
+            />
+          </View>
+        </Modal>
       </View>
     )
   }
@@ -190,34 +278,74 @@ export const Phases = ({ navigation }) => {
       <View style={userPackagesStyles.container}>
         <Text style={userPackagesStyles.textHeader}>Add Packages</Text>
         <View style={userPackagesStyles.uploadPictureContainer}>
-          <Image style={userPackagesStyles.uploadPicture} source={_package.image} />
-          <Button label="Upload Picture" onPress={pickImagePackage} style={userPackagesStyles.uploadPictureButton}/>
+          <Image
+            style={userPackagesStyles.uploadPicture}
+            source={_package.image}
+          />
+          <Button
+            label="Upload Picture"
+            onPress={pickImagePackage}
+            style={userPackagesStyles.uploadPictureButton}
+          />
         </View>
         <View style={userPackagesStyles.inputContainer}>
           <View style={userPackagesStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>Package Name</Text>
-            <TextField style={inputStyles.inputField} value={_package.name} onChangeText={value => setPackage({ ..._package, name: value })}/>
+            <Text style={[fontStyles[700], fontStyles.large]}>
+              Package Name
+            </Text>
+            <TextField
+              style={inputStyles.inputField}
+              value={_package.name}
+              onChangeText={(value) => setPackage({ ..._package, name: value })}
+            />
           </View>
           <View style={userPackagesStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>Package Price</Text>
-            <TextField style={inputStyles.inputField} value={_package.price} onChangeText={value => setPackage({ ..._package, price: value })}/>
+            <Text style={[fontStyles[700], fontStyles.large]}>
+              Package Price
+            </Text>
+            <TextField
+              style={inputStyles.inputField}
+              value={_package.price}
+              onChangeText={(value) =>
+                setPackage({ ..._package, price: value })
+              }
+            />
           </View>
           <View style={userPackagesStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>Package Description</Text>
-            <TextField style={inputStyles.inputField} value={_package.description} onChangeText={value => setPackage({ ..._package, description: value })} />
+            <Text style={[fontStyles[700], fontStyles.large]}>
+              Package Description
+            </Text>
+            <TextField
+              style={inputStyles.inputField}
+              value={_package.description}
+              onChangeText={(value) =>
+                setPackage({ ..._package, description: value })
+              }
+            />
           </View>
         </View>
         <View>
-          <Button style={userPackagesStyles.button} onPress={handleSubmitPackage} label="Add Package" />
+          <Button
+            style={userPackagesStyles.button}
+            onPress={handleSubmitPackage}
+            label="Add Package"
+          />
         </View>
-        {
-          packages.length > 0 &&
+        {packages.length > 0 && (
           <View style={userPackagesStyles.listPackages}>
             <ScrollView>
-              {packages.map((item, index) => <PackageCard key={index} name={item.name} price={item.price} description={item.description} image={item.image} />)}
+              {packages.map((item, index) => (
+                <PackageCard
+                  key={index}
+                  name={item.name}
+                  price={item.price}
+                  description={item.description}
+                  image={item.image}
+                />
+              ))}
             </ScrollView>
           </View>
-        }
+        )}
       </View>
     )
   }
@@ -243,7 +371,10 @@ export const Phases = ({ navigation }) => {
     }
 
     const handleCountry = (value) => {
-      setGeneralInformation({ ...generalInformation, country: { name: value.label, code: value.value } })
+      setGeneralInformation({
+        ...generalInformation,
+        country: { name: value.label, code: value.value },
+      })
       setCountry({ name: value.label, code: value.value })
     }
 
@@ -254,41 +385,115 @@ export const Phases = ({ navigation }) => {
     return (
       <View style={userGeneralInformationStyles.container}>
         <View style={userGeneralInformationStyles.uploadImageContainer}>
-          <Image style={userGeneralInformationStyles.uploadImage} source={{ uri: generalInformation.picture }} />
-          <Button onPress={pickImageProfile} size={'xSmall'} style={userGeneralInformationStyles.uploadImageButtonIcon}>
-            <Image source={images.CameraIcon} style={userGeneralInformationStyles.icon}/>
+          <Image
+            style={userGeneralInformationStyles.uploadImage}
+            source={{ uri: generalInformation.picture }}
+          />
+          <Button
+            onPress={pickImageProfile}
+            size={'xSmall'}
+            style={userGeneralInformationStyles.uploadImageButtonIcon}
+          >
+            <Image
+              source={images.CameraIcon}
+              style={userGeneralInformationStyles.icon}
+            />
           </Button>
         </View>
         <ScrollView>
           <View style={userGeneralInformationStyles.informationContainer}>
             <View style={userPackagesStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>Name</Text>
-              <TextField style={inputStyles.inputField} placeholder={'Enter Name'} value={generalInformation.name} onChangeText={handleName}/>
+              <TextField
+                style={inputStyles.inputField}
+                placeholder={'Enter Name'}
+                value={generalInformation.name}
+                onChangeText={handleName}
+              />
             </View>
             <View style={userPackagesStyles.inputRow}>
-              <Text style={[fontStyles[700], fontStyles.large]}>Date of Birth</Text>
-              <DateTimePicker style={inputStyles.inputField} dateFormat="DD-MMM-YYYY" placeholder="DD-MMM-YYYY" mode={'date'} value={generalInformation.dob} onChange={handleDateOfBirth}/>
+              <Text style={[fontStyles[700], fontStyles.large]}>
+                Date of Birth
+              </Text>
+              <DateTimePicker
+                style={inputStyles.inputField}
+                dateFormat="DD-MMM-YYYY"
+                placeholder="DD-MMM-YYYY"
+                mode={'date'}
+                value={generalInformation.dob}
+                onChange={handleDateOfBirth}
+              />
             </View>
             <View style={userPackagesStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>Gender</Text>
               <View style={userGeneralInformationStyles.genderContainer}>
-                <Card style={generalInformation.gender === 'Male' ? userGeneralInformationStyles.genderButtonSelected : userGeneralInformationStyles.genderButton} onPress={() => setGeneralInformation({ ...generalInformation, gender: 'Male' })}>
-                  <Text style={generalInformation.gender === 'Male' ? userGeneralInformationStyles.genderButtonTextSelected : userGeneralInformationStyles.genderButtonText}>Male</Text>
+                <Card
+                  style={
+                    generalInformation.gender === 'Male'
+                      ? userGeneralInformationStyles.genderButtonSelected
+                      : userGeneralInformationStyles.genderButton
+                  }
+                  onPress={() =>
+                    setGeneralInformation({
+                      ...generalInformation,
+                      gender: 'Male',
+                    })
+                  }
+                >
+                  <Text
+                    style={
+                      generalInformation.gender === 'Male'
+                        ? userGeneralInformationStyles.genderButtonTextSelected
+                        : userGeneralInformationStyles.genderButtonText
+                    }
+                  >
+                    Male
+                  </Text>
                 </Card>
-                <Card style={generalInformation.gender === 'Female' ? userGeneralInformationStyles.genderButtonSelected : userGeneralInformationStyles.genderButton} onPress={() => setGeneralInformation({ ...generalInformation, gender: 'Female' })}>
-                  <Text style={generalInformation.gender === 'Female' ? userGeneralInformationStyles.genderButtonTextSelected : userGeneralInformationStyles.genderButtonText}>Female</Text>
+                <Card
+                  style={
+                    generalInformation.gender === 'Female'
+                      ? userGeneralInformationStyles.genderButtonSelected
+                      : userGeneralInformationStyles.genderButton
+                  }
+                  onPress={() =>
+                    setGeneralInformation({
+                      ...generalInformation,
+                      gender: 'Female',
+                    })
+                  }
+                >
+                  <Text
+                    style={
+                      generalInformation.gender === 'Female'
+                        ? userGeneralInformationStyles.genderButtonTextSelected
+                        : userGeneralInformationStyles.genderButtonText
+                    }
+                  >
+                    Female
+                  </Text>
                 </Card>
               </View>
             </View>
             <View style={userPackagesStyles.inputRow}>
-              <Text style={[fontStyles[700], fontStyles.large]}>Contact Number</Text>
-              <TextField style={inputStyles.inputField} placeholder={'Enter Contact Number'} value={generalInformation.contact} onChangeText={handleContact}/>
+              <Text style={[fontStyles[700], fontStyles.large]}>
+                Contact Number
+              </Text>
+              <TextField
+                style={inputStyles.inputField}
+                placeholder={'Enter Contact Number'}
+                value={generalInformation.contact}
+                onChangeText={handleContact}
+              />
             </View>
             <View style={userPackagesStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>Country</Text>
-              <Picker 
+              <Picker
                 placeholder={'Select Country'}
-                value={{ label: generalInformation.country.name, value: generalInformation.country.code }}
+                value={{
+                  label: generalInformation.country.name,
+                  value: generalInformation.country.code,
+                }}
                 enableModalBlur={false}
                 topBarProps={{ title: 'Countries' }}
                 showSearch
@@ -296,19 +501,25 @@ export const Phases = ({ navigation }) => {
                 onChange={handleCountry}
                 mode={Picker.modes.SINGLE}
                 migrateTextField
-                style={inputStyles.inputField}>
-                {
-                  countries.map((item, index) => (
-                    <Picker.Item key={index} label={item.name} value={item.code} />
-                    ))
-                  }
+                style={inputStyles.inputField}
+              >
+                {countries.map((item, index) => (
+                  <Picker.Item
+                    key={index}
+                    label={item.name}
+                    value={item.code}
+                  />
+                ))}
               </Picker>
             </View>
             <View style={userPackagesStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>City</Text>
-              <Picker 
+              <Picker
                 placeholder={'Select City'}
-                value={{ label: generalInformation.city, value: generalInformation.city }}
+                value={{
+                  label: generalInformation.city,
+                  value: generalInformation.city,
+                }}
                 enableModalBlur={false}
                 topBarProps={{ title: 'Cities' }}
                 showSearch
@@ -316,17 +527,21 @@ export const Phases = ({ navigation }) => {
                 onChange={handleCity}
                 mode={Picker.modes.SINGLE}
                 migrateTextField
-                style={inputStyles.inputField}>
-                {
-                  cities.map((item, index) => (
-                    <Picker.Item key={index} label={item.name} value={''} />
-                    ))
-                  }
+                style={inputStyles.inputField}
+              >
+                {cities.map((item, index) => (
+                  <Picker.Item key={index} label={item.name} value={''} />
+                ))}
               </Picker>
             </View>
             <View style={userPackagesStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>Address</Text>
-              <TextField style={inputStyles.inputField} placeholder={'Enter Address'} value={generalInformation.address} onChangeText={handleAddress}/>
+              <TextField
+                style={inputStyles.inputField}
+                placeholder={'Enter Address'}
+                value={generalInformation.address}
+                onChangeText={handleAddress}
+              />
             </View>
           </View>
         </ScrollView>
@@ -335,27 +550,26 @@ export const Phases = ({ navigation }) => {
   }
 
   const renderStep = () => {
-    const { activeIndex } = state;
+    const { activeIndex } = state
     switch (activeIndex) {
       case 0:
-        return renderUserType();
-        case 1:
-        return renderUserPackage();
+        return renderUserType()
+      case 1:
+        return renderUserPackage()
       case 2:
-        return renderUserInformation();
+        return renderUserInformation()
     }
   }
 
   const handleState = (index) => {
-    const { activeIndex, completedStepIndex } = state;
-    let temp = Wizard.States.DISABLED;
+    const { activeIndex, completedStepIndex } = state
+    let temp = Wizard.States.DISABLED
     if (completedStepIndex > index - 1) {
-      temp = Wizard.States.COMPLETED;
+      temp = Wizard.States.COMPLETED
+    } else if (activeIndex === index || completedStepIndex === index - 1) {
+      temp = Wizard.States.ENABLED
     }
-    else if (activeIndex === index || completedStepIndex === index - 1) {
-      temp = Wizard.States.ENABLED;
-    }
-    return temp;
+    return temp
   }
 
   const handleNextStep = () => {
@@ -363,7 +577,7 @@ export const Phases = ({ navigation }) => {
       navigation.goBack()
       return
     }
-    setState({ 
+    setState({
       ...state,
       activeIndex: state.activeIndex + 1,
       completedStepIndex: state.activeIndex,
@@ -379,12 +593,17 @@ export const Phases = ({ navigation }) => {
     setState({
       ...state,
       activeIndex: state.activeIndex - 1,
-      modal: false
+      modal: false,
     })
   }
 
   const handleSubmitPackage = () => {
-    if (_package.name === '' || _package.price === '' || _package.description === '' || _package.image === '') {
+    if (
+      _package.name === '' ||
+      _package.price === '' ||
+      _package.description === '' ||
+      _package.image === ''
+    ) {
       return
     }
     dispatch({ type: Packages.ADD_PACKAGE, payload: _package })
@@ -395,7 +614,7 @@ export const Phases = ({ navigation }) => {
     activeIndex: 0,
     completedStepIndex: undefined,
     userType: undefined,
-    modal: false
+    modal: false,
   })
 
   const [_package, setPackage] = React.useState({
@@ -415,13 +634,18 @@ export const Phases = ({ navigation }) => {
     address: '',
     picture: '',
   })
-  const [countries, setCountries] = React.useState([]);
-  const [cities, setCities] = React.useState([]);
-  const [states, setStates] = React.useState([]);
-  const [country, setCountry] = React.useState({ code: '', name: '' });
+  const [countries, setCountries] = React.useState([])
+  const [cities, setCities] = React.useState([])
+  const [states, setStates] = React.useState([])
+  const [country, setCountry] = React.useState({ code: '', name: '' })
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar animated={true} barStyle={'dark-content'} showHideTransition={'fade'} backgroundColor={AppHelper.material.green500} />
+      <StatusBar
+        animated={true}
+        barStyle={'dark-content'}
+        showHideTransition={'fade'}
+        backgroundColor={AppHelper.material.green500}
+      />
       <Wizard activeIndex={state.activeIndex} containerStyle={styles.wizard}>
         <Wizard.Step label="Type" state={handleState(0)} />
         <Wizard.Step label="Package" state={handleState(1)} />
@@ -430,8 +654,16 @@ export const Phases = ({ navigation }) => {
       <View style={styles.wizardStepContent}>
         {renderStep()}
         <View style={styles.buttonContainer}>
-          <Button label="Go Back" onPress={handleGoBack} style={styles.button}/>
-          <Button label="Next Step" onPress={handleNextStep} style={styles.button}/>
+          <Button
+            label="Go Back"
+            onPress={handleGoBack}
+            style={styles.button}
+          />
+          <Button
+            label="Next Step"
+            onPress={handleNextStep}
+            style={styles.button}
+          />
         </View>
         {/* <TabController items={[{ label: 'Type' }, { label: 'Packages'}, { label: 'Profile' }]}>
           <TabController.TabBar enableShadows/>
