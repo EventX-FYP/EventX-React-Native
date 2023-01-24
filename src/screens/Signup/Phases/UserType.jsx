@@ -1,8 +1,7 @@
 import React from 'react'
-import { AppHelper } from '../../../helper/AppHelper/AppHelper'
+import { AppHelper } from '../../../helper'
 import { Text, View, StyleSheet, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Size } from 'react-native-ui-lib/src/components/skeletonView'
 import { images } from '../../../assets'
 import {TouchableOpacity} from 'react-native';
 

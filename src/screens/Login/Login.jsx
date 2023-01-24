@@ -1,24 +1,27 @@
 import { SafeAreaView, Image, View } from "react-native";
 import { Text, Button } from "react-native-ui-lib";
 import { images } from "../../assets";
-import { AppHelper } from "../../helper/AppHelper/AppHelper";
 import React from "react";
 import { TextField } from "react-native-ui-lib/src/incubator";
 import { StatusBar } from "react-native";
 import { styles } from "./styles";
 import { inputStyles } from "../../styles";
-import { ScreenNavigator } from "../../helper";
+import { ScreenNavigator, AppHelper } from "../../helper";
 
 export const Login = ({ navigation }) => {
     const [auth, setAuth] = React.useState({ email: "", password: "" });
     const [error, setError] = React.useState({ email: "", password: "" });
 
     const handleLoginButton = () => {
-        navigation.navigate(ScreenNavigator.Planner);
+        navigation.navigate(ScreenNavigator.Client);
     }
 
     const handleSignupButton = () => {
         navigation.navigate(ScreenNavigator.Signup);
+    }
+
+    const handleForgotPasswordButton = () => {
+        // navigation.navigate(ScreenNavigator.ForgotPassword);
     }
 
     return (
@@ -36,7 +39,7 @@ export const Login = ({ navigation }) => {
                         <Text style={styles.bold}>Password</Text>
                         <TextField value={auth.password} onChangeText={(text) => setAuth({ ...auth, password: text })} error={error.password} style={inputStyles.inputField} />
                     </View>
-                    <Button label="Forgot Password?" style={styles.forgotPassword} onPress={() => navigation.navigate("Signup")} link outline color={AppHelper.material.green500}/>
+                    <Button label="Forgot Password?" style={styles.forgotPassword} onPress={handleForgotPasswordButton} link outline color={AppHelper.material.green500}/>
                 </View>
                 <View style={styles.loginContainer}>
                     <View style={styles.buttonContainer}>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { AppHelper } from '../../../helper/AppHelper/AppHelper'
+import { AppHelper } from '../../../helper'
 import { Text, View, StyleSheet, Image, TextInput, Button } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../../assets'

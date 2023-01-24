@@ -2,7 +2,7 @@ import { Home } from "./Home/Home"
 import { TabController, View } from "react-native-ui-lib"
 export const Client = ({ navigation }) => {
   const pages = [
-    { label: "Client Home" },
+    { label: "Home" },
     { label: "Search" },
     { label: "Packages" },
     { label: "Notifications" },
@@ -12,7 +12,9 @@ export const Client = ({ navigation }) => {
       <TabController items={pages}>
         <TabController.TabBar enableShadows />
         <View flex>
-          <TabController.TabPage index={0}><Home navigation={navigation}/></TabController.TabPage>
+          <TabController.TabPage index={0}>
+            <Home navigation={navigation}/>
+          </TabController.TabPage>
           <TabController.TabPage index={1}></TabController.TabPage>
           <TabController.TabPage index={2}></TabController.TabPage>
           <TabController.TabPage index={3}></TabController.TabPage>

@@ -1,7 +1,6 @@
 import { Packages } from "../types";
 
 export const packagesReducer = (state = [], action) => {
-  console.log(action.type)
   const { ADD_PACKAGE, UPDATE_PACKAGE, REMOVE_PACKAGE, GET_PACKAGES, GET_PACKAGE } = Packages;
   switch (action.type) {
     case ADD_PACKAGE:

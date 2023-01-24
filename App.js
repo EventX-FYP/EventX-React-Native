@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Login, Signup, UserType, GeneralInfo, Phases, Planner, Client } from "./src/screens";
+import { Login, Signup, Phases, Planner, Client } from "./src/screens";
 import { Provider } from "react-redux";
 import store from "./src/store";
 import { ScreenNavigator } from "./src/helper";

@@ -1,9 +1,9 @@
-import { CountryStateCityAPI } from './index'
+import { GET_COUNTRY_API, GET_STATES_BY_COUNTRY_API, GET_CITIES_BY_COUNTRY_API, GET_CITIES_BY_STATE_API } from './routes'
 export const fetchCountry = async (setCountries, API_KEY) => {
   const headers = new Headers();
   headers.append('X-CSCAPI-KEY', API_KEY);
   
-  const response = await fetch(CountryStateCityAPI.GET_COUNTRY_API, {
+  const response = await fetch(GET_COUNTRY_API, {
     method: 'GET',
     headers: headers,
     redirect: 'follow',
@@ -18,7 +18,7 @@ export const fetchStates = async (setStates, countryCode, API_KEY) => {
   const headers = new Headers();
   headers.append('X-CSCAPI-KEY', API_KEY);
   
-  const response = await fetch(CountryStateCityAPI.GET_STATES_BY_COUNTRY_API(countryCode), {
+  const response = await fetch(GET_STATES_BY_COUNTRY_API(countryCode), {
     method: 'GET',
     headers: headers,
     redirect: 'follow',
@@ -35,7 +35,7 @@ export const fetchCities = async (setCities, countryCode, stateCode, API_KEY) =>
 
   let response;
   if (stateCode === '') {
-    response = await fetch(CountryStateCityAPI.GET_CITIES_BY_COUNTRY_API(countryCode), {
+    response = await fetch(GET_CITIES_BY_COUNTRY_API(countryCode), {
       method: 'GET',
       headers: headers,
       redirect: 'follow',
@@ -44,7 +44,7 @@ export const fetchCities = async (setCities, countryCode, stateCode, API_KEY) =>
       .catch(err => console.log(err))
   }
   else {
-    response = await fetch(CountryStateCityAPI.GET_CITIES_BY_STATE_API(countryCode, stateCode), {
+    response = await fetch(GET_CITIES_BY_STATE_API(countryCode, stateCode), {
       method: 'GET',
       headers: headers,
       redirect: 'follow',

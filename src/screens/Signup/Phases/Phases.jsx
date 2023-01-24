@@ -1,26 +1,7 @@
 import React from 'react'
 import { SafeAreaView, View, StatusBar, ScrollView } from 'react-native'
-import {
-  Button,
-  Card,
-  RadioGroup,
-  RadioButton,
-  Chip,
-  Image,
-  Modal,
-  Text,
-  Wizard,
-  DateTimePicker,
-  Picker,
-} from 'react-native-ui-lib'
-import {
-  styles,
-  userCategoriesStyles,
-  userPackagesStyles,
-  userTypeStyles,
-  userGeneralInformationStyles,
-} from './styles'
-import { AppHelper } from '../../../helper/AppHelper/AppHelper'
+import { Button, Card, Chip, Image, Modal, Text, Wizard, DateTimePicker, Picker } from 'react-native-ui-lib'
+import { styles, userCategoriesStyles, userPackagesStyles, userTypeStyles, userGeneralInformationStyles } from './styles'
 import { images } from '../../../assets'
 import { useSelector, useDispatch } from 'react-redux'
 import { PackageCard } from '../../../components'
@@ -29,7 +10,7 @@ import { fontStyles, inputStyles } from '../../../styles'
 import { TextField } from 'react-native-ui-lib/src/incubator'
 import * as ImagePicker from 'expo-image-picker'
 import { COUNTRY_STATE_CITY_API_KEY } from '@env'
-import { CountryStateCityAPI } from '../../../helper/API/CountryStateCity'
+import { CountryStateCityAPI, AppHelper } from '../../../helper'
 
 export const Phases = ({ navigation }) => {
   const dispatch = useDispatch()

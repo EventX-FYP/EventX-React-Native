@@ -7,7 +7,7 @@ import moment from 'moment/moment'
 
 const currentDate = new Date().toISOString().slice(0, 10)
 
-export default function JobCard() {
+export const JobCard = () => {
   return (
     <View style={styles.CardContainer}>
       <View style={styles.FirstRow}>

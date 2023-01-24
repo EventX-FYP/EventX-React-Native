@@ -1,6 +1,8 @@
 export * from './fontStyles';
 export * from './inputStyles';
 export * from './dateTimePickerStyles';
+export * from './scrollStyles';
+export * from './imageStyles';
 // export * from './buttonStyles';
 // export * from './textStyles';
 // export * from './containerStyles';

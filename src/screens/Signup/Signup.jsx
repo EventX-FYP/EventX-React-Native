@@ -5,8 +5,7 @@ import { StatusBar } from "react-native";
 import { styles } from "./styles";
 import { TextField } from "react-native-ui-lib/src/incubator";
 import React from "react";
-import { AppHelper } from "../../helper/AppHelper/AppHelper";
-import { ScreenNavigator } from "../../helper";
+import { ScreenNavigator, AppHelper } from "../../helper";
 
 export const Signup = ({ navigation }) => {
     const [auth, setAuth] = React.useState({ email: "", password: "", confirmPassword: "" });

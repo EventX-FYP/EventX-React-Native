@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, Text } from 'react-native-ui-lib'
 import { StyleSheet } from 'react-native'
-import JobCard from '../../../components/JobCard/JobCard'
+import  { JobCard } from '../../../components'
 
 export const Home = ({ navigation }) => {
   return (
