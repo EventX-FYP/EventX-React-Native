@@ -1,77 +1,113 @@
 import { SafeAreaView, View, Text } from 'react-native'
-import { Image } from 'react-native-ui-lib'
+import { Image, TouchableOpacity } from 'react-native-ui-lib'
 import { StyleSheet } from 'react-native'
 import { images } from '../../assets/index'
 import { ScrollView } from 'react-native-gesture-handler'
 import moment from 'moment/moment'
+import { ScreenNavigator, AppHelper } from "../../helper";
 
 const currentDate = new Date().toISOString().slice(0, 10)
-
+const content = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic"
 export const JobCard = () => {
   return (
-    <View style={styles.CardContainer}>
-      <View style={styles.FirstRow}>
-        
-          <Image style={styles.PersonImage} source={images.CardTestPicture} />
-          <Text style={styles.CardTittle} numberOfLines={1}>
-            Tittle
+
+    <TouchableOpacity>
+      <View style={styles.CardContainer}>
+
+        <View style={styles.FirstRow}>      
+            <Text style={styles.CardTittle} numberOfLines={1}>
+              Tittle
+            </Text>
+
+            <Text  style={styles.CardCity} numberOfLines={1}>
+              Lahore
+            </Text>
+        </View>
+
+        <View style={styles.CategoryRow}>
+          <Text numberOfLines={1} style={styles.CategoryText}>
+            Category 1 | Category 1 | Category 1 | Category 1 | Category 1 |
+            Category 1 |
           </Text>
-          {/* <Text>{moment(currentDate).format('DD-MMM-YYYY')}</Text> */}
+        </View>
+
+        <View style={styles.Description}>
+          <Text style={styles.DescriptionContent} numberOfLines={3}>
+             {content}
+          </Text>
+        </View>
+
+        <View style={styles.Row} >
+          <Text style={styles.SecondLastRowHeading} >
+            Posted By:
+          </Text>
+          <Text style={styles.SecondLastRowHeading} >
+            Deadline: 
+          </Text>
+        </View>
+
+        <View style={styles.Row} >
+          <Text numberOfLines={1}  style={styles.SecondLastRowHeading}>
+              Haroon Tahir Haroon Tahir Haroon Tahir Haroon Tahir
+          </Text>
+
+          <Text numberOfLines={1} style={styles.SecondLastRowHeading}>
+          {moment(currentDate).format('DD-MMM-YYYY')}
+          </Text>
+        </View>
         
       </View>
+    </TouchableOpacity>
 
-      <View style={styles.CategoryRow}>
-        <Text numberOfLines={1} style={styles.CategoryText}>
-          Category 1 | Category 1 | Category 1 | Category 1 | Category 1 |
-          Category 1 |
-        </Text>
-      </View>
-
-      <Text>
-        
-      </Text>
-    </View>
+    
   )
 }
 
 const styles = StyleSheet.create({
   CardContainer: {
-    height: 150,
-    width: 270,
+    height: 200,
+    width: "90%",
     borderRadius: 20,
-    backgroundColor: 'grey',
+    backgroundColor: 'white',
     justifyContent: 'space-evenly',
-    flex: 1,
-    paddingHorizontal:10
-  },
-  PersonImage: {
-    width: 35,
-    height: 35,
-    borderRadius: 50,
-    resizeMode: 'cover',
-    marginEnd:10
+    paddingHorizontal:15,
+    paddingVertical:5,
+    borderWidth:1
   },
   CardTittle: {
     fontWeight:"bold",
-    maxWidth: '50%',
-    fontSize:15
+    maxWidth: '60%',
+    fontSize:15,
   },
   FirstRow: {
     flexDirection:"row",
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginStart:15
-  },
-  ScrollViewRow: {
-    alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'white',
-    display: 'flex',
-    width: '100%',
   },
   CategoryRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start',
   },
+  Description:{
+    flexDirection:"row",
+    justifyContent:"flex-start",
+  },
+  DescriptionContent:{
+    color: AppHelper.gray
+  },
+  Row:{
+    flexDirection:"row",
+    justifyContent:"space-between"
+  },
+  SecondLastRowHeading:{
+    maxWidth:"50%"
+  },
+  CategoryText:{
+    color:AppHelper.material.green600,
+  },
+  CardCity:{
+    fontSize:12,
+    maxWidth:"30%"
+  }
 })

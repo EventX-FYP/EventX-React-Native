@@ -13,7 +13,7 @@ export const Login = ({ navigation }) => {
     const [error, setError] = React.useState({ email: "", password: "" });
 
     const handleLoginButton = () => {
-        navigation.navigate(ScreenNavigator.Client);
+        navigation.navigate(ScreenNavigator.Planner);
     }
 
     const handleSignupButton = () => {
