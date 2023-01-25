@@ -11,7 +11,7 @@ const content = "Lorem Ipsum is simply dummy text of the printing and typesettin
 export const JobCard = () => {
   return (
 
-    <TouchableOpacity>
+    
       <View style={styles.CardContainer}>
 
         <View style={styles.FirstRow}>      
@@ -57,7 +57,7 @@ export const JobCard = () => {
         </View>
         
       </View>
-    </TouchableOpacity>
+    
 
     
   )
@@ -66,9 +66,9 @@ export const JobCard = () => {
 const styles = StyleSheet.create({
   CardContainer: {
     height: 200,
-    width: "90%",
+    width: 300,
     borderRadius: 20,
-    backgroundColor: 'white',
+    backgroundColor: AppHelper.material.green50,
     justifyContent: 'space-evenly',
     paddingHorizontal:15,
     paddingVertical:5,
@@ -101,7 +101,8 @@ const styles = StyleSheet.create({
     justifyContent:"space-between"
   },
   SecondLastRowHeading:{
-    maxWidth:"50%"
+    maxWidth:"50%",
+    fontWeight:"600"
   },
   CategoryText:{
     color:AppHelper.material.green600,

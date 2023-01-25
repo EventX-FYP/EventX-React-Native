@@ -15,7 +15,7 @@ export const Home = ({ navigation }) => {
         <View style={styles.ViewHolder}>
 
           <View style= {styles.Component}>
-            <Text style={styles.heading}>Top Picks For You</Text>
+            <Text style={styles.heading}>{TopJobs}</Text>
             <View>
               <JobCard />
             </View>
@@ -25,7 +25,11 @@ export const Home = ({ navigation }) => {
           <View style= {styles.Component}>
             <Text style={styles.heading}>{JobsNear}</Text>
             <View>
+              <ScrollView horizontal={true}>
               <JobCard />
+              <JobCard />
+              </ScrollView>
+              
             </View>
           </View>
           
@@ -51,7 +55,7 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 25,
-    fontWeight: '400',
+    fontWeight: '600',
   },
   ViewHolder:{
    paddingStart:15,
