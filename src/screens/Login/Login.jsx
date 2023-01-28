@@ -17,7 +17,7 @@ export const Login = ({ navigation }) => {
     const { error, loading, data } = useQuery(GET_USER_ME);
 
     const handleLoginButton = () => {
-        navigation.navigate(ScreenNavigator.Client);
+        navigation.navigate(ScreenNavigator.Planner);
     }
 
     const handleSignupButton = () => {

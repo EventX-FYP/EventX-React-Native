@@ -1,77 +1,104 @@
 import { SafeAreaView, View, Text } from 'react-native'
-import { Image } from 'react-native-ui-lib'
+import { Image, TouchableOpacity } from 'react-native-ui-lib'
 import { StyleSheet } from 'react-native'
 import { images } from '../../assets/index'
 import { ScrollView } from 'react-native-gesture-handler'
 import moment from 'moment/moment'
+import { ScreenNavigator, AppHelper } from '../../helper'
 
-const currentDate = new Date().toISOString().slice(0, 10)
-
-export const JobCard = () => {
+export const JobCard = ({ job }) => {
+  // console.log(job)
+  const { title, City, Category, Content, Name, Date } = job?.item
+    ? job.item
+    : job
   return (
     <View style={styles.CardContainer}>
       <View style={styles.FirstRow}>
-        
-          <Image style={styles.PersonImage} source={images.CardTestPicture} />
-          <Text style={styles.CardTittle} numberOfLines={1}>
-            Tittle
-          </Text>
-          {/* <Text>{moment(currentDate).format('DD-MMM-YYYY')}</Text> */}
-        
+        <Text style={styles.CardTittle} numberOfLines={1}>
+          {title}
+        </Text>
+
+        <Text style={styles.CardCity} numberOfLines={1}>
+          {City}
+        </Text>
       </View>
 
       <View style={styles.CategoryRow}>
         <Text numberOfLines={1} style={styles.CategoryText}>
-          Category 1 | Category 1 | Category 1 | Category 1 | Category 1 |
-          Category 1 |
+          {Category}
         </Text>
       </View>
 
-      <Text>
-        
-      </Text>
+      <View style={styles.Description}>
+        <Text style={styles.DescriptionContent} numberOfLines={3}>
+          {Content}
+        </Text>
+      </View>
+
+      <View style={styles.Row}>
+        <Text style={styles.SecondLastRowHeading}>Posted By:</Text>
+        <Text style={styles.SecondLastRowHeading}>Deadline:</Text>
+      </View>
+
+      <View style={styles.Row}>
+        <Text numberOfLines={1} style={styles.SecondLastRowHeading}>
+          {Name}
+        </Text>
+
+        <Text numberOfLines={1} style={styles.SecondLastRowHeading}>
+          {Date}
+        </Text>
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   CardContainer: {
-    height: 150,
-    width: 270,
+    height: 200,
+    width: 300,
     borderRadius: 20,
-    backgroundColor: 'grey',
+    backgroundColor: AppHelper.material.green50,
     justifyContent: 'space-evenly',
-    flex: 1,
-    paddingHorizontal:10
-  },
-  PersonImage: {
-    width: 35,
-    height: 35,
-    borderRadius: 50,
-    resizeMode: 'cover',
-    marginEnd:10
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderWidth: 1,
   },
   CardTittle: {
-    fontWeight:"bold",
-    maxWidth: '50%',
-    fontSize:15
+    fontWeight: 'bold',
+    maxWidth: '60%',
+    fontSize: 15,
   },
   FirstRow: {
-    flexDirection:"row",
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginStart:15
-  },
-  ScrollViewRow: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'white',
-    display: 'flex',
-    width: '100%',
   },
   CategoryRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-start',
+  },
+  Description: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  DescriptionContent: {
+    color: AppHelper.gray,
+  },
+  Row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  SecondLastRowHeading: {
+    maxWidth: '50%',
+    fontWeight: '600',
+  },
+  CategoryText: {
+    color: AppHelper.material.green600,
+  },
+  CardCity: {
+    fontSize: 12,
+    maxWidth: '30%',
   },
 })
