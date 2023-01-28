@@ -1,7 +1,6 @@
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView, ScrollView } from 'react-native'
 import { StyleSheet, Text } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
 import { View } from 'react-native-ui-lib'
 
 export const Notifications = ({ navigation }) => {

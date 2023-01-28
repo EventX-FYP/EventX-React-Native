@@ -1,6 +1,6 @@
 import { TabController, View, Text } from 'react-native-ui-lib'
 import { Home } from './Home/Home'
-import { Notifications } from './Notifications/Notifications'
+import { Notifications } from '../General'
 export const Planner = ({ navigation }) => {
   const pages = [
     { label: 'Planner Home' },
