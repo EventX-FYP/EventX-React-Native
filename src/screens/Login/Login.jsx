@@ -7,10 +7,14 @@ import { StatusBar } from "react-native";
 import { styles } from "./styles";
 import { inputStyles } from "../../styles";
 import { ScreenNavigator, AppHelper } from "../../helper";
+import { GET_USER_ME } from "../../graphql/queries";
+import { useQuery } from "@apollo/client";
 
 export const Login = ({ navigation }) => {
     const [auth, setAuth] = React.useState({ email: "", password: "" });
-    const [error, setError] = React.useState({ email: "", password: "" });
+    const [setError] = React.useState({ email: "", password: "" });
+
+    const { error, loading, data } = useQuery(GET_USER_ME);
 
     const handleLoginButton = () => {
         navigation.navigate(ScreenNavigator.Client);
@@ -22,6 +26,9 @@ export const Login = ({ navigation }) => {
 
     const handleForgotPasswordButton = () => {
         // navigation.navigate(ScreenNavigator.ForgotPassword);
+        console.log(loading);
+        console.log(error);
+        console.log(data?.getUserMe);
     }
 
     return (
@@ -33,11 +40,11 @@ export const Login = ({ navigation }) => {
                     <Text style={styles.login}>Login</Text>
                     <View style={styles.inputField}>
                         <Text style={styles.bold}>Email</Text>
-                        <TextField value={auth.email} onChangeText={(text) => setAuth({ ...auth, email: text })} error={error.email} style={inputStyles.inputField} />
+                        <TextField value={auth.email} onChangeText={(text) => setAuth({ ...auth, email: text })} style={inputStyles.inputField} />
                     </View>
                     <View style={styles.inputField}>
                         <Text style={styles.bold}>Password</Text>
-                        <TextField value={auth.password} onChangeText={(text) => setAuth({ ...auth, password: text })} error={error.password} style={inputStyles.inputField} />
+                        <TextField value={auth.password} onChangeText={(text) => setAuth({ ...auth, password: text })} style={inputStyles.inputField} />
                     </View>
                     <Button label="Forgot Password?" style={styles.forgotPassword} onPress={handleForgotPasswordButton} link outline color={AppHelper.material.green500}/>
                 </View>

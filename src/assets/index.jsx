@@ -14,5 +14,14 @@ export const images = {
     Buyer: require('./transparent-icons/86.png'),
     GeneralInfoWave: require('./generalinfowave.png'),
     CameraIcon: require('./icons/camera.png'),
-    CardTestPicture: require('./portrait/6.png')
+    CardTestPicture: require('./portrait/6.png'),
+    BirthdayPlanner: require("./category-icons/birthday.png"),
+    DigitalPlanner: require("./category-icons/digital.jpg"),
+    FinancialPlanner: require("./category-icons/financial.jpg"),
+    HealthFitnessPlanner: require("./category-icons/health-fitness.jpg"),
+    PartyPlanner: require("./category-icons/party.jpg"),
+    PersonalPlanner: require("./category-icons/personal.jpg"),
+    WeddingPlanner: require("./category-icons/wedding.jpg"),
+    WeeklyPlanner: require("./category-icons/weekly.jpg"),
+    WorkPlanner: require("./category-icons/work.jpg"),
 };

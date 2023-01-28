@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.eventx"
     },
     "android": {
       "adaptiveIcon": {
@@ -36,6 +37,14 @@
         "projectId": "29657a98-b850-4614-ac0e-384916fa7b8c"
       }
     },
-    "owner": "haroon-tahir"
+    "owner": "haroon-tahir",
+    "plugins": [
+      [
+        "react-native-auth0",
+        {
+          "domain": "dev-0wrwesnq6iraecr0.us.auth0.com"
+        }
+      ]
+    ]
   }
 }

@@ -1,5 +1,5 @@
 import { View, Text, Icon, Image, Button } from 'react-native-ui-lib';
-import { SafeAreaView, ScrollView } from 'react-native';
+import { FlatList, SafeAreaView, ScrollView } from 'react-native';
 import { styles } from './styles';
 import { fontStyles, inputStyles, ScrollStyles } from '../../../styles';
 import { TextField } from 'react-native-ui-lib/src/incubator';
@@ -32,15 +32,14 @@ export const Home = ({ navigation }) => {
               <Text style={[fontStyles.bold, fontStyles.large, styles.textColor]}>Show more from this area</Text>
             </Button>
             <View>
-              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                <View style={styles.row}>
-                  {
-                    planners.map((planner, index) =>
-                      <PlannerCard planner={planner} key={index}/>
-                    )
-                  }
-                </View>
-              </ScrollView>
+              <SafeAreaView>
+                <FlatList
+                  data={planners}
+                  horizontal={true}
+                  ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+                  renderItem={planner => <PlannerCard navigation={navigation} planner={planner} /> }
+                />
+              </SafeAreaView>
             </View>
           </View>
           <View style={styles.info}>
@@ -53,15 +52,14 @@ export const Home = ({ navigation }) => {
               <Text style={[fontStyles.bold, fontStyles.large, styles.textColor]}>See more profiles</Text>
             </Button>
             <View>
-              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                <View style={styles.row}>
-                  {
-                    planners.map((planner, index) =>
-                      <PlannerCard planner={planner} key={index}/>
-                    )
-                  }
-                </View>
-              </ScrollView>
+              <SafeAreaView>
+                <FlatList
+                  data={planners}
+                  horizontal={true}
+                  ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+                  renderItem={planner => <PlannerCard navigation={navigation} planner={planner} /> }
+                />
+              </SafeAreaView>
             </View>
           </View>
         </View>

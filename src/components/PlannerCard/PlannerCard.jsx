@@ -5,7 +5,7 @@ import { Image } from "react-native-ui-lib";
 import { fontStyles, imageStyles } from "../../styles";
 
 export const PlannerCard = ({ navigation, planner }) => {
-  const { name, categories, image, earned, reviews, rating, location, status } = planner;
+  const { name, categories, image, earned, reviews, rating, location, status } = planner.item ? planner.item : planner;
   return (
     <View style={styles.container}>
       <View style={styles.topRow}>
@@ -19,7 +19,7 @@ export const PlannerCard = ({ navigation, planner }) => {
             <Text style={[fontStyles[100], fontStyles.small, styles.maxLimit]} numberOfLines={1}>
               {
                 categories.map((category, index) => {
-                  if (index === planner.categories.length - 1) {
+                  if (index === categories.length - 1) {
                     return category;
                   } else {
                     return category + ' | ';
