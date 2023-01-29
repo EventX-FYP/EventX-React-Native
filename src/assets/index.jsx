@@ -1,3 +1,5 @@
+import UserAdd from "./svg/user-add.svg";
+import EmptyFolder from "./svg/empty-folder.svg";
 export const images = {
     Icon: require("./icon.png"),
     Favicon: require("./favicon.png"),
@@ -8,8 +10,6 @@ export const images = {
     Portrait1: { uri: "https://media-public.canva.com/MADFxRUu1Mo/1/thumbnail_large.jpg" },
     React: { uri: "https://reactjs.org/logo-og.png" },
     GoogleIcon: require('./brand-icons/google-icon.png'),
-    // Seller: require('./seller.png'),
-    // Buyer: require('./buyer.png'),
     Seller: require('./transparent-icons/87.png'),
     Buyer: require('./transparent-icons/86.png'),
     GeneralInfoWave: require('./generalinfowave.png'),
@@ -24,4 +24,8 @@ export const images = {
     WeddingPlanner: require("./category-icons/wedding.jpg"),
     WeeklyPlanner: require("./category-icons/weekly.jpg"),
     WorkPlanner: require("./category-icons/work.jpg"),
+    SVG: {
+        UserAdd,
+        EmptyFolder,
+    },
 };
