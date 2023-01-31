@@ -1,8 +1,10 @@
 import { FlatList, ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { View, Text } from 'react-native-ui-lib'
-import { StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native-ui-lib'
+import { StyleSheet, Image } from 'react-native'
 import { JobCard } from '../../../components'
+import {images} from '../../../assets/index'
+
 import moment from 'moment/moment'
 
 const TopJobs = 'Top Jobs'
@@ -50,7 +52,13 @@ const JobList = [
 export const Home = ({ navigation }) => {
   return (
     <SafeAreaView>
-      <ScrollView >
+      <ScrollView style={styles.container} >
+        <TouchableOpacity>
+          <View style={styles.Search}>
+              <Text>Search</Text>
+              <Image style={styles.SearchImage} source={images.SearchIcon} />
+          </View>
+        </TouchableOpacity>
         <View style={styles.ViewHolder}>
           <View style={styles.Component}>
             <Text style={styles.heading}>{TopJobs}</Text>
@@ -95,18 +103,32 @@ export const Home = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'grey',
-    flex: 1,
+    paddingHorizontal:20,
+    paddingTop:15
   },
   heading: {
     fontSize: 25,
     fontWeight: '600',
   },
   ViewHolder: {
-    paddingHorizontal: 20,
+    paddingEnd: 20,
   },
   Component: {
     justifyContent: 'space-evenly',
     height: 270,
   },
+  Search:{
+    flexDirection:"row",
+    justifyContent:"space-between",
+    alignItems:"center",
+    paddingHorizontal:20,
+    paddingVertical:10,
+    backgroundColor:"white",
+    borderWidth:1,
+    borderRadius:15
+  },
+  SearchImage:{
+    width:30,
+    height:30
+  }
 })

@@ -25,6 +25,7 @@ export const images = {
     WeeklyPlanner: require("./category-icons/weekly.jpg"),
     WorkPlanner: require("./category-icons/work.jpg"),
     Thunder: require("./thunder.png"),
+    SearchIcon: require("./searchIcon.png"),
     SVG: {
         UserAdd,
         EmptyFolder,
