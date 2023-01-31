@@ -59,10 +59,10 @@ export const Notifications = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'gray',
+    paddingHorizontal:20
   },
   heading:{
-    color: AppHelper.white,
+    color: AppHelper.black,
     fontSize: 25
   },
   ContentContainer:{
