@@ -1,6 +1,8 @@
 import { TabController, View, Text } from 'react-native-ui-lib'
 import { Home } from './Home/Home'
 import { Notifications } from '../General'
+import {Search} from './Search/Search'
+
 export const Planner = ({ navigation }) => {
   const pages = [
     { label: 'Planner Home' },
@@ -17,7 +19,7 @@ export const Planner = ({ navigation }) => {
             <Home navigation={navigation} />
           </TabController.TabPage>
           <TabController.TabPage index={1}>
-            <Text>Hello</Text>
+            <Search navigation={navigation} />
           </TabController.TabPage>
           <TabController.TabPage index={2}>
             <Text>Hello</Text>

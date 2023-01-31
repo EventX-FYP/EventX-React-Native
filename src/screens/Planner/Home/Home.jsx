@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     paddingVertical:10,
     backgroundColor:"white",
     borderWidth:1,
-    borderRadius:15
+    borderRadius:15,
   },
   SearchImage:{
     width:30,
