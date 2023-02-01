@@ -17,13 +17,18 @@ export const Client = ({ navigation }) => {
           <TabController.TabPage index={0}>
             <Home navigation={navigation}/>
           </TabController.TabPage>
+
           <TabController.TabPage index={1}>
             <Search navigation={navigation}/>
           </TabController.TabPage>
+          
           <TabController.TabPage index={2}>
             <Job navigation={navigation} />
           </TabController.TabPage>
-          <TabController.TabPage index={3}></TabController.TabPage>
+          
+          <TabController.TabPage index={3}>
+
+          </TabController.TabPage>
         </View>
       </TabController>
     </View>

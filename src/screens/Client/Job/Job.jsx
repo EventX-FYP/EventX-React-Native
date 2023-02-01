@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, SafeAreaView, ScrollView } from "react-native";
+import { Pressable, SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
 import { View, Text, Button } from "react-native-ui-lib";
 import { fontStyles } from "../../../styles";
 import { styles } from "./styles";

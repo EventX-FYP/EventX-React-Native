@@ -9,25 +9,35 @@ import { inputStyles } from "../../styles";
 import { ScreenNavigator, AppHelper } from "../../helper";
 import { GET_USER_ME } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
+import { signIn, signInWithGoogle, signInWithGoogleRedirect } from "../../firebase";
+
 
 export const Login = ({ navigation }) => {
-    const [auth, setAuth] = React.useState({ email: "", password: "" });
-    const [setError] = React.useState({ email: "", password: "" });
+    const [auth, setAuth] = React.useState({ username: "", password: "" });
 
-    const { error, loading, data } = useQuery(GET_USER_ME);
+    const { data } = useQuery(GET_USER_ME);
 
-    const handleLoginButton = () => {
-        navigation.navigate(ScreenNavigator.Client);
+    const handleLoginButton = async () => {
+        await signIn(auth.username, auth.password)
+            .then(() => navigation.navigate(ScreenNavigator.Client))
+            .catch((error) => console.log(error));
+        // navigation.navigate(ScreenNavigator.Client);
+    }
+
+    const handleLoginWithGoogleButton = async () => {
+        await signInWithGoogleRedirect()
+            .then(() => navigation.navigate(ScreenNavigator.Client))
+            .catch((error) => console.log(error));
     }
 
     const handleSignupButton = () => {
         navigation.navigate(ScreenNavigator.Signup);
     }
 
-    const handleForgotPasswordButton = () => {
+    const handleForgotPasswordButton = async () => {
         // navigation.navigate(ScreenNavigator.ForgotPassword);
-        console.log(loading);
-        console.log(error);
+        // console.log(loading);
+        // console.log(error);
         console.log(data?.getUserMe);
     }
 
@@ -40,7 +50,7 @@ export const Login = ({ navigation }) => {
                     <Text style={styles.login}>Login</Text>
                     <View style={styles.inputField}>
                         <Text style={styles.bold}>Email</Text>
-                        <TextField value={auth.email} onChangeText={(text) => setAuth({ ...auth, email: text })} style={inputStyles.inputField} />
+                        <TextField value={auth.email} onChangeText={(text) => setAuth({ ...auth, username: text })} style={inputStyles.inputField} />
                     </View>
                     <View style={styles.inputField}>
                         <Text style={styles.bold}>Password</Text>
@@ -56,7 +66,7 @@ export const Login = ({ navigation }) => {
                             <Text style={{ color: AppHelper.material.green400 }}>Or</Text>
                             <View style={{ borderBottomColor: AppHelper.material.green300, borderBottomWidth: 1, width: "40%" }} />
                         </View>
-                        <Button style={styles.googleButton} onPress={handleLoginButton}>
+                        <Button style={styles.googleButton} onPress={handleLoginWithGoogleButton}>
                             <Image source={images.GoogleIcon} style={styles.googleIcon}/>
                             <Text style={styles.googleText}>Login With Google</Text>
                         </Button>

@@ -6,13 +6,15 @@ import { styles } from "./styles";
 import { TextField } from "react-native-ui-lib/src/incubator";
 import React from "react";
 import { ScreenNavigator, AppHelper } from "../../helper";
+import { createUser } from "../../firebase";
 
 export const Signup = ({ navigation }) => {
-    const [auth, setAuth] = React.useState({ email: "", password: "", confirmPassword: "" });
+    const [auth, setAuth] = React.useState({ username: "", password: "", confirmPassword: "" });
     const [error, setError] = React.useState({ email: "Email is required", password: "Please enter password", confirmPassword: "Please enter confirm password" });
 
-    const handleSignupButton = () => {
-        navigation.navigate(ScreenNavigator.Phases);
+    const handleSignupButton = async () => {
+        await createUser(auth.username, auth.password)
+            .then(() => navigation.navigate(ScreenNavigator.Phases))
     }
 
     const handleLoginButton = () => {
@@ -28,7 +30,7 @@ export const Signup = ({ navigation }) => {
                     <Text style={styles.login}>Signup</Text>
                     <View style={styles.inputField}>
                         <Text style={styles.bold}>Email</Text>
-                        <TextField value={auth.email} onChangeText={(text) => setAuth({ ...auth, email: text })} error={error.email} style={styles.input} />
+                        <TextField value={auth.email} onChangeText={(text) => setAuth({ ...auth, username: text })} error={error.email} style={styles.input} />
                     </View>
                     <View style={styles.inputField}>
                         <Text style={styles.bold}>Password</Text>
@@ -36,7 +38,7 @@ export const Signup = ({ navigation }) => {
                     </View>
                     <View style={styles.inputField}>
                         <Text style={styles.bold}>Re-enter Password</Text>
-                        <TextField value={auth.password} onChangeText={(text) => setAuth({ ...auth, confirmPassword: text })} error={error.password} style={styles.input} />
+                        <TextField value={auth.confirmPassword} onChangeText={(text) => setAuth({ ...auth, confirmPassword: text })} error={error.password} style={styles.input} />
                     </View>
                 </View>
                 <View style={styles.loginContainer}>
