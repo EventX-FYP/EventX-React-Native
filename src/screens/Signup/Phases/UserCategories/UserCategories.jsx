@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { Chip } from "react-native-ui-lib"
-import { fontStyles } from '../../../styles'
+import { fontStyles } from '../../../../styles'
 import { useSelector, useDispatch } from 'react-redux'
-import { User } from '../../../store/types'
+import { User } from '../../../../store/types'
 
 export const UserCategories = ({ navigation }) => {
   const [categories, setCategories] = useState([

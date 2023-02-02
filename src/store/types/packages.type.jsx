@@ -1,5 +1,0 @@
-export const ADD_PACKAGE = "ADD_PACKAGE";
-export const REMOVE_PACKAGE = "REMOVE_PACKAGE";
-export const UPDATE_PACKAGE = "UPDATE_PACKAGE";
-export const GET_PACKAGES = "GET_PACKAGES";
-export const GET_PACKAGE = "GET_PACKAGE";

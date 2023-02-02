@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Card, Text } from 'react-native-ui-lib'
-import { images } from '../../../assets'
-import { AppHelper } from '../../../helper'
+import { images } from '../../../../assets'
+import { AppHelper } from '../../../../helper'
 import { useSelector, useDispatch } from 'react-redux'
-import { User } from '../../../store/types'
+import { User } from '../../../../store/types'
 
 export const UserType = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -13,10 +13,10 @@ export const UserType = ({ navigation }) => {
     <View style={userTypeStyles.container}>
       <Text style={userTypeStyles.title}>Join as a client or planner</Text>
       <View style={userTypeStyles.options}>
-        <Card style={user.type === 'C' ? userTypeStyles.cardClicked : userTypeStyles.card}
-          onPress={() => dispatch({ type: User.UPDATE_USER, payload: { ...user, type: 'C' }})}
+        <Card style={user.type === 'Client' ? userTypeStyles.cardClicked : userTypeStyles.card}
+          onPress={() => dispatch({ type: User.UPDATE_USER, payload: { ...user, type: 'Client' }})}
         >
-          <Text style={user.type === 'C' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
+          <Text style={user.type === 'Client' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
             Client
           </Text>
           
@@ -25,10 +25,10 @@ export const UserType = ({ navigation }) => {
             imageStyle={userTypeStyles.image}
           />
         </Card>
-        <Card style={user.type === 'P' ? userTypeStyles.cardClicked : userTypeStyles.card}
-          onPress={() => dispatch({ type: User.UPDATE_USER, payload: { ...user, type: 'P' }})}
+        <Card style={user.type === 'Planner' ? userTypeStyles.cardClicked : userTypeStyles.card}
+          onPress={() => dispatch({ type: User.UPDATE_USER, payload: { ...user, type: 'Planner' }})}
         >
-          <Text style={user.type === 'P' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
+          <Text style={user.type === 'Planner' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
             Planner
           </Text>
           <Card.Section

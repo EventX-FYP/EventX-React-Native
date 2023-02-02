@@ -1,86 +1,15 @@
 import React from 'react'
-import { SafeAreaView, View, StatusBar } from 'react-native'
+import { SafeAreaView, View, StatusBar, StyleSheet } from 'react-native'
 import { Button, Wizard } from 'react-native-ui-lib'
-import { styles } from './styles'
-import { images } from '../../../assets'
-import { useSelector, useDispatch } from 'react-redux'
-import { Packages } from '../../../store/types'
 import { AppHelper } from '../../../helper'
-import { UserType } from './UserType'
-import { Package } from './Package'
-import { GeneralInformation } from './GeneralInformation'
+import { UserType } from './UserType/UserType'
+import { Package } from './Package/Package'
+import { GeneralInformation } from './GeneralInformation/GeneralInformation'
+import { useSelector, useDispatch } from 'react-redux'
 
 export const Phases = ({ navigation }) => {
+  const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
-  const packages = useSelector((state) => state.package)
-
-  const [categories, setCategories] = React.useState([
-    {
-      id: 1,
-      name: '👰 Wedding Planning',
-      selected: false,
-    },
-    {
-      id: 2,
-      name: '🎂 Birthday Planning',
-      selected: false,
-    },
-    {
-      id: 3,
-      name: '🎤 Concert Planning',
-      selected: false,
-    },
-    {
-      id: 4,
-      name: '👔 Corporate Planning',
-      selected: false,
-    },
-    {
-      id: 5,
-      name: '🎉 Party Planning',
-      selected: false,
-    },
-    {
-      id: 6,
-      name: '🏋️ Health and Fitness Planning',
-      selected: false,
-    },
-    {
-      id: 7,
-      name: '✈️ Travel Planning',
-      selected: false,
-    },
-    {
-      id: 8,
-      name: '📅 Weekly Planning',
-      selected: false,
-    },
-    {
-      id: 9,
-      name: '💰 Financial Planning',
-      selected: false,
-    },
-    {
-      id: 10,
-      name: '🏠 Home Planning',
-      selected: false,
-    },
-    {
-      id: 11,
-      name: '👩‍💻 Work Planning',
-      selected: false,
-    },
-    {
-      id: 12,
-      name: '👩‍👧 Personal/Life Planning',
-      selected: false,
-    },
-    {
-      id: 13,
-      name: '📱 Digital Planning',
-      selected: false,
-    },
-  ])
 
   const renderStep = () => {
     const { activeIndex } = state
@@ -106,6 +35,7 @@ export const Phases = ({ navigation }) => {
   }
 
   const handleNextStep = () => {
+    console.log(user);
     if (state.activeIndex === 2) {
       navigation.goBack()
       return
@@ -114,11 +44,11 @@ export const Phases = ({ navigation }) => {
       ...state,
       activeIndex: state.activeIndex + 1,
       completedStepIndex: state.activeIndex,
-      modal: false,
     })
   }
 
   const handleGoBack = () => {
+    console.log(user);
     if (state.activeIndex === 0) {
       navigation.goBack()
       return
@@ -126,51 +56,14 @@ export const Phases = ({ navigation }) => {
     setState({
       ...state,
       activeIndex: state.activeIndex - 1,
-      modal: false,
     })
-  }
-
-  const handleSubmitPackage = () => {
-    if (
-      _package.name === '' ||
-      _package.price === '' ||
-      _package.description === '' ||
-      _package.image === ''
-    ) {
-      return
-    }
-    dispatch({ type: Packages.ADD_PACKAGE, payload: _package })
-    setPackage({ name: '', price: '', description: '', image: images.Buyer })
   }
 
   const [state, setState] = React.useState({
     activeIndex: 0,
     completedStepIndex: undefined,
-    userType: undefined,
-    modal: false,
   })
 
-  const [_package, setPackage] = React.useState({
-    name: '',
-    price: '',
-    description: '',
-    image: images.Buyer,
-  })
-
-  const [generalInformation, setGeneralInformation] = React.useState({
-    name: '',
-    gender: '',
-    dob: '',
-    contact: '',
-    country: { code: '', name: '' },
-    city: '',
-    address: '',
-    picture: '',
-  })
-  const [countries, setCountries] = React.useState([])
-  const [cities, setCities] = React.useState([])
-  const [states, setStates] = React.useState([])
-  const [country, setCountry] = React.useState({ code: '', name: '' })
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -202,3 +95,34 @@ export const Phases = ({ navigation }) => {
     </SafeAreaView>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: AppHelper.material.lightWhite,
+    height: '100%',
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  wizard: {
+    backgroundColor: AppHelper.material.white,
+    borderBottomColor: AppHelper.white,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  wizardStepContent: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%',
+  },
+  button: {
+    flex: 1,
+    margin: 10,
+    borderRadius: 10,
+    height: 40,
+    backgroundColor: AppHelper.material.green500,
+  },
+})

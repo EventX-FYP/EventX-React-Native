@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 import { Button, Image, Text } from 'react-native-ui-lib'
-import { PackageCard } from '../../../components'
-import { fontStyles, inputStyles } from '../../../styles'
+import { PackageCard } from '../../../../components'
+import { fontStyles, inputStyles } from '../../../../styles'
 import { TextField } from 'react-native-ui-lib/src/incubator'
-import { AppHelper } from '../../../helper'
+import { AppHelper } from '../../../../helper'
 import { useSelector, useDispatch } from 'react-redux'
-import { User } from '../../../store/types'
+import { User } from '../../../../store/types'
 import * as ImagePicker from "expo-image-picker"
-import { images } from '../../../assets'
+import { images } from '../../../../assets'
 
 export const Package = ({ navigation }) => {
   const user = useSelector((state) => state.user)
@@ -41,6 +41,11 @@ export const Package = ({ navigation }) => {
       price: '',
       description: '',
     })
+  }
+
+  const handleRemovePackage = (index) => {
+    const newPackages = user.packages.filter((_, i) => i !== index)
+    dispatch({ type: User.UPDATE_USER, payload: { ...user, packages: newPackages }})
   }
 
 

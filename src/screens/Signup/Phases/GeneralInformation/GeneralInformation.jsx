@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 import { Button, Card, Image, Text, DateTimePicker, Picker } from 'react-native-ui-lib'
-import { images } from '../../../assets'
-import { fontStyles, inputStyles } from '../../../styles'
+import { images } from '../../../../assets'
+import { fontStyles, inputStyles } from '../../../../styles'
 import { TextField } from 'react-native-ui-lib/src/incubator'
-import { AppHelper, CountryStateCityAPI } from '../../../helper'
+import { AppHelper, CountryStateCityAPI } from '../../../../helper'
 import { useSelector, useDispatch } from 'react-redux'
-import { User } from '../../../store/types'
+import { User } from '../../../../store/types'
 import * as ImagePicker from "expo-image-picker"
 import { COUNTRY_STATE_CITY_API_KEY } from '@env'
 
@@ -14,15 +14,15 @@ export const GeneralInformation = ({ navigation }) => {
   const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const [generalInformation, setGeneralInformation] = useState({
-    name: "",
-    dob: "",
-    gender: "",
-    contact_number: "",
-    country: "",
-    city: "",
-    state: "",
-    address: "",
-    picture: "",
+    name: user.name,
+    dob: user.dob,
+    gender: user.gender,
+    contact_number: user.contact_number,
+    country: user.country,
+    city: user.city,
+    state: user.state,
+    address: user.address,
+    picture: user.picture,
   })
 
   const [countries, setCountries] = useState([])
@@ -58,7 +58,53 @@ export const GeneralInformation = ({ navigation }) => {
     })
     if (!result.cancelled) {
       dispatch({ type: User.UPDATE_USER, payload: { ...user, picture: result.uri }})
+      setGeneralInformation({ ...generalInformation, picture: result.uri })
     }
+  }
+
+  const handleNameChange = (e) => {
+    setGeneralInformation({ ...generalInformation, name: e })
+    dispatch({ type: User.UPDATE_USER, payload: { ...user, name: e }})
+  }
+
+  const handleDobChange = (e) => {
+    setGeneralInformation({ ...generalInformation, dob: e })
+    dispatch({ type: User.UPDATE_USER, payload: { ...user, dob: e }})
+  }
+
+  const handleContactChange = (e) => {
+    setGeneralInformation({ ...generalInformation, contact_number: e })
+    dispatch({ type: User.UPDATE_USER, payload: { ...user, contact_number: e }})
+  }
+
+  const handleAddressChange = (e) => {
+    setGeneralInformation({ ...generalInformation, address: e })
+    dispatch({ type: User.UPDATE_USER, payload: { ...user, address: e }})
+  }
+
+  const handleCountryChange = (e) => {
+    setGeneralInformation({ ...generalInformation, country: { name: e.label, code: e.value }})
+    dispatch({ type: User.UPDATE_USER, payload: { ...user, country: e.label }})
+  }
+
+  const handleStateChange = (e) => {
+    setGeneralInformation({ ...generalInformation, state: e.label })
+    dispatch({ type: User.UPDATE_USER, payload: { ...user, state: e.label }})
+  }
+
+  const handleCityChange = (e) => {
+    setGeneralInformation({ ...generalInformation, city: e.label })
+    dispatch({ type: User.UPDATE_USER, payload: { ...user, city: e.label }})
+  }
+
+  const handleMaleGenderChange = () => {
+    setGeneralInformation({ ...generalInformation, gender: 'Male' });
+    dispatch({ type: User.UPDATE_USER, payload: { ...user, gender: "Male" }})
+  }
+
+  const handleFemaleGenderChange = () => {
+    setGeneralInformation({ ...generalInformation, gender: "Female" });
+    dispatch({ type: User.UPDATE_USER, payload: { ...user, gender: "Female"}})
   }
 
   return (
@@ -73,7 +119,7 @@ export const GeneralInformation = ({ navigation }) => {
           <View style={userGeneralInformationStyles.informationContainer}>
             <View style={userGeneralInformationStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>Name</Text>
-              <TextField style={inputStyles.inputField} placeholder={'Enter Name'} value={generalInformation.name} onChangeText={value => setGeneralInformation({ ...generalInformation, name: value })} />
+              <TextField style={inputStyles.inputField} placeholder={'Enter Name'} value={generalInformation.name} onChangeText={handleNameChange} />
             </View>
             <View style={userGeneralInformationStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>Date of Birth</Text>
@@ -83,19 +129,19 @@ export const GeneralInformation = ({ navigation }) => {
                 placeholder="DD-MMM-YYYY"
                 mode={'date'}
                 value={generalInformation.dob}
-                onChange={value => setGeneralInformation({ ...generalInformation, dob: value })}
+                onChange={handleDobChange}
               />
             </View>
             <View style={userGeneralInformationStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>Gender</Text>
               <View style={userGeneralInformationStyles.genderContainer}>
                 <Card style={generalInformation.gender === 'Male' ? userGeneralInformationStyles.genderButtonSelected : userGeneralInformationStyles.genderButton}
-                  onPress={() => setGeneralInformation({ ...generalInformation, gender: 'Male' })}
+                  onPress={handleMaleGenderChange}
                 >
                   <Text style={generalInformation.gender === 'Male' ? userGeneralInformationStyles.genderButtonTextSelected : userGeneralInformationStyles.genderButtonText}>Male</Text>
                 </Card>
                 <Card style={generalInformation.gender === 'Female' ? userGeneralInformationStyles.genderButtonSelected : userGeneralInformationStyles.genderButton}
-                  onPress={() => setGeneralInformation({ ...generalInformation, gender: 'Female' })}
+                  onPress={handleFemaleGenderChange}
                 >
                   <Text style={generalInformation.gender === 'Female' ? userGeneralInformationStyles.genderButtonTextSelected : userGeneralInformationStyles.genderButtonText}>Female</Text>
                 </Card>
@@ -103,23 +149,22 @@ export const GeneralInformation = ({ navigation }) => {
             </View>
             <View style={userGeneralInformationStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>Contact Number</Text>
-              <TextField style={inputStyles.inputField} placeholder={'Enter Contact Number'} value={generalInformation.contact} onChangeText={value => setGeneralInformation({ ...generalInformation, contact_number: value })} />
+              <TextField style={inputStyles.inputField} placeholder={'Enter Contact Number'} value={generalInformation.contact_number} onChangeText={handleContactChange} />
             </View>
             <View style={userGeneralInformationStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>Country</Text>
               <Picker
                 placeholder={'Select Country'}
                 value={{
-                  label: generalInformation.country.name,
-                  value: generalInformation.country.code,
+                  label: generalInformation.country.name ?? generalInformation.country,
+                  value: generalInformation.country.code ?? generalInformation.country,
                 }}
+                // value={generalInformation.country.code}
                 enableModalBlur={false}
                 topBarProps={{ title: 'Countries' }}
                 showSearch
                 searchPlaceholder={'Search Country'}
-                onChange={value => {
-                  setGeneralInformation({ ...generalInformation, country: { name: value.label, code: value.value } })
-                }}
+                onChange={handleCountryChange}
                 mode={Picker.modes.SINGLE}
                 migrateTextField
                 style={inputStyles.inputField}
@@ -147,9 +192,7 @@ export const GeneralInformation = ({ navigation }) => {
                 topBarProps={{ title: 'Cities' }}
                 showSearch
                 searchPlaceholder={'Search City'}
-                onChange={value => {
-                  setGeneralInformation({ ...generalInformation, city: value.label })
-                }}
+                onChange={handleCityChange}
                 mode={Picker.modes.SINGLE}
                 migrateTextField
                 style={inputStyles.inputField}
@@ -163,7 +206,7 @@ export const GeneralInformation = ({ navigation }) => {
             </View>
             <View style={userGeneralInformationStyles.inputRow}>
               <Text style={[fontStyles[700], fontStyles.large]}>Address</Text>
-              <TextField style={inputStyles.inputField} placeholder={'Enter Address'} value={generalInformation.address} onChangeText={value => setGeneralInformation({ ...generalInformation, address: value })} />
+              <TextField style={inputStyles.inputField} placeholder={'Enter Address'} value={generalInformation.address} onChangeText={handleAddressChange} />
             </View>
           </View>
         </ScrollView>
