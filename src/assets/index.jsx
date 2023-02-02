@@ -1,5 +1,7 @@
 import UserAdd from "./svg/user-add.svg";
 import EmptyFolder from "./svg/empty-folder.svg";
+import MessageIcon from "./svg/message-icon.svg";
+
 export const images = {
     Icon: require("./icon.png"),
     Favicon: require("./favicon.png"),
@@ -29,8 +31,9 @@ export const images = {
     SVG: {
         UserAdd,
         EmptyFolder,
+        MessageIcon,
     },
     Users: {
         User1: require("./users/user1.jpg"),
-    }
+    },
 };

@@ -2,7 +2,6 @@ import { Home } from "./Home/Home"
 import { Search } from "./Search/Search"
 import { TabController, View } from "react-native-ui-lib"
 import { Job } from "./Job/Job"
-import { Text } from "react-native"
 import { Notifications } from "../General"
 import { Message } from "../General/Message/Message"
 export const Client = ({ navigation }) => {
