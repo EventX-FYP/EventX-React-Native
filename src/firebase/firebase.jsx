@@ -7,12 +7,9 @@ export const createUser = async (email, password) => {
   await createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      return true;
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      return false;
+      throw new Error(error);
     });
 };
 
@@ -23,10 +20,7 @@ export const signIn = async (email, password) => {
       console.log(user)
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage)
-      throw new Error(errorMessage);
+      throw new Error(error);
     });
 };
 
@@ -36,7 +30,7 @@ export const signOutAuth = () => {
       return true;
     })
     .catch((error) => {
-      return false;
+      throw new Error(error);
     });
 };
 
@@ -51,32 +45,22 @@ export const authState = (callback) => {
 };
 
 export const signInWithGoogle = async () => {
-  await signInWithPopup(auth, provider)
-    .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      const user = result.user;
-      return true;
-    }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.email;
-      const credential = GoogleAuthProvider.credentialFromError(error);
-    });
-};
-
-export const signInWithGoogleRedirect = async () => {
-  await signInWithRedirect(auth, provider)
-    .then((result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential.accessToken;
-      const user = result.user;
-      return true;
-    }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.email;
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      throw new Error(errorMessage);
-    });
+  try {
+    // await GoogleSignin.hasPlayServices();
+    // await GoogleSignin.signOut();
+    // const userInfo = await GoogleSignin.signIn();
+    // console.log(userInfo);
+    return true;
+  } catch (error) {
+    // if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+    //   console.log('user cancelled the login flow');
+    // } else if (error.code === statusCodes.IN_PROGRESS) {
+    //   console.log('operation (e.g. sign in) is in progress already');
+    // } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+    //   console.log('play services not available or outdated');
+    // } else {
+    //   console.log(error);
+    // }
+    throw new Error(error);
+  }
 };

@@ -1,14 +1,16 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID, MEASUREMENT_ID, IOS_CLIENT_ID, ANDROID_CLIENT_ID } from "@env";
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDpg_K1QmT8cbUFpsk9szAHJV5vhSDJG1A",
-  authDomain: "eventx-e40ca.firebaseapp.com",
-  projectId: "eventx-e40ca",
-  storageBucket: "eventx-e40ca.appspot.com",
-  messagingSenderId: "580004731161",
-  appId: "1:580004731161:web:d6d460a3fcf5ca97188d88",
-  measurementId: "G-J829HD6EJD"
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);

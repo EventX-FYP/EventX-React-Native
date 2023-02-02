@@ -30,4 +30,7 @@ export const images = {
         UserAdd,
         EmptyFolder,
     },
+    Users: {
+        User1: require("./users/user1.jpg"),
+    }
 };

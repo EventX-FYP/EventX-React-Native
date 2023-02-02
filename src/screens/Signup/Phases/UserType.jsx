@@ -1,72 +1,100 @@
 import React from 'react'
-import { AppHelper } from '../../../helper'
-import { Text, View, StyleSheet, Image } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { View, StyleSheet } from 'react-native'
+import { Card, Text } from 'react-native-ui-lib'
 import { images } from '../../../assets'
-import {TouchableOpacity} from 'react-native';
+import { AppHelper } from '../../../helper'
+import { useSelector, useDispatch } from 'react-redux'
+import { User } from '../../../store/types'
 
 export const UserType = ({ navigation }) => {
+  const dispatch = useDispatch()
+  const user = useSelector((state) => state.user)
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.cardholder}>  
-        <TouchableOpacity onPress={() => navigation.navigate("GeneralInfo")}>
-          <View style={styles.card}>
-            <Image style={styles.cardimg} source={images.Seller} />
-            <Text style={styles.cardtextfont}>Seller</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("GeneralInfo")}>
-          <View style={styles.card}>
-            <Image style={styles.cardimg} source={images.Buyer} />
-            <Text style={styles.cardtextfont}>Buyer</Text>
-          </View>
-        </TouchableOpacity>
+    <View style={userTypeStyles.container}>
+      <Text style={userTypeStyles.title}>Join as a client or planner</Text>
+      <View style={userTypeStyles.options}>
+        <Card style={user.type === 'C' ? userTypeStyles.cardClicked : userTypeStyles.card}
+          onPress={() => dispatch({ type: User.UPDATE_USER, payload: { ...user, type: 'C' }})}
+        >
+          <Text style={user.type === 'C' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
+            Client
+          </Text>
+          
+          <Card.Section
+            imageSource={images.Buyer}
+            imageStyle={userTypeStyles.image}
+          />
+        </Card>
+        <Card style={user.type === 'P' ? userTypeStyles.cardClicked : userTypeStyles.card}
+          onPress={() => dispatch({ type: User.UPDATE_USER, payload: { ...user, type: 'P' }})}
+        >
+          <Text style={user.type === 'P' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
+            Planner
+          </Text>
+          <Card.Section
+            imageSource={images.Seller}
+            imageStyle={userTypeStyles.image}
+          />
+        </Card>
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 
-const styles = StyleSheet.create({
+const userTypeStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppHelper.material.white,
-    alignItems: 'center',
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    paddingTop: 20,
   },
-  usertype: {
-    color: AppHelper.material.clouds,
-    fontSize: 60,
+  title: {
+    fontSize: 28,
     fontWeight: 'bold',
-    color: 'white',
+    textAlign: 'center',
   },
-  info: {
-    backgroundColor: AppHelper.material.green600,
-    width: '100%',
-    height: '25%',
+  options: {
+    flex: 1,
+    flexDirection: 'row',
+    width: "100%",
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 7,
-    marginBottom: 100,
   },
   card: {
-    backgroundColor: 'white',
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-    width: 160,
-    height: 160,
+    justifyContent: 'center',
+    margin: 10,
     borderRadius: 10,
+    height: 200,
   },
-  cardholder: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
+  image: {
+    width: 150,
+    height: 150,
+  },
+  cardText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  cardTextWhite: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: AppHelper.white,
+  },
+  cardClicked: {
+    flex: 1,
     alignItems: 'center',
-    width: '100%',
-    padding: 5,
+    justifyContent: 'center',
+    margin: 10,
+    borderRadius: 10,
+    height: 200,
+    backgroundColor: AppHelper.material.green500,
   },
-  cardimg: {
-    width: 100,
-    height: 100,
-  },
-  cardtextfont: {
-    fontSize: 25,
-  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  }
 })

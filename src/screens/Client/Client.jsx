@@ -2,11 +2,15 @@ import { Home } from "./Home/Home"
 import { Search } from "./Search/Search"
 import { TabController, View } from "react-native-ui-lib"
 import { Job } from "./Job/Job"
+import { Text } from "react-native"
+import { Notifications } from "../General"
+import { Message } from "../General/Message/Message"
 export const Client = ({ navigation }) => {
   const pages = [
     { label: "Home" },
     { label: "Search" },
-    { label: "Packages" },
+    { label: "Job" },
+    { label: "Message" },
     { label: "Notifications" },
   ]
   return (
@@ -27,7 +31,11 @@ export const Client = ({ navigation }) => {
           </TabController.TabPage>
           
           <TabController.TabPage index={3}>
+            <Message navigation={navigation}/>
+          </TabController.TabPage>
 
+          <TabController.TabPage index={4}>
+            <Notifications navigation={navigation} />
           </TabController.TabPage>
         </View>
       </TabController>

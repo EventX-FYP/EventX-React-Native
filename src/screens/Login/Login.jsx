@@ -9,25 +9,41 @@ import { inputStyles } from "../../styles";
 import { ScreenNavigator, AppHelper } from "../../helper";
 import { GET_USER_ME } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
-import { signIn, signInWithGoogle, signInWithGoogleRedirect } from "../../firebase";
+import { signIn } from "../../firebase";
+import { IOS_CLIENT_ID, ANDROID_CLIENT_ID, EXPO_CLIENT_ID } from "@env";
+
+import * as Google from "expo-auth-session/providers/google";
+
+const googleConfig = {
+    expoClientId: EXPO_CLIENT_ID,
+    iosClientId: IOS_CLIENT_ID,
+    androidClientId: ANDROID_CLIENT_ID,
+    scopes: ["profile", "email"],
+}
+
 
 
 export const Login = ({ navigation }) => {
+    const [request, response, promptAsync] = Google.useAuthRequest(googleConfig);
     const [auth, setAuth] = React.useState({ username: "", password: "" });
 
     const { data } = useQuery(GET_USER_ME);
 
     const handleLoginButton = async () => {
-        await signIn(auth.username, auth.password)
-            .then(() => navigation.navigate(ScreenNavigator.Client))
-            .catch((error) => console.log(error));
-        // navigation.navigate(ScreenNavigator.Client);
+        // await signIn(auth.username, auth.password)
+        //     .then(() => navigation.navigate(ScreenNavigator.Client))
+        //     .catch((error) => alert("Error", error));
+        navigation.navigate(ScreenNavigator.Phases);
     }
 
     const handleLoginWithGoogleButton = async () => {
-        await signInWithGoogleRedirect()
-            .then(() => navigation.navigate(ScreenNavigator.Client))
-            .catch((error) => console.log(error));
+        console.log({
+            request: request,
+            response: response,
+        })
+
+        promptAsync();
+
     }
 
     const handleSignupButton = () => {

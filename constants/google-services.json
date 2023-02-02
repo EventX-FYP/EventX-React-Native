@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "580004731161",
+    "project_id": "eventx-e40ca",
+    "storage_bucket": "eventx-e40ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580004731161:android:554b0d0a5046d4c4188d88",
+        "android_client_info": {
+          "package_name": "com.eventx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "580004731161-e0s5c9uulic27k0bt49vqv7q12h60hd7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQs-HS670wRPG9DX4fsYrUNPTWqkbEc5I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "580004731161-e0s5c9uulic27k0bt49vqv7q12h60hd7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "580004731161-kn032821ga8cjk9copur6fjfanorbfeg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.eventx"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

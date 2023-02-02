@@ -13,15 +13,7 @@ module.exports = (() => {
   config.resolver = {
     ...resolver,
     // Add svg and cjs to the list of asset extensions
-    assetExts: resolver.assetExts.filter((ext) => {
-      if (ext === 'svg') {
-        return false;
-      }
-      if (ext === 'cjs') {
-        return false;
-      }
-      return true;
-    }),
+    assetExts: resolver.assetExts.filter((ext) => ext !== 'svg' && ext !== 'cjs'),
     sourceExts: [...resolver.sourceExts, 'svg', 'cjs'],
   };
 

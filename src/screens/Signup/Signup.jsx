@@ -7,14 +7,39 @@ import { TextField } from "react-native-ui-lib/src/incubator";
 import React from "react";
 import { ScreenNavigator, AppHelper } from "../../helper";
 import { createUser } from "../../firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { User } from "../../store/types";
 
 export const Signup = ({ navigation }) => {
     const [auth, setAuth] = React.useState({ username: "", password: "", confirmPassword: "" });
     const [error, setError] = React.useState({ email: "Email is required", password: "Please enter password", confirmPassword: "Please enter confirm password" });
 
+    const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
+
     const handleSignupButton = async () => {
-        await createUser(auth.username, auth.password)
-            .then(() => navigation.navigate(ScreenNavigator.Phases))
+        if (auth.username === "") {
+            alert("Email is required");
+            return;
+        }
+        if (auth.password === "") {
+            alert("Password is required");
+            return;
+        }
+        if (auth.confirmPassword === "") {
+            alert("Confirm password is required");
+            return;
+        }
+        if (auth.password !== auth.confirmPassword) {
+            alert("Password and confirm password does not match");
+            return;
+        }
+        
+        // await createUser(auth.username, auth.password)
+        //     .then(() => navigation.navigate(ScreenNavigator.Phases))
+        
+        dispatch({ type: User.UPDATE_USER, payload: { ...user, email: auth.username, password: auth.password }})
+        navigation.navigate(ScreenNavigator.Phases);
     }
 
     const handleLoginButton = () => {
