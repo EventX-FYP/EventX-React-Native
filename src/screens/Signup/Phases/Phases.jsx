@@ -35,7 +35,7 @@ export const Phases = ({ navigation }) => {
   }
 
   const handleNextStep = () => {
-    console.log(user);
+    // console.log(user);
     if (state.activeIndex === 2) {
       navigation.goBack()
       return
@@ -48,7 +48,7 @@ export const Phases = ({ navigation }) => {
   }
 
   const handleGoBack = () => {
-    console.log(user);
+    // console.log(user);
     if (state.activeIndex === 0) {
       navigation.goBack()
       return

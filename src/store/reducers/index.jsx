@@ -1,11 +1,11 @@
 import { loggedReducer } from "./isLogged.reducer"
-import { profileReducer } from "./profile.reducer";
-import { combineReducers } from "redux";
 import { userReducer } from "./user.reducer";
+
+import { combineReducers } from "redux";
+
 
 const rootReducers = combineReducers({
   isLogged: loggedReducer,
-  profile: profileReducer,
   user: userReducer,
 });
 

@@ -1,6 +1,11 @@
 import UserAdd from "./svg/user-add.svg";
 import EmptyFolder from "./svg/empty-folder.svg";
 import MessageIcon from "./svg/message-icon.svg";
+import EmojiIcon from "./svg/emoji.svg";
+import AttachmentIcon from "./svg/attachment-icon.svg";
+import MicrophoneIcon from "./svg/microphone-icon.svg";
+import PaperPlaneHorizontalIcon from "./svg/paper-plane-horizontal.svg";
+import ArrowLeft from "./svg/arrow-left.svg";
 
 export const images = {
     Icon: require("./icon.png"),
@@ -32,6 +37,11 @@ export const images = {
         UserAdd,
         EmptyFolder,
         MessageIcon,
+        EmojiIcon,
+        AttachmentIcon,
+        MicrophoneIcon,
+        PaperPlaneHorizontalIcon,
+        ArrowLeft,
     },
     Users: {
         User1: require("./users/user1.jpg"),

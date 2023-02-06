@@ -6,6 +6,7 @@ import store from "./src/store";
 import { ScreenNavigator } from "./src/helper";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./src/hooks/ApolloClient";
+import { Chat } from "./src/screens/General";
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ export default function App() {
             <Stack.Screen name={ScreenNavigator.Phases} component={Phases} />
             <Stack.Screen name={ScreenNavigator.Planner} component={Planner} />
             <Stack.Screen name={ScreenNavigator.Client} component={Client} />
+            <Stack.Screen name={ScreenNavigator.Chat} component={Chat}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

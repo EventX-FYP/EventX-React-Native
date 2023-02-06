@@ -14,7 +14,7 @@ export const fetchCountry = async (API_KEY) => {
   return response;      
 }
 
-export const fetchStates = async (setStates, countryCode, API_KEY) => {
+export const fetchStates = async (countryCode, API_KEY) => {
   const headers = new Headers();
   headers.append('X-CSCAPI-KEY', API_KEY);
   
@@ -26,7 +26,7 @@ export const fetchStates = async (setStates, countryCode, API_KEY) => {
     .then(res => res.json())
     .catch(err => console.log(err))
   
-  setStates(response.map(state => { return { name: state.name, code: state.iso2 }}))
+  return response;
 }
 
 export const fetchCities = async (countryCode, stateCode, API_KEY) => {

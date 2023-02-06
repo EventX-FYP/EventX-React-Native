@@ -4,4 +4,5 @@ export const ScreenNavigator = {
   Phases: "Phases",
   Planner: "Planner",
   Client: "Client",
+  Chat: "Chat",
 }

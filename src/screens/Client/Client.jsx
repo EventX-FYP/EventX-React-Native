@@ -3,7 +3,7 @@ import { Search } from "./Search/Search"
 import { TabController, View } from "react-native-ui-lib"
 import { Job } from "./Job/Job"
 import { Notifications } from "../General"
-import { Message } from "../General/Message/Message"
+import { ChatList } from "../General"
 export const Client = ({ navigation }) => {
   const pages = [
     { label: "Home" },
@@ -30,7 +30,7 @@ export const Client = ({ navigation }) => {
           </TabController.TabPage>
           
           <TabController.TabPage index={3}>
-            <Message navigation={navigation}/>
+            <ChatList navigation={navigation}/>
           </TabController.TabPage>
 
           <TabController.TabPage index={4}>

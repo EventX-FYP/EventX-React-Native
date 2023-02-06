@@ -2,12 +2,12 @@ import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Avatar } from 'react-native-ui-lib';
 import { images } from '../../assets';
-import { AppHelper } from '../../helper';
+import { AppHelper, ScreenNavigator } from '../../helper';
 import { fontStyles } from '../../styles';
 
 export const ChatCard = ({ navigation, data }) => {
   return (
-    <TouchableOpacity style={chatCardStyles.container}>
+    <TouchableOpacity style={chatCardStyles.container} onPress={() => navigation.navigate(ScreenNavigator.Chat)}>
       <View style={chatCardStyles.imageContainer}>
         <Avatar source={data?.image} name={data.name} badgeProps={{ backgroundColor: AppHelper.material.green500, size: 12 }} autoColorsConfig />
       </View>

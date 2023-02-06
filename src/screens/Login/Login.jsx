@@ -3,7 +3,7 @@ import { Text, Button } from "react-native-ui-lib";
 import { images } from "../../assets";
 import React from "react";
 import { TextField } from "react-native-ui-lib/src/incubator";
-import { StatusBar } from "react-native";
+import { StatusBar, TextInput } from "react-native";
 import { styles } from "./styles";
 import { inputStyles } from "../../styles";
 import { ScreenNavigator, AppHelper } from "../../helper";
@@ -49,7 +49,7 @@ export const Login = ({ navigation }) => {
         // navigation.navigate(ScreenNavigator.ForgotPassword);
         // console.log(loading);
         // console.log(error);
-        console.log(data?.getUserMe);
+        // console.log(data?.getUserMe);
     }
 
     return (
@@ -65,7 +65,7 @@ export const Login = ({ navigation }) => {
                     </View>
                     <View style={styles.inputField}>
                         <Text style={styles.bold}>Password</Text>
-                        <TextField value={auth.password} onChangeText={(text) => setAuth({ ...auth, password: text })} style={inputStyles.inputField} />
+                        <TextInput value={auth.password} onChangeText={(text) => setAuth({ ...auth, password: text })} style={inputStyles.inputField} secureTextEntry />
                     </View>
                     <Button label="Forgot Password?" style={styles.forgotPassword} onPress={handleForgotPasswordButton} link outline color={AppHelper.material.green500}/>
                 </View>
