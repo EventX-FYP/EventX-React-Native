@@ -30,15 +30,15 @@ export const Login = ({ navigation }) => {
     const { data } = useQuery(GET_USER_ME);
 
     const handleLoginButton = async () => {
-        await signIn(auth.username, auth.password)
-            .then(() => navigation.navigate(ScreenNavigator.Client))
-            .catch((error) => alert("Error", error));
-        // navigation.navigate(ScreenNavigator.Client);
+        // await signIn(auth.username, auth.password)
+        //     .then(() => navigation.navigate(ScreenNavigator.Client))
+        //     .catch((error) => alert("Error", error));
+        navigation.navigate(ScreenNavigator.Client);
     }
 
     const handleLoginWithGoogleButton = async () => {
-        await promptAsync()
-            .then((result) => console.log(result));
+        // await promptAsync()
+        //     .then((result) => console.log(result));
     }
 
     const handleSignupButton = () => {
