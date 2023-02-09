@@ -5,4 +5,5 @@ export const ScreenNavigator = {
   Planner: "Planner",
   Client: "Client",
   Chat: "Chat",
+  JobDetail: "JobDetail"
 }

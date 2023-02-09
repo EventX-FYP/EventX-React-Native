@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity } from 'react-native-ui-lib'
 import { StyleSheet, Image } from 'react-native'
 import { JobCard } from '../../../components'
 import {images} from '../../../assets/index'
+import { ScreenNavigator} from "../../../helper";
 
 import moment from 'moment/moment'
 
@@ -50,6 +51,12 @@ const JobList = [
 ]
 
 export const Home = ({ navigation }) => {
+
+  const handlePress = (item) => {
+    console.log("test")
+    navigation.navigate(ScreenNavigator.JobDetail, { item });
+  };
+
   return (
     <SafeAreaView>
       <ScrollView style={styles.container} >
@@ -66,7 +73,7 @@ export const Home = ({ navigation }) => {
               <FlatList
                 ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
                 data={JobList}
-                renderItem={({item}) => <JobCard job={item} />}
+                renderItem={({item}) => <JobCard job={item} onPress={() => handlePress(item)}/>}
                 horizontal={true}
               />
             </View>
