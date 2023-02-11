@@ -1,4 +1,4 @@
-import { SafeAreaView, View } from "react-native";
+import { SafeAreaView, TextInput, View } from "react-native";
 import { Button, Image, Text } from "react-native-ui-lib";
 import { images } from "../../assets";
 import { StatusBar } from "react-native";
@@ -59,11 +59,11 @@ export const Signup = ({ navigation }) => {
                     </View>
                     <View style={styles.inputField}>
                         <Text style={styles.bold}>Password</Text>
-                        <TextField value={auth.password} onChangeText={(text) => setAuth({ ...auth, password: text })} error={error.password} style={styles.input} />
+                        <TextInput value={auth.password} onChangeText={(text) => setAuth({ ...auth, password: text })} error={error.password} style={styles.input} secureTextEntry />
                     </View>
                     <View style={styles.inputField}>
                         <Text style={styles.bold}>Re-enter Password</Text>
-                        <TextField value={auth.confirmPassword} onChangeText={(text) => setAuth({ ...auth, confirmPassword: text })} error={error.password} style={styles.input} />
+                        <TextInput value={auth.confirmPassword} onChangeText={(text) => setAuth({ ...auth, confirmPassword: text })} error={error.password} style={styles.input} secureTextEntry />
                     </View>
                 </View>
                 <View style={styles.loginContainer}>

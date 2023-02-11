@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Login, Signup, Phases, Planner, Client } from "./src/screens";
 import { Provider } from "react-redux";
 import store from "./src/store";
@@ -8,8 +8,7 @@ import { ApolloProvider } from "@apollo/client";
 import { client } from "./src/hooks/ApolloClient";
 import { Chat } from "./src/screens/General";
 
-const Stack = createStackNavigator();
-
+const Stack = createNativeStackNavigator();
 export default function App() { 
   return (
     <ApolloProvider client={client}>

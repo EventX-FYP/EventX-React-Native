@@ -21,8 +21,6 @@ const googleConfig = {
     scopes: ["profile", "email"],
 }
 
-
-
 export const Login = ({ navigation }) => {
     const [request, response, promptAsync] = Google.useAuthRequest(googleConfig);
     const [auth, setAuth] = React.useState({ username: "", password: "" });
@@ -30,10 +28,10 @@ export const Login = ({ navigation }) => {
     const { data } = useQuery(GET_USER_ME);
 
     const handleLoginButton = async () => {
-        await signIn(auth.username, auth.password)
-            .then(() => navigation.navigate(ScreenNavigator.Client))
-            .catch((error) => alert("Error", error));
-        // navigation.navigate(ScreenNavigator.Client);
+        // await signIn(auth.username, auth.password)
+        //     .then(() => navigation.navigate(ScreenNavigator.Client))
+        //     .catch((error) => alert("Error", error));
+        navigation.navigate(ScreenNavigator.Client);
     }
 
     const handleLoginWithGoogleButton = async () => {
@@ -78,7 +76,7 @@ export const Login = ({ navigation }) => {
                             <View style={{ borderBottomColor: AppHelper.material.green300, borderBottomWidth: 1, width: "40%" }} />
                         </View>
                         <Button style={styles.googleButton} onPress={handleLoginWithGoogleButton}>
-                            <Image source={images.GoogleIcon} style={styles.googleIcon}/>
+                            <Image source={images.GoogleIcon} style={styles.googleIcon} />
                             <Text style={styles.googleText}>Login With Google</Text>
                         </Button>
                     </View>

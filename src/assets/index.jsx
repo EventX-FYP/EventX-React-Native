@@ -6,6 +6,7 @@ import AttachmentIcon from "./svg/attachment-icon.svg";
 import MicrophoneIcon from "./svg/microphone-icon.svg";
 import PaperPlaneHorizontalIcon from "./svg/paper-plane-horizontal.svg";
 import ArrowLeft from "./svg/arrow-left.svg";
+import BottomNavBackground from "./svg/bottomNavBar.svg";
 
 export const images = {
     Icon: require("./icon.png"),
@@ -42,8 +43,12 @@ export const images = {
         MicrophoneIcon,
         PaperPlaneHorizontalIcon,
         ArrowLeft,
+        BottomNavBackground,
     },
     Users: {
         User1: require("./users/user1.jpg"),
+    },
+    JSON: {
+        // Home: require("./lottie/home.icon.json"),
     },
 };
