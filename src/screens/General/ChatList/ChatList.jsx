@@ -10,18 +10,18 @@ export const ChatList = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('')
   const onChangeSearch = query => setSearchQuery(query)
   const chats = [
-    // { id: 1, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 2, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 3, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 4, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 5, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 6, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 7, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 8, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 9, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 10, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 11, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
-    // { id: 12, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 1, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 2, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 3, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 4, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 5, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 6, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 7, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 8, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 9, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 10, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 11, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
+    { id: 12, name: 'Haroon Tahir', image: images.Users.User1, lastMessage: 'Hello', date: '12:00' },
   ]
 
   return (
@@ -34,7 +34,7 @@ export const ChatList = ({ navigation }) => {
             chats.length > 0 ?
             <FlatList
               data={chats}
-              // ItemSeparatorComponent={() => <View style={{ height: 1, backgroundColor: AppHelper.material.minBlack }} />}
+              ItemSeparatorComponent={() => <View style={{ height: 1 }} />}
               renderItem={({ item }) => <ChatCard navigation={navigation} data={item} />}
               keyExtractor={item => item.id}
               />
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: AppHelper.material.white,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   chatList: {
     height: '87%',

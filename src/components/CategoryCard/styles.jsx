@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { AppHelper } from "../../helper";
 
-const radius = 30;
+const radius = 12;
 
 export const styles = StyleSheet.create({
   container: {

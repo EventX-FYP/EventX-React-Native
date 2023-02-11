@@ -28,7 +28,7 @@ const TabButton = (props) => {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={1} style={styles.container}>
       <Animatable.View ref={viewRef} duration={500} style={styles.container}>
-        <Icon type={item.type} name={focused ? item.activeIcon : item.inActiveIcon} color={focused ? AppHelper.material.green900 : AppHelper.material.grey500} size={24} />
+        <Icon type={item.type} name={focused ? item.activeIcon : item.inActiveIcon} color={focused ? AppHelper.material.green700 : AppHelper.material.grey600} size={24} />
       </Animatable.View>
     </TouchableOpacity>
   )
