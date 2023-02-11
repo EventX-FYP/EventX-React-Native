@@ -2,7 +2,7 @@ import React from 'react'
 import { SafeAreaView, Image, View, Text, StyleSheet } from 'react-native'
 import { AppHelper } from '../../../helper'
 import moment from 'moment/moment'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { TouchableOpacity } from 'react-native'
 
 const currentDate = new Date().toISOString().slice(0, 10)
 

@@ -49,7 +49,7 @@ export const Client = ({ navigation }) => {
         headerShown: false,
         tabBarStyle: {
           height: 60,
-          bottom: 16,
+          bottom: 5,
           // right: 16,
           // left: 16,
           width: "95%",
