@@ -7,6 +7,7 @@ import { ScreenNavigator } from "./src/helper";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./src/hooks/ApolloClient";
 import { Chat } from "./src/screens/General";
+import { JobDetail } from "./src/screens/General";
 
 const Stack = createNativeStackNavigator();
 export default function App() { 
@@ -21,6 +22,7 @@ export default function App() {
             <Stack.Screen name={ScreenNavigator.Planner} component={Planner} />
             <Stack.Screen name={ScreenNavigator.Client} component={Client} />
             <Stack.Screen name={ScreenNavigator.Chat} component={Chat}/>
+            <Stack.Screen name={ScreenNavigator.JobDetail} component={JobDetail}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

@@ -35,8 +35,8 @@ export const Login = ({ navigation }) => {
     }
 
     const handleLoginWithGoogleButton = async () => {
-        await promptAsync()
-            .then((result) => console.log(result));
+        // await promptAsync()
+        //     .then((result) => console.log(result));
     }
 
     const handleSignupButton = () => {
