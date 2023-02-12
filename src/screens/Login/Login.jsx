@@ -1,7 +1,7 @@
-import { SafeAreaView, Image, View } from "react-native";
+import { SafeAreaView, Image, View, useWindowDimensions } from "react-native";
 import { Text, Button } from "react-native-ui-lib";
 import { images } from "../../assets";
-import React from "react";
+import React, { useRef } from "react";
 import { TextField } from "react-native-ui-lib/src/incubator";
 import { StatusBar, TextInput } from "react-native";
 import { styles } from "./styles";
@@ -11,6 +11,7 @@ import { GET_USER_ME } from "../../graphql/queries";
 import { useQuery } from "@apollo/client";
 import { signIn } from "../../firebase";
 import { IOS_CLIENT_ID, ANDROID_CLIENT_ID, EXPO_CLIENT_ID } from "@env";
+import { BottomSheet } from "../../components";
 
 import * as Google from "expo-auth-session/providers/google";
 
@@ -24,6 +25,8 @@ const googleConfig = {
 export const Login = ({ navigation }) => {
     const [request, response, promptAsync] = Google.useAuthRequest(googleConfig);
     const [auth, setAuth] = React.useState({ username: "", password: "" });
+    const loginRef = useRef();
+    const { height } = useWindowDimensions();
 
     const { data } = useQuery(GET_USER_ME);
 
@@ -32,6 +35,7 @@ export const Login = ({ navigation }) => {
         //     .then(() => navigation.navigate(ScreenNavigator.Client))
         //     .catch((error) => alert("Error", error));
         navigation.navigate(ScreenNavigator.Client);
+        // loginRef.current.expand();
     }
 
     const handleLoginWithGoogleButton = async () => {
@@ -86,6 +90,7 @@ export const Login = ({ navigation }) => {
                     </View>
                 </View>
             </View>
+            <BottomSheet ref={loginRef} activeHeight={height * 0.5} backgroundColor={AppHelper.material.green50} backDropColor={'black'} />
         </SafeAreaView>
     );
 }

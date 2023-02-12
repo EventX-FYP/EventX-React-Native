@@ -47,8 +47,7 @@ export const images = {
     },
     Users: {
         User1: require("./users/user1.jpg"),
-    },
-    JSON: {
-        // Home: require("./lottie/home.icon.json"),
+        Photo: require("./users/photo.jpg"),
+        Profile: require("./users/profile.png"),
     },
 };
