@@ -48,7 +48,7 @@ export const Client = ({ navigation }) => {
   ]
   const tabs = [
     { route: ScreenNavigator.ClientHome, label: "Home", type: Icons.Ionicons, activeIcon: "home", inActiveIcon: "home-outline", component: Home,  },
-    { route: ScreenNavigator.ClientSearch, label: "Categories", type: Icons.Ionicons, activeIcon: "search", inActiveIcon: "search", component: Search,  },
+    { route: ScreenNavigator.ClientSearch, label: "Search", type: Icons.Ionicons, activeIcon: "search", inActiveIcon: "search", component: Search,  },
     { route: ScreenNavigator.ClientJob, label: "Job", type: Icons.Ionicons, activeIcon: "briefcase", inActiveIcon: "briefcase-outline", component: Job,  },
     { route: ScreenNavigator.ClientMessage, label: "Messages", type: Icons.Ionicons, activeIcon: "chatbubble", inActiveIcon: "chatbubble-outline", component: ChatList,  },
     { route: ScreenNavigator.ClientNotifications, label: "Notifications", type: Icons.Ionicons, activeIcon: "notifications", inActiveIcon: "notifications-outline", component: Notifications,  },

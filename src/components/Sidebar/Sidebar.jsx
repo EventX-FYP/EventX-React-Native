@@ -14,10 +14,6 @@ const TabButton = ({ currentTab, setCurrentTab, item, setShowMenu }) => {
     }
   }
 
-  const offsetValue = useRef(new Animated.Value(0)).current;
-  const scaleValue = useRef(new Animated.Value(1)).current;
-  const closeButtonOffset = useRef(new Animated.Value(0)).current;
-
   const handleNavigation = (e) => {
     e.preventDefault();
     if (item.title === "Log out") {
