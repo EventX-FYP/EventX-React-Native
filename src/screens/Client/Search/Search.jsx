@@ -72,7 +72,7 @@ export const Search = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppHelper.material.white,
+    // backgroundColor: AppHelper.material.white,
     padding: 10,
     height: "100%",
   },
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   searchResultContainer: {
     flex: 1,
-    backgroundColor: AppHelper.material.white,
+    // backgroundColor: AppHelper.material.white,
     // paddingBottom: 22,
     // marginBottom: 10,
     height: "90%",

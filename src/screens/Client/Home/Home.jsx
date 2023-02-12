@@ -75,7 +75,7 @@ export const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: AppHelper.material.lightWhite,
+    // backgroundColor: AppHelper.material.lightWhite,
     padding: 10,
   },
   searchContainer: {
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   homeContainer: {
     flex: 1,
-    backgroundColor: AppHelper.material.white,
+    // backgroundColor: AppHelper.material.white,
     // padding: 10,
     marginTop: 10,
     height: '100%',
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    backgroundColor: AppHelper.material.greenA400,
+    backgroundColor: AppHelper.material.green600,
     borderRadius: 10,
     padding: 10,
     display: 'flex',
