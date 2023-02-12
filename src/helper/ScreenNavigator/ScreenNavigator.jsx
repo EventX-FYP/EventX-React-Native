@@ -18,5 +18,6 @@ export const ScreenNavigator = {
   ClientNotifications: "ClientNotifications",
   PlannerProfile: "PlannerProfile",
   ClientProfile: "ClientProfile",
-  JobDetail: "JobDetail"
+  JobDetail: "JobDetail",
+  Packages: "Packages"
 }

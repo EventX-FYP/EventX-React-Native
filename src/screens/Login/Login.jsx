@@ -34,8 +34,7 @@ export const Login = ({ navigation }) => {
         // await signIn(auth.username, auth.password)
         //     .then(() => navigation.navigate(ScreenNavigator.Client))
         //     .catch((error) => alert("Error", error));
-        navigation.navigate(ScreenNavigator.Client);
-        // loginRef.current.expand();
+        navigation.navigate(ScreenNavigator.Packages);
     }
 
     const handleLoginWithGoogleButton = async () => {

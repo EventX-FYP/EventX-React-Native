@@ -4,3 +4,4 @@ export { UserType } from './Signup/Phases/UserType/UserType';
 export { Phases } from "./Signup/Phases/Phases";
 export { Planner } from "./Planner/Planner";
 export { Client } from "./Client/Client";
+export {Packages} from "./Planner/Packages/Packages"
