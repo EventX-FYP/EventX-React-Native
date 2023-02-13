@@ -1,18 +1,18 @@
 import { View, Text, SafeAreaView, StyleSheet, Image } from 'react-native'
-import {images} from '../../assets'
-
 import React from 'react'
 
 const description =  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic"
 
-export const PlannerPackageCard = () => {
+export const PlannerPackageCard = ({packageContent,cardimage}) => {
+  const {description, packagePrice, title} = packageContent
+  const image = cardimage
   return (
     <SafeAreaView style={styles.container}>
-      <Image style={styles.cardImg} source={images.DigitalPlanner}></Image>
+      <Image style={styles.cardImg} source={image}></Image>
       <View style={styles.cardContent}>
-        <Text numberOfLines={1} style={styles.title}>Package Title</Text>
-        <Text numberOfLines={1} style={styles.price}>Package Price</Text>
-        <Text style={styles.description}>{description}</Text>
+        <Text numberOfLines={1} style={styles.title}>{title}</Text>
+        <Text numberOfLines={1} style={styles.price}>{packagePrice}</Text>
+        <Text style={styles.description} numberOfLines={4}>{description}</Text>
       </View>
       
     </SafeAreaView>
@@ -22,7 +22,7 @@ export const PlannerPackageCard = () => {
 const styles = StyleSheet.create({
     container:{
         borderWidth:1,
-        height:350,
+        height:370,
         width:300,
        borderTopStartRadius:25,
        borderTopEndRadius:25,
@@ -32,16 +32,19 @@ const styles = StyleSheet.create({
     },
     cardImg:{
        width:"100%",
-       height:"60%",
+       height:"55%",
+       resizeMode:"cover"
     },
     cardContent:{
         alignItems:"center"
     },
     title:{
-        fontSize:25
+        fontSize:25,
+        marginVertical:5
     },
     price:{
-        fontSize:20
+        fontSize:20,
+        marginVertical:10
     },
     description:{
         textAlign:"center"
