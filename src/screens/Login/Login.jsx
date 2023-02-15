@@ -35,6 +35,7 @@ export const Login = ({ navigation }) => {
         //     .then(() => navigation.navigate(ScreenNavigator.Client))
         //     .catch((error) => alert("Error", error));
         navigation.navigate(ScreenNavigator.Packages);
+        // loginRef.current.expand();
     }
 
     const handleLoginWithGoogleButton = async () => {
@@ -89,7 +90,11 @@ export const Login = ({ navigation }) => {
                     </View>
                 </View>
             </View>
-            <BottomSheet ref={loginRef} activeHeight={height * 0.5} backgroundColor={AppHelper.material.green50} backDropColor={'black'} />
+            <BottomSheet ref={loginRef} activeHeight={height * 0.5} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
+                <View>
+                    <Text>Bottom Sheet</Text>
+                </View>
+            </BottomSheet>
         </SafeAreaView>
     );
 }
