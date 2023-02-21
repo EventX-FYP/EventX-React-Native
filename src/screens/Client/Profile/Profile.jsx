@@ -51,14 +51,6 @@ export const ClientProfile = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <View style={styles.carouselContainer}>
-        <Text style={styles.text}>Image Carousal Square</Text>
-        <CustomImageCarousal data={data1} autoPlay={true} pagination={true} />
-      </View>
-      <View style={styles.carouselContainer}>
-        <Text style={styles.text}>Image Carousal Landscape</Text>
-        <CustomImageCarousal data={data2} autoPlay={true} pagination={true} aspectRatio={16/9}/>
-      </View> */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon type={Icons.Feather} name={"arrow-left"} size={25} color={"black"}/>
