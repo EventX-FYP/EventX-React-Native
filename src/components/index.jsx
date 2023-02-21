@@ -6,3 +6,5 @@ export { NotificationCard } from './NotificationCard/NotificationCard'
 export { ChatCard } from './ChatCard/ChatCard'
 export { BottomSheet } from './BottomSheet/BottomSheet'
 export { Sidebar } from './Sidebar/Sidebar'
+export { CustomImageCarousal } from './Carousal/CustomImageCarousal'
+export { CameraComponent } from "./Camera/Camera";

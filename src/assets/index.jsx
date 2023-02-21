@@ -22,7 +22,6 @@ export const images = {
     Buyer: require('./transparent-icons/86.png'),
     GeneralInfoWave: require('./generalinfowave.png'),
     CameraIcon: require('./icons/camera.png'),
-    CardTestPicture: require('./portrait/6.png'),
     BirthdayPlanner: require("./category-icons/birthday.png"),
     DigitalPlanner: require("./category-icons/digital.jpg"),
     FinancialPlanner: require("./category-icons/financial.jpg"),
@@ -50,4 +49,14 @@ export const images = {
         Photo: require("./users/photo.jpg"),
         Profile: require("./users/profile.png"),
     },
+    Dummy: {
+        Square1: require("./dummy/image-product-1.jpg"),
+        Square2: require("./dummy/image-product-2.jpg"),
+        Square3: require("./dummy/image-product-3.jpg"),
+        Square4: require("./dummy/image-product-4.jpg"),
+        Landscape1: require("./dummy/image-product-1-landscape.jpg"),
+        Landscape2: require("./dummy/image-product-2-landscape.jpg"),
+        Landscape3: require("./dummy/image-product-3-landscape.jpg"),
+        Landscape4: require("./dummy/image-product-4-landscape.jpg"),
+    }
 };

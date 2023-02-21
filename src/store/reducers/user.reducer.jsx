@@ -1,4 +1,4 @@
-import { User } from "../types";
+import { UPDATE_USER, DELETE_USER, GET_USER, CREATE_USER } from "../types";
 
 const initialState = {
   id: "",
@@ -19,7 +19,6 @@ const initialState = {
 };
 
 export const userReducer = (state = initialState, action) => {
-  const { UPDATE_USER, DELETE_USER, GET_USER, CREATE_USER } = User
   switch (action.type) {
     case UPDATE_USER:
       return action.payload;
