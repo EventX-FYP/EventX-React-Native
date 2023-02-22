@@ -111,6 +111,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    zIndex: 100,
+    elevation: 100,
   },
   lineContainer: {
     marginVertical: 10,

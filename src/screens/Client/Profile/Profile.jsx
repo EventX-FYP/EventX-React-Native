@@ -44,11 +44,6 @@ export const ClientProfile = ({ navigation }) => {
     setCurrentIndex(e.value);
   }
 
-  useEffect(() => {
-    console.log("Current Index: ", currentIndex)
-  }, [currentIndex])
-
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
