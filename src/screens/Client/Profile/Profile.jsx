@@ -40,8 +40,8 @@ export const ClientProfile = ({ navigation }) => {
 
   const [currentIndex, setCurrentIndex] = useState(0)
 
-  const handleStatusChange = (index) => {
-    setCurrentIndex(index)
+  const handleStatusChange = (e) => {
+    setCurrentIndex(e.value);
   }
 
   useEffect(() => {
@@ -77,12 +77,17 @@ export const ClientProfile = ({ navigation }) => {
           </View>
         </View>
         <TouchableOpacity style={{ alignItems: "center", justifyContent: "center" }}>
-          <Picker style={[inputStyles.inputFieldWhite, { color: "white" }]} useSafeArea
-           value={status[currentIndex]} enableModalBlur={false} topBarProps={{ title: "Status" }} mode={Picker.modes.SINGLE}>
+          <Picker 
+            style={[inputStyles.inputFieldWhite, { color: "white" }]}
+            value={{ value: status[currentIndex].value, label: status[currentIndex].label }}
+            enableModalBlur={false}
+            topBarProps={{ title: "Status" }}
+            mode={Picker.modes.SINGLE}
+            onChange={handleStatusChange}>
             {
               status.map((item, index) => {
                 return (
-                  <Picker.Item key={index} value={item} label={item.label} onPress={() => handleStatusChange(index)} />
+                  <Picker.Item key={index} value={index} label={item.value} />
                 )
               })
             }
