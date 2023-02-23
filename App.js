@@ -9,6 +9,7 @@ import { client } from "./src/hooks/ApolloClient";
 import { Chat } from "./src/screens/General";
 import { JobDetail } from "./src/screens/General";
 import { Packages } from "./src/screens";
+import PackageDetail from "./src/screens/General/PackageDetail/PackageDetail";
 
 const Stack = createNativeStackNavigator();
 export default function App() { 
@@ -24,6 +25,7 @@ export default function App() {
             <Stack.Screen name={ScreenNavigator.Client} component={Client} />
             <Stack.Screen name={ScreenNavigator.Chat} component={Chat}/>
             <Stack.Screen name={ScreenNavigator.JobDetail} component={JobDetail}/>
+            <Stack.Screen name={ScreenNavigator.PackageDetail} component={PackageDetail}/>
             <Stack.Screen name={ScreenNavigator.Packages} component={Packages}/>
           </Stack.Navigator>
         </NavigationContainer>

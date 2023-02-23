@@ -9,20 +9,22 @@ export const PlannerPackageCard = ({ packageContent, cardimage }) => {
   const { description, packagePrice, title } = packageContent
   const image = cardimage
   return (
-    <SafeAreaView style={styles.container}>
-      <Image style={styles.cardImg} source={image}></Image>
-      <View style={styles.cardContent}>
-        <Text numberOfLines={1} style={styles.title}>
-          {title}
-        </Text>
-        <Text numberOfLines={1} style={styles.price}>
-          {packagePrice}
-        </Text>
-        <Text style={styles.description} numberOfLines={4}>
-          {description}
-        </Text>
-      </View>
-    </SafeAreaView>
+    <Pressable>
+      <SafeAreaView style={styles.container}>
+        <Image style={styles.cardImg} source={image}></Image>
+        <View style={styles.cardContent}>
+          <Text numberOfLines={1} style={styles.title}>
+            {title}
+          </Text>
+          <Text numberOfLines={1} style={styles.price}>
+            {packagePrice}
+          </Text>
+          <Text style={styles.description} numberOfLines={4}>
+            {description}
+          </Text>
+        </View>
+      </SafeAreaView>
+    </Pressable>
   )
 }
 
