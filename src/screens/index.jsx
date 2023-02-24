@@ -7,3 +7,4 @@ export { Client } from "./Client/Client";
 export { ClientProfile } from "./Client/Profile/Profile";
 export { EditProfile } from "./Client/Profile/EditProfile";
 export { SavedPlanner } from "./Client/SavedPlanner/SavedPlanner";
+export { Analytics } from "./Client/Analytics/Analytics";
