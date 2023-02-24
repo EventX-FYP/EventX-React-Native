@@ -58,7 +58,7 @@ export const Home = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex:1}}>
       <ScrollView style={styles.container} >
         <TouchableOpacity>
           <View style={styles.Search}>
@@ -111,7 +111,8 @@ export const Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal:20,
-    paddingTop:15
+    paddingTop:15,
+    // flex:1
   },
   heading: {
     fontSize: 25,
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
   Component: {
     justifyContent: 'space-evenly',
     height: 270,
+    marginBottom:5
   },
   Search:{
     flexDirection:"row",

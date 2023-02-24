@@ -30,7 +30,7 @@ export const Login = ({ navigation }) => {
         // await signIn(auth.username, auth.password)
         //     .then(() => navigation.navigate(ScreenNavigator.Client))
         //     .catch((error) => alert("Error", error));
-        navigation.navigate(ScreenNavigator.Client);
+        navigation.navigate(ScreenNavigator.PackageDetail);
         // loginRef.current.expand();
     }
 
@@ -86,7 +86,11 @@ export const Login = ({ navigation }) => {
                     </View>
                 </View>
             </View>
-            <BottomSheet ref={loginRef} activeHeight={height} backgroundColor={AppHelper.material.green50} backDropColor={'black'} />
+            <BottomSheet ref={loginRef} activeHeight={height} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
+                <View>
+                    <Text>Bottom Sheet</Text>
+                </View>
+            </BottomSheet>
         </SafeAreaView>
     );
 }
