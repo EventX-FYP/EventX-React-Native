@@ -24,4 +24,5 @@ export const ScreenNavigator = {
   PlannerProfileForClient: "PlannerProfileForClient",
   PlannerAnalytics: "PlannerAnalytics",
   ClientAnalytics: "ClientAnalytics",
+  ClientJobPosting: "ClientJobPosting",
 }

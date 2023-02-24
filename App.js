@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Login, Signup, Phases, Planner, Client, ClientProfile, EditProfile, SavedPlanner, Analytics } from "./src/screens";
+import { Login, Signup, Phases, Planner, Client, ClientProfile, EditProfile, SavedPlanner, Analytics, JobPosting } from "./src/screens";
 import { Chat, JobDetail, PlannerProfile } from "./src/screens/General";
 import { Provider } from "react-redux";
 import store from "./src/store";
@@ -27,6 +27,7 @@ export default function App() {
             <Stack.Screen name={ScreenNavigator.SavedPlanner} component={SavedPlanner} />
             <Stack.Screen name={ScreenNavigator.PlannerProfileForClient} component={PlannerProfile} />
             <Stack.Screen name={ScreenNavigator.ClientAnalytics} component={Analytics} />
+            <Stack.Screen name={ScreenNavigator.ClientJobPosting} component={JobPosting} />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
