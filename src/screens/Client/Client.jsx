@@ -41,7 +41,7 @@ export const Client = ({ navigation }) => {
   
   const sidebarIcons = [
     { route: ScreenNavigator.SavedPlanner, title: "Saved Planners", type: Icons.Ionicons, name: "home" },
-    { route: ScreenNavigator.ClientSearch, title: "Search", type: Icons.Ionicons, name: "search" },
+    { route: ScreenNavigator.PlannerProfileForClient, title: "Planner Profile", type: Icons.FontAwesome, name: "user" },
     { route: ScreenNavigator.ClientJob, title: "Job", type: Icons.Ionicons, name: "briefcase" },
     { route: ScreenNavigator.ClientMessage, title: "Messages", type: Icons.Ionicons, name: "chatbubble" },
     { route: ScreenNavigator.ClientNotifications, title: "Notifications", type: Icons.Ionicons, name: "notifications" },

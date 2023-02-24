@@ -5,10 +5,10 @@ import { images } from '../../../assets'
 
 const Planner = ({ name, picture }) => {
   return (
-    <View style={{ display: "flex", flexDirection: "row", padding: 10, width: "90%", backgroundColor: AppHelper.material.green300, borderTopRightRadius: 50, borderBottomRightRadius: 50 }}>
+    <TouchableOpacity style={{ display: "flex", flexDirection: "row", padding: 10, width: "90%", backgroundColor: AppHelper.material.lightGreen400, borderTopRightRadius: 50, borderBottomRightRadius: 50 }}>
       <Image source={picture} style={{ width: 70, height: 70, borderRadius: 20 }} />
       <Text style={{ color: "white", marginLeft: 10, fontWeight: "bold", fontSize: 18, alignSelf: "center" }}>{name}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 
