@@ -13,15 +13,17 @@ const TabButton = forwardRef(({ currentTab, setCurrentTab, item }, ref) => {
       nav.navigate(ScreenNavigator.Login);
       return;
     }
-    if (item.title !== currentTab) {
-      setCurrentTab(item.title);
+    // if (item.title !== currentTab) {
+      // setCurrentTab(item.title);
       ref.current.handleMenuButton();
       nav.navigate(item.route)
-    }
+    // }
   }
 
-  const tintColor = currentTab === item.title ? bgColor : "white";
-  const backgroundColor = currentTab === item.title ? "white" : "transparent";
+  // const tintColor = currentTab === item.title ? bgColor : "white";
+  // const backgroundColor = currentTab === item.title ? "white" : "transparent";
+  const tintColor = "white";
+  const backgroundColor = "transparent";
 
   return (
     <TouchableOpacity onPress={handleNavigation}>
@@ -61,19 +63,19 @@ export const Sidebar = ({ children, sideBar, currentTab, setCurrentTab, navigati
   const handleMenuButton = () => {
     Animated.timing(scaleValue, {
       toValue: menu ? 1 : 0.95,
-      duration: 300,
+      duration: 200,
       useNativeDriver: true,
     }).start();
 
     Animated.timing(offsetValue, {
       toValue: menu ? 0 : 230,
-      duration: 300,
+      duration: 200,
       useNativeDriver: true,
     }).start();
 
     Animated.timing(closeButtonOffset, {
       // toValue: menu ? 0 : 20,
-      duration: 300,
+      duration: 200,
       useNativeDriver: true,
     }).start();
 
@@ -86,7 +88,10 @@ export const Sidebar = ({ children, sideBar, currentTab, setCurrentTab, navigati
       <View style={{ justifyContent: "flex-start", padding: 15 }}>
         <Image source={images.Users.Photo} style={{ width: 60, height: 60, borderRadius: 15, marginTop: 8 }} />
         <Text style={{ fontSize: 20, fontWeight: "bold", color: "white", marginTop: 20 }}>Jane Doe</Text>
-        <TouchableOpacity onPress={() => navigation.navigate(ScreenNavigator.ClientProfile)}>
+        <TouchableOpacity onPress={() => {
+          handleMenuButton();
+          navigation.navigate(ScreenNavigator.ClientProfile)
+        }}>
           <Text style={{ marginTop: 6, color: "white" }}>View Profile</Text>
         </TouchableOpacity>
 
