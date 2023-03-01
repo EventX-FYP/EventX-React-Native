@@ -16,6 +16,7 @@ const initialState = {
   state: "",
   country: "",
   picture: "",
+  location: "",
 };
 
 export const userReducer = (state = initialState, action) => {

@@ -1,11 +1,9 @@
-import React, { createRef, useRef } from 'react'
-import { SafeAreaView, ScrollView, StyleSheet, PanResponder } from 'react-native'
-import { View, Text } from 'react-native-ui-lib';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import React, { useState } from 'react'
+import { SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View, Text, TextInput } from 'react-native'
 import { Chip } from 'react-native-paper';
-import { Slider } from 'react-native-ui-lib';
-import { AppHelper } from '../../../helper';
+import { AppHelper, Icon, Icons } from '../../../helper';
 import { RangeSlider } from '../../../components';
+import { useSelector, useDispatch } from 'react-redux';
 
 export const JobPosting = () => {
   const events = {
@@ -20,6 +18,12 @@ export const JobPosting = () => {
     "Political": ["Election Campaign Rallies", "Debates", "Political Conferences", "Fundraisers"],
     "Community": ["Neighborhood Block Parties", "Farmer's Markets", "Carnivals", "Charity Runs", "Blood Drives", "Volunteer Events"],
   };
+
+
+  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
+
+  const [location, setLocation] = useState(user.location ?? "");
 
   const [selected, setSelected] = React.useState(new Map());
   
@@ -38,8 +42,8 @@ export const JobPosting = () => {
 
   const MIN_DEFAULT = 10;
   const MAX_DEFAULT = 500;
-  const [minValue, setMinValue] = React.useState(MIN_DEFAULT);
-  const [maxValue, setMaxValue] = React.useState(MAX_DEFAULT);
+  const [minValue, setMinValue] = useState(MIN_DEFAULT);
+  const [maxValue, setMaxValue] = useState(MAX_DEFAULT);
 
   const onSliderRangeChange = (values) => {
     // console.log(values);
@@ -49,49 +53,71 @@ export const JobPosting = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.categoriesContainer}>
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>Categories</Text>
-        <ScrollView>
-          <View style={[styles.categories, { marginVertical: 15 }]}>
-            {Object.keys(events).map((type, typeIndex) => {
-              return (
-                <>
-                  <Chip key={typeIndex} style={{ backgroundColor: selected.get(typeIndex) ? AppHelper.material.green900 : AppHelper.material.green600, margin: 3 }}
-                    textStyle={{color: AppHelper.material.white }}
-                    onPress={() => handleChipPress(typeIndex)}>
-                      {type}
-                  </Chip>
-                  {selected.get(typeIndex) && events[type].map((item, index) => {
-                    const key = `${typeIndex}-${index}`;
-                    const isSelected = selected.get(key);
-                    return (
-                      <Chip key={key} style={isSelected ? styles.chipSelect : styles.chipUnselect}
-                        textStyle={{ color: isSelected ? AppHelper.material.white : AppHelper.material.lightBlack }}
-                        onPress={() => handleChipPress(typeIndex, index)}>
-                          {item}
-                      </Chip>
-                    );
-                  })}
-                </>
-              )
-            })}
+    <SafeAreaView style={[styles.container, { backgroundColor: "white" }]}>
+      <ScrollView>
+        <View style={styles.categoriesContainer}>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Categories</Text>
+          <ScrollView>
+            <View style={[styles.categories, { marginVertical: 15 }]}>
+              {Object.keys(events).map((type, typeIndex) => {
+                return (
+                  <>
+                    <Chip key={typeIndex} style={{ backgroundColor: selected.get(typeIndex) ? AppHelper.material.green900 : AppHelper.material.green600, margin: 3 }}
+                      textStyle={{color: AppHelper.material.white }}
+                      onPress={() => handleChipPress(typeIndex)}>
+                        {type}
+                    </Chip>
+                    {selected.get(typeIndex) && events[type].map((item, index) => {
+                      const key = `${typeIndex}-${index}`;
+                      const isSelected = selected.get(key);
+                      return (
+                        <Chip key={key} style={isSelected ? styles.chipSelect : styles.chipUnselect}
+                          textStyle={{ color: isSelected ? AppHelper.material.white : AppHelper.material.darkWhite }}
+                          onPress={() => handleChipPress(typeIndex, index)}>
+                            {item}
+                        </Chip>
+                      );
+                    })}
+                  </>
+                )
+              })}
+            </View>
+          </ScrollView>
+        </View>
+        <View style={[styles.moneyContainer, { backgroundColor: "white", borderRadius: 20}]}>
+          <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+            <Text style={{ fontWeight: "bold", fontSize: 18 }}>Price Range</Text>
+            <Text style={{ fontWeight: "bold", fontSize: 18 }}>{minValue} PKR - {maxValue} PKR</Text>
           </View>
-        </ScrollView>
-      </View>
-      <View style={[styles.moneyContainer, { backgroundColor: "white", borderRadius: 20}]}>
-        <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>Price Range</Text>
-          <Text style={{ fontWeight: "bold", fontSize: 18 }}>{minValue} PKR - {maxValue} PKR</Text>
-        </View>
 
-        <View style={{ marginVertical: 10 }}>
-          <RangeSlider sliderWidth={300} min={MIN_DEFAULT} max={MAX_DEFAULT} step={10} onValueChange={range => {
-            setMinValue(range.min);
-            setMaxValue(range.max);
-          }}/>
+          <View style={{ marginVertical: 10 }}>
+            <RangeSlider sliderWidth={300} min={MIN_DEFAULT} max={MAX_DEFAULT} step={10} onValueChange={range => {
+              setMinValue(range.min);
+              setMaxValue(range.max);
+            }}/>
+          </View>
         </View>
-      </View>
+        <View style={[styles.moneyContainer, { display: "flex", flexDirection: "column" }]}>
+          <Text style={{ fontWeight: "bold", fontSize: 20 }}>Location:</Text>
+          <TouchableOpacity onPress={() => {}} style={[styles.selectLocation,{ marginTop: 10 }]}>
+            <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+              <Icon type={Icons.Ionicons} name={"search"} size={20} color="black" />
+              <Text style={{ marginLeft: 10 }}>Select location</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.moneyContainer]}>
+          <Text style={{ fontWeight: "bold", fontSize: 20 }}>Job Description:</Text>
+          <View style={{ display: "flex", flexDirection: "column" }}>
+            <TextInput placeholder="Title" style={{ marginTop: 10, fontSize: 16, padding: 10, borderWidth: 1, borderColor: AppHelper.material.grey300, borderRadius: 10 }} />
+            <TextInput placeholder='Price' style={{ marginTop: 10, fontSize: 16, padding: 10, borderWidth: 1, borderColor: AppHelper.material.grey300, borderRadius: 10 }} />
+            <TextInput multiline={true} numberOfLines={2} placeholder="Description" style={{ marginTop: 10, fontSize: 16, padding: 10, borderWidth: 1, borderColor: AppHelper.material.grey300, borderRadius: 10 }} />
+          </View>
+        </View>
+      </ScrollView>
+      <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: AppHelper.material.green800, padding: 15, alignItems: "center" }}>
+        <Text style={{ color: "white", fontWeight: "bold", fontSize: 18 }}>Post</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }
@@ -99,6 +125,7 @@ export const JobPosting = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "space-between"
   },
   categoriesContainer: {
     padding: 20,
@@ -121,43 +148,21 @@ const styles = StyleSheet.create({
   moneyContainer: {
     padding: 20,
   },
-})
+  selectLocation: {
+    // borderWidth: 0.7,
+    padding: 14,
+    borderRadius: 10,
+    backgroundColor: "white",
+    borderColor: AppHelper.material.lightBlack,
+    // Shadow
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
+    elevation: 8,
 
-const rangeStyle = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#EBECF2',
-  },
-  contentContainer: {
-    width: '90%',
-    height: 300,
-    backgroundColor: 'white',
-    borderRadius: 25,
-  },
-  content: {
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  text: {
-    color: 'black',
-    fontSize: 20,
-  },
-  tableContainer: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  table: {
-    borderColor: '#EBECF2',
-    borderWidth: 1,
-    padding: 10,
-    marginTop: 5,
-    borderRadius: 5,
-  },
-  colorBlack: {
-    color: 'black'
-  },
+  }
 });
