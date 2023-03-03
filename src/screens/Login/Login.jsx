@@ -7,9 +7,6 @@ import { StatusBar, TextInput } from "react-native";
 import { styles } from "./styles";
 import { inputStyles } from "../../styles";
 import { ScreenNavigator, AppHelper } from "../../helper";
-import { GET_USER_ME } from "../../graphql/queries";
-import { useQuery } from "@apollo/client";
-import { signIn } from "../../firebase";
 import { IOS_CLIENT_ID, ANDROID_CLIENT_ID, EXPO_CLIENT_ID } from "@env";
 import { BottomSheet } from "../../components";
 
@@ -28,7 +25,6 @@ export const Login = ({ navigation }) => {
     const loginRef = useRef();
     const { height } = useWindowDimensions();
 
-    const { data } = useQuery(GET_USER_ME);
 
     const handleLoginButton = async () => {
         // await signIn(auth.username, auth.password)
@@ -39,8 +35,8 @@ export const Login = ({ navigation }) => {
     }
 
     const handleLoginWithGoogleButton = async () => {
-        // await promptAsync()
-        //     .then((result) => console.log(result));
+        await promptAsync()
+            .then((result) => console.log(result));
     }
 
     const handleSignupButton = () => {
@@ -90,7 +86,7 @@ export const Login = ({ navigation }) => {
                     </View>
                 </View>
             </View>
-            <BottomSheet ref={loginRef} activeHeight={height * 0.5} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
+            <BottomSheet ref={loginRef} activeHeight={height} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
                 <View>
                     <Text>Bottom Sheet</Text>
                 </View>

@@ -17,7 +17,7 @@ const TabButton = (props) => {
   const { item, onPress, accessibilityState, setCurrentTab } = props;
   const focused = accessibilityState.selected;
   const viewRef = useRef(null);
-
+  
   useEffect(() => {
     if (focused) {
       viewRef.current?.animate({ 0: { scale: .5, rotate: "0deg" }, 1: { scale: 1.2, rotate: "360deg" }});
@@ -26,7 +26,7 @@ const TabButton = (props) => {
       viewRef.current?.animate({ 0: { scale: 1.2, rotate: "360deg" }, 1: { scale: 1, rotate: "0deg" }});
     }
   }, [focused]);
-
+  
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={1} style={styles.container}>
       <Animatable.View ref={viewRef} duration={500} style={styles.container}>
@@ -38,12 +38,12 @@ const TabButton = (props) => {
 
 export const Client = ({ navigation }) => {
   const [currentTab, setCurrentTab] = useState("Home");
-
+  
   const sidebarIcons = [
-    { route: ScreenNavigator.ClientHome, title: "Home", type: Icons.Ionicons, name: "home" },
-    { route: ScreenNavigator.ClientSearch, title: "Search", type: Icons.Ionicons, name: "search" },
-    { route: ScreenNavigator.ClientJob, title: "Job", type: Icons.Ionicons, name: "briefcase" },
-    { route: ScreenNavigator.ClientMessage, title: "Messages", type: Icons.Ionicons, name: "chatbubble" },
+    { route: ScreenNavigator.SavedPlanner, title: "Saved Planners", type: Icons.Ionicons, name: "home" },
+    { route: ScreenNavigator.PlannerProfileForClient, title: "Planner Profile", type: Icons.FontAwesome, name: "user" },
+    { route: ScreenNavigator.ClientAnalytics, title: "Client Analytics", type: Icons.Ionicons, name: "briefcase" },
+    { route: ScreenNavigator.ClientJobPosting, title: "Client Job Posting", type: Icons.Entypo, name: "briefcase" },
     { route: ScreenNavigator.ClientNotifications, title: "Notifications", type: Icons.Ionicons, name: "notifications" },
   ]
   const tabs = [
@@ -93,5 +93,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 0,
+    elevation: 0,
   },
 })

@@ -8,5 +8,12 @@ export const inputStyles = StyleSheet.create({
     borderWidth: 0.4,
     borderRadius: 5,
     padding: 10,
+  },
+  inputFieldWhite: {
+    borderColor: AppHelper.material.white,
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    height: 40,
   }
 });

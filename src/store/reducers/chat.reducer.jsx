@@ -1,35 +1,35 @@
-import { Chat } from "../types";
+import { GET_CHATS, GET_CHAT, CREATE_CHAT, UPDATE_CHAT, DELETE_CHAT, GET_CHAT_MESSAGES, GET_CHAT_MESSAGE, CREATE_CHAT_MESSAGE, UPDATE_CHAT_MESSAGE, DELETE_CHAT_MESSAGE } from "../types";
 
 export const chatReducer = (state = [], action) => {
   switch (action.type) {
-    case Chat.GET_CHATS:
+    case GET_CHATS:
       return action.payload;
     
-      case Chat.GET_CHAT:
+    case GET_CHAT:
       return action.payload;
 
-    case Chat.CREATE_CHAT:
+    case CREATE_CHAT:
       return action.payload;
     
-    case Chat.UPDATE_CHAT:
+    case UPDATE_CHAT:
       return action.payload;
     
-    case Chat.DELETE_CHAT:
+    case DELETE_CHAT:
       return action.payload;
     
-    case Chat.GET_CHAT_MESSAGES:
+    case GET_CHAT_MESSAGES:
       return action.payload;
     
-    case Chat.GET_CHAT_MESSAGE:
+    case GET_CHAT_MESSAGE:
       return action.payload;
     
-    case Chat.CREATE_CHAT_MESSAGE:
+    case CREATE_CHAT_MESSAGE:
       return action.payload;
     
-    case Chat.UPDATE_CHAT_MESSAGE:
+    case UPDATE_CHAT_MESSAGE:
       return action.payload;
 
-    case Chat.DELETE_CHAT_MESSAGE:
+    case DELETE_CHAT_MESSAGE:
       return action.payload;
     
     default:
