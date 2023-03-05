@@ -86,8 +86,8 @@ export const Login = ({ navigation }) => {
                     </View>
                 </View>
             </View>
-            <BottomSheet ref={loginRef} activeHeight={height} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
-                <View>
+            <BottomSheet ref={loginRef} activeHeight={height * 0.5} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
+                <View style={{ alignItems: "center" }}>
                     <Text>Bottom Sheet</Text>
                 </View>
             </BottomSheet>

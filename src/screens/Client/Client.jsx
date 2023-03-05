@@ -44,7 +44,7 @@ export const Client = ({ navigation }) => {
     { route: ScreenNavigator.PlannerProfileForClient, title: "Planner Profile", type: Icons.FontAwesome, name: "user" },
     { route: ScreenNavigator.ClientAnalytics, title: "Client Analytics", type: Icons.Ionicons, name: "briefcase" },
     { route: ScreenNavigator.ClientJobPosting, title: "Client Job Posting", type: Icons.Entypo, name: "briefcase" },
-    { route: ScreenNavigator.ClientNotifications, title: "Notifications", type: Icons.Ionicons, name: "notifications" },
+    { route: ScreenNavigator.ClientProposals, title: "Proposals", type: Icons.Ionicons, name: "mail" },
   ]
   const tabs = [
     { route: ScreenNavigator.ClientHome, label: "Home", type: Icons.Ionicons, activeIcon: "home", inActiveIcon: "home-outline", component: Home,  },

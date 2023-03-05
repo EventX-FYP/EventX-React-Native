@@ -10,6 +10,7 @@ import { client } from "./src/hooks/ApolloClient";
 import { Packages } from "./src/screens";
 import PackageDetail from "./src/screens/General/PackageDetail/PackageDetail";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Proposals } from "./src/screens/Client/Proposals/Proposals";
 
 const Stack = createNativeStackNavigator();
 export default function App() { 
@@ -34,6 +35,7 @@ export default function App() {
               <Stack.Screen name={ScreenNavigator.PlannerProfileForClient} component={PlannerProfile} />
               <Stack.Screen name={ScreenNavigator.ClientAnalytics} component={Analytics} />
               <Stack.Screen name={ScreenNavigator.ClientJobPosting} component={JobPosting} />
+              <Stack.Screen name={ScreenNavigator.ClientProposals} component={Proposals} />
             </Stack.Navigator>
           </NavigationContainer>
         </Provider>
