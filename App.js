@@ -1,7 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Login, Signup, Phases, Planner, Client, ClientProfile, EditProfile, SavedPlanner, Analytics, JobPosting } from "./src/screens";
+import { Login, Signup, Phases, Planner, Client, ClientProfile, EditProfile, SavedPlanner, Analytics, JobPosting, Proposals } from "./src/screens";
 import { Chat, JobDetail, PlannerProfile } from "./src/screens/General";
+import { Home } from "./src/screens/TaskManagement";
 import { Provider } from "react-redux";
 import store from "./src/store";
 import { ScreenNavigator } from "./src/helper";
@@ -10,7 +11,6 @@ import { client } from "./src/hooks/ApolloClient";
 import { Packages } from "./src/screens";
 import PackageDetail from "./src/screens/General/PackageDetail/PackageDetail";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Proposals } from "./src/screens/Client/Proposals/Proposals";
 
 const Stack = createNativeStackNavigator();
 export default function App() { 
@@ -36,6 +36,7 @@ export default function App() {
               <Stack.Screen name={ScreenNavigator.ClientAnalytics} component={Analytics} />
               <Stack.Screen name={ScreenNavigator.ClientJobPosting} component={JobPosting} />
               <Stack.Screen name={ScreenNavigator.ClientProposals} component={Proposals} />
+              <Stack.Screen name={ScreenNavigator.TaskManagementHome} component={Home} />
             </Stack.Navigator>
           </NavigationContainer>
         </Provider>

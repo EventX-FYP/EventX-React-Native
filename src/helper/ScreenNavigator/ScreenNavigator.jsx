@@ -28,4 +28,11 @@ export const ScreenNavigator = {
   ClientAnalytics: "ClientAnalytics",
   ClientJobPosting: "ClientJobPosting",
   ClientProposals: "ClientProposals",
+  TaskManagementHome: "TaskManagementHome",
+  TaskManagementTask: "TaskManagementTask",
+  TaskManagementTaskDetail: "TaskManagementTaskDetail",
+  TaskManagementTaskDetailEdit: "TaskManagementTaskDetailEdit",
+  TaskManagementTaskDetailAdd: "TaskManagementTaskDetailAdd",
+  TaskManagementTaskDetailAddSubTask: "TaskManagementTaskDetailAddSubTask",
+  TaskManagementTaskDetailAddSubTaskEdit: "TaskManagementTaskDetailAddSubTaskEdit",
 }
