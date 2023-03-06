@@ -23,7 +23,7 @@ const TabButton = forwardRef(({ currentTab, setCurrentTab, item }, ref) => {
   // const tintColor = currentTab === item.title ? bgColor : "white";
   // const backgroundColor = currentTab === item.title ? "white" : "transparent";
   const tintColor = "white";
-  const backgroundColor = AppHelper.material.green400;
+  const backgroundColor = "transparent";
 
   return (
     <TouchableOpacity onPress={handleNavigation}>
