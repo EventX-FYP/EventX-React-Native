@@ -4,7 +4,7 @@ import React, { forwardRef, useImperativeHandle, useCallback } from 'react';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, useAnimatedGestureHandler, interpolate } from 'react-native-reanimated';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 
-export const BottomSheet = forwardRef(({activeHeight, children, backgroundColor, backDropColor}, ref) => {
+export const BottomSheet = forwardRef(({activeHeight, children, backgroundColor, backDropColor, setClick, useGestureHandler=true}, ref) => {
   const { height } = useWindowDimensions();
   const newActiveHeight = height - activeHeight;
   const topAnimation = useSharedValue(height);
@@ -23,6 +23,7 @@ export const BottomSheet = forwardRef(({activeHeight, children, backgroundColor,
       damping: 100,
       stiffness: 400,
     });
+    if (setClick) setClick(false);
   }, []);
 
   useImperativeHandle(ref, () => ({
@@ -90,7 +91,7 @@ export const BottomSheet = forwardRef(({activeHeight, children, backgroundColor,
         <Animated.View style={[styles.backDrop, backDropAnimation, { backgroundColor: backDropColor }]} />
       </TouchableWithoutFeedback>
 
-      <PanGestureHandler onGestureEvent={gestureHandler}>
+      <PanGestureHandler enabled={useGestureHandler} onGestureEvent={gestureHandler}>
         <Animated.View style={[styles.container, animationStyle, { height: activeHeight, backgroundColor: backgroundColor }]}>
           <View style={styles.lineContainer}>
             <View style={styles.line} />

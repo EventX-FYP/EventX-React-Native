@@ -59,8 +59,8 @@ export const Home = ({ navigation }) => {
   ]
   return (
     <Sidebar sideBar={sidebarIcons} currentTab={currentTab} setCurrentTab={setCurrentTab} navigation={navigation}>
-      <ScrollView>
-        <SafeAreaView style={[styles.container, { padding: 10 }]}>
+      <ScrollView style={[styles.container, { padding: 10 }]}>
+        <SafeAreaView >
           <View style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             <View style={{ display: "flex", flexDirection: "row" }}>
               <InfoButton value={8} text={"Scheduled"} color={AppHelper.material.blue700} height={110} icon={InfoIcons[0]} />
@@ -71,7 +71,7 @@ export const Home = ({ navigation }) => {
               <InfoButton value={23} text={"All Tasks"} color={AppHelper.material.green700} height={110} icon={InfoIcons[3]} />
             </View>
           </View>
-          <View style={{display: "flex", flexDirection: "column", marginVertical: 15, marginHorizontal: 10 }}>
+          <View style={{ display: "flex", flexDirection: "column", marginVertical: 15, marginHorizontal: 10, flex: 1 }}>
             <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
               <Text style={{ fontSize: 22, fontWeight: "bold", color: AppHelper.material.grey900 }}>My Works</Text>
               <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: AppHelper.material.green600, padding: 8, borderRadius: 50 }}>
