@@ -10,3 +10,4 @@ export { PlannerPackageCard } from './PlannerPackageCard/PlannerPackageCard'
 export { CustomImageCarousal } from './Carousal/CustomImageCarousal'
 export { CameraComponent } from "./Camera/Camera";
 export { RangeSlider } from "./RangeSlider/RangeSlider";
+export { Loader } from "./Loader/Loader";
