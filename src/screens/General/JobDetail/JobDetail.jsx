@@ -4,6 +4,7 @@ import { AppHelper } from '../../../helper'
 import moment from 'moment/moment'
 import { TouchableOpacity } from 'react-native'
 import { Chip } from 'react-native-paper';
+import {Bid} from '../../Planner/Bidding/Bid'
 
 const currentDate = new Date().toISOString().slice(0, 10)
 
@@ -24,6 +25,7 @@ const JobList = [
 
 export const JobDetail = ({ navigation }) => {
   return (
+    
     <SafeAreaView style={styles.container}>
       <View style={styles.row}>
         <View style={styles.col1}>
@@ -46,24 +48,35 @@ export const JobDetail = ({ navigation }) => {
           renderItem={({ item }) => <Chip  textStyle={styles.chipTextStyle} style={styles.chipStyle} >{item}</Chip>}/>
       </View>
 
-
-        <Text style={styles.descriptionHeading}>Description</Text>
-        <Text style={styles.description}>{JobList[0].Content}</Text>
+        <View>
+          <Text style={styles.descriptionHeading}>Description</Text>
+          <Text style={styles.description}>{JobList[0].Content}</Text>
+        </View>
+        
      
 
       
         <TouchableOpacity style={styles.buttonContainer} >
         <Text style={styles.button}>Bid</Text>
         </TouchableOpacity>
+        <Bid/>
     </SafeAreaView>
+     
+    
+    
+
+    
   )
 }
 
 const styles = StyleSheet.create({
+  parent:{
+    flex: 1,
+  },
   container: {
     paddingHorizontal: 10,
     flex: 1,
-   marginTop:20
+    justifyContent: 'space-evenly'
   },
   majorHeading: {
     fontSize: 25,
