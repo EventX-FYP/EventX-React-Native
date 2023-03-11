@@ -75,7 +75,7 @@ export const Search = ({ navigation }) => {
             />
         </SafeAreaView>
       </View>
-      <BottomSheet ref={searchRef} activeHeight={height * 0.35} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
+      <BottomSheet ref={searchRef} activeHeight={height * 0.5} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
         <SafeAreaView style={{ flex: 1, backgroundColor: AppHelper.material.green50, padding: 10, alignItems: "center" }}>
           <Text style={{ display: "flex", textAlign: "center", color: "green", fontSize: 24, fontWeight: "bold", justifyContent: "center", alignItems: "center", width: "100%" }}>
             Filters

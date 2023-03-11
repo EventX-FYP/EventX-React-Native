@@ -52,7 +52,7 @@ export const EditProfile = ({ navigation }) => {
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity style={{ alignItems: "center" }}>
+        <TouchableOpacity activeOpacity={0.8} style={{ alignItems: "center", marginVertical: 20 }}>
           <Image source={images.BirthdayPlanner} style={styles.imageContainer} />
         </TouchableOpacity>
         <View style={{ flex: 1, flexDirection: "column", paddingHorizontal: 20, paddingTop: 10 }}>
@@ -84,10 +84,10 @@ export const EditProfile = ({ navigation }) => {
 
           
           <View style={[styles.genderContainer, styles.marginTop]}>
-            <TouchableOpacity style={information.gender === "Male" ? styles.genderButtonActive : styles.genderButtonInActive} onPress={() => setInformation({ ...information, gender: "Male" })}>
+            <TouchableOpacity activeOpacity={0.6} style={information.gender === "Male" ? styles.genderButtonActive : styles.genderButtonInActive} onPress={() => setInformation({ ...information, gender: "Male" })}>
               <Text style={information.gender === "Male" ? styles.activeButtonText : styles.inActiveButtonText}>Male</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={information.gender === "Female" ? styles.genderButtonActive : styles.genderButtonInActive} onPress={() => setInformation({ ...information, gender: "Female" })}>
+            <TouchableOpacity activeOpacity={0.6} style={information.gender === "Female" ? styles.genderButtonActive : styles.genderButtonInActive} onPress={() => setInformation({ ...information, gender: "Female" })}>
               <Text style={information.gender === "Female" ? styles.activeButtonText : styles.inActiveButtonText}>Female</Text>
             </TouchableOpacity>
           </View>

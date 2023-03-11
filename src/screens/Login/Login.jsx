@@ -30,7 +30,7 @@ export const Login = ({ navigation }) => {
         // await signIn(auth.username, auth.password)
         //     .then(() => navigation.navigate(ScreenNavigator.Client))
         //     .catch((error) => alert("Error", error));
-        navigation.navigate(ScreenNavigator.Planner);
+        navigation.navigate(ScreenNavigator.Client);
         // loginRef.current.expand();
     }
 
@@ -86,8 +86,8 @@ export const Login = ({ navigation }) => {
                     </View>
                 </View>
             </View>
-            <BottomSheet ref={loginRef} activeHeight={height} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
-                <View>
+            <BottomSheet ref={loginRef} activeHeight={height * 0.5} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
+                <View style={{ alignItems: "center" }}>
                     <Text>Bottom Sheet</Text>
                 </View>
             </BottomSheet>

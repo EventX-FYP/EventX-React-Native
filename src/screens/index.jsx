@@ -11,3 +11,4 @@ export { SavedPlanner } from "./Client/SavedPlanner/SavedPlanner";
 export { Analytics } from "./Client/Analytics/Analytics";
 export { JobPosting } from "./Client/JobPosting/JobPosting";
 export {Bid} from "./Planner/Bidding/Bid";
+export { Proposals } from "./Client/Proposals/Proposals";

@@ -61,6 +61,6 @@ export const signInWithGoogle = async () => {
     // } else {
     //   console.log(error);
     // }
-    throw new Error(error);
+    // throw new Error(error);
   }
 };

@@ -7,6 +7,7 @@ import MicrophoneIcon from "./svg/microphone-icon.svg";
 import PaperPlaneHorizontalIcon from "./svg/paper-plane-horizontal.svg";
 import ArrowLeft from "./svg/arrow-left.svg";
 import BottomNavBackground from "./svg/bottomNavBar.svg";
+import NoProposals from "./svg/no-proposals.svg";
 
 export const images = {
     Icon: require("./icon.png"),
@@ -43,6 +44,7 @@ export const images = {
         PaperPlaneHorizontalIcon,
         ArrowLeft,
         BottomNavBackground,
+        NoProposals,
     },
     Users: {
         User1: require("./users/user1.jpg"),
