@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Login, Signup, Phases, Planner, Client, ClientProfile, EditProfile, SavedPlanner, Analytics, JobPosting, Proposals } from "./src/screens";
-import { Chat, JobDetail, PlannerProfile , PostReview} from "./src/screens/General";
+import { Login, Signup, Phases, Planner, Client, ClientProfile, EditProfile, SavedPlanner, Analytics, JobPosting, Proposals, Bid } from "./src/screens";
+import { Chat, JobDetail, PlannerProfile, PostReview } from "./src/screens/General";
 import { Home, Task } from "./src/screens/TaskManagement";
 import { Provider } from "react-redux";
 import store from "./src/store";

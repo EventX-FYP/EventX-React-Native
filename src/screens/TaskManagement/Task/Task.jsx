@@ -18,7 +18,7 @@ const Banner = ({ navigation }) => {
   )
 }
 
-const TaskCard = ({ data, value, setClick }) => {
+const TaskCard = ({ data, value, setClick, showModal }) => {
   const color = AppHelper.material.faintWhite
   return (
     <View style={{ display: "flex", flexDirection: "column", backgroundColor: color, paddingHorizontal: 10, paddingVertical: 15, borderRadius: 10, marginHorizontal: 15, marginVertical: 20 }}>
@@ -33,7 +33,7 @@ const TaskCard = ({ data, value, setClick }) => {
       </ScrollView>
       
       <View style={{ display: "flex", flexDirection: "row" , justifyContent: "space-between" }}>
-        <TouchableOpacity activeOpacity={0.8} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+        <TouchableOpacity onPress={showModal} activeOpacity={0.8} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
           <Icon name={"plus"} type={Icons.AntDesign} size={16} color={AppHelper.material.green500} />
           <Text style={{ fontSize: 14, fontWeight: "600", color: AppHelper.material.green500, marginLeft: 4 }}>Add Card</Text>
         </TouchableOpacity>
@@ -120,12 +120,6 @@ const InformationBottomSheet = forwardRef(({ navigation, setClick, showModal }, 
                 <Icon name={"eye"} type={Icons.AntDesign} size={16} color={AppHelper.material.green500} />
                 <Text style={{ fontSize: 14, fontWeight: "600", color: AppHelper.material.green500, marginLeft: 4 }}>View</Text>
               </TouchableOpacity>
-
-              <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("Attachments")} style={{ display: "flex", flexDirection: "row", alignItems: "center", marginLeft: 10 }}>
-                <Icon name={"plus"} type={Icons.AntDesign} size={16} color={AppHelper.material.green500} />
-                <Text style={{ fontSize: 14, fontWeight: "600", color: AppHelper.material.green500, marginLeft: 4 }}>Add</Text>
-              </TouchableOpacity>
-
             </View>
           </View>
         </View>
@@ -143,11 +137,16 @@ export const Task = ({ navigation }) => {
   const offset = useSharedValue(1);
   const taskRef = useRef();
   const [click, setClick] = useState(false);
-  const [visible, setVisible] = useState(false);
+
+  const [isAttachmentsModalVisible, setIsAttachmentsModalVisible] = useState(false);
+  const [isAddSubTaskModalVisible, setIsAddSubTaskModalVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
+  const showAttachmentModal = () => setIsAttachmentsModalVisible(true);
+  const hideAttachmentModal = () => setIsAttachmentsModalVisible(false);
+
+  const showAddSubTaskModal = () => setIsAddSubTaskModalVisible(true);
+  const hideAddSubTaskModal = () => setIsAddSubTaskModalVisible(false);
 
   const taskOpen = () => taskRef.current.expand();
   const taskClose = () => taskRef.current.close();
@@ -190,10 +189,10 @@ export const Task = ({ navigation }) => {
 
       <Provider>
         <Portal>
-          <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={{ backgroundColor: "white", margin: 40, borderRadius: 20, padding: 20 }}>
+          <Modal visible={isAttachmentsModalVisible} onDismiss={hideAttachmentModal} contentContainerStyle={{ backgroundColor: "white", margin: 40, borderRadius: 20, padding: 20 }}>
             <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
               <Text style={{ fontSize: 16, fontWeight: "600", color: AppHelper.material.grey900 }}>Attachments</Text>
-              <TouchableOpacity activeOpacity={0.8} onPress={hideModal} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity activeOpacity={0.8} onPress={hideAttachmentModal} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                 <Icon name={"close"} type={Icons.AntDesign} size={16} color={AppHelper.material.grey900} />
               </TouchableOpacity>
             </View>
@@ -218,18 +217,53 @@ export const Task = ({ navigation }) => {
             </TouchableOpacity>
 
           </Modal>
+
+          <Modal visible={isAddSubTaskModalVisible} onDismiss={hideAddSubTaskModal} contentContainerStyle={{ backgroundColor: "white", margin: 40, borderRadius: 20, padding: 20 }}>
+            <SafeAreaView style={{ display: "flex", flexDirection: "column" }}>
+              <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                <Text style={{ fontSize: 16, fontWeight: "600", color: AppHelper.material.grey900 }}>Add Sub Task</Text>
+                <TouchableOpacity activeOpacity={0.8} onPress={hideAddSubTaskModal} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                  <Icon name={"close"} type={Icons.AntDesign} size={16} color={AppHelper.material.grey900} />
+                </TouchableOpacity>
+              </View>
+              <View style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 20 }}>
+                <View style={{ display: "flex", flexDirection: "row", alignItems: "center", }}>
+                  <Icon name={"file-text"} type={Icons.FontAwesome} size={16} color={AppHelper.material.grey900} />
+                  <TextInput style={{ fontSize: 14, fontWeight: "600", color: AppHelper.material.grey900, marginLeft: 10, borderWidth: 1, borderColor: AppHelper.material.grey300, width: "90%", borderRadius: 5, paddingHorizontal: 10 }} placeholder={"Task Name"} />
+                </View>
+                <View style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop: 10 }}>
+                  <Icon name={"file-text"} type={Icons.FontAwesome} size={16} color={AppHelper.material.grey900} />
+                  <TextInput multiline={true} style={{ fontSize: 14, fontWeight: "600", color: AppHelper.material.grey900, marginLeft: 10, borderWidth: 1, borderColor: AppHelper.material.grey300, width: "90%", borderRadius: 5, paddingHorizontal: 10 }} placeholder={"Task Description"} />
+                </View>
+              </View>
+              <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%", marginTop: 20 }}>
+                <TouchableOpacity activeOpacity={0.8} onPress={hideAddSubTaskModal} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                  <Icon name={"close"} type={Icons.AntDesign} size={16} color={AppHelper.material.grey900} />
+                  <Text style={{ fontSize: 14, fontWeight: "600", color: AppHelper.material.grey900, marginLeft: 10 }}>
+                    Cancel
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.8} onPress={hideAddSubTaskModal} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                  <Icon name={"check"} type={Icons.AntDesign} size={16} color={AppHelper.material.green500} />
+                  <Text style={{ fontSize: 14, fontWeight: "600", color: AppHelper.material.green500, marginLeft: 10 }}>
+                    Save
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </SafeAreaView>
+          </Modal>
         </Portal>
         <Animated.View style={[animatedStyle, { flex: 1 }]}>
           <ScrollView horizontal>
             <View style={{ display: "flex", flexDirection: "row" }}>
-              <TaskCard value={"Protocols & Information"} data={data} setClick={setClick} />
-              <TaskCard value={"Protocols & Information"} data={data} setClick={setClick} />
-              <TaskCard value={"Protocols & Information"} data={data} setClick={setClick} />
-              <TaskCard value={"Protocols & Information"} data={data} setClick={setClick} />
+              <TaskCard value={"Protocols & Information"} data={data} setClick={setClick} showModal={showAddSubTaskModal} />
+              <TaskCard value={"Protocols & Information"} data={data} setClick={setClick} showModal={showAddSubTaskModal} />
+              <TaskCard value={"Protocols & Information"} data={data} setClick={setClick} showModal={showAddSubTaskModal} />
+              <TaskCard value={"Protocols & Information"} data={data} setClick={setClick} showModal={showAddSubTaskModal} />
             </View>
           </ScrollView>
         </Animated.View>
-        <InformationBottomSheet ref={taskRef} navigation={navigation} setClick={setClick} showModal={showModal} />
+        <InformationBottomSheet ref={taskRef} navigation={navigation} setClick={setClick} showModal={showAttachmentModal} />
       </Provider>
       {/* <CameraComponent /> */}
     </SafeAreaView>
