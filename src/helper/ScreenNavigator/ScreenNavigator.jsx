@@ -27,6 +27,7 @@ export const ScreenNavigator = {
   PlannerAnalytics: "PlannerAnalytics",
   ClientAnalytics: "ClientAnalytics",
   ClientJobPosting: "ClientJobPosting",
+  Bid:"Bid",
   ClientProposals: "ClientProposals",
   TaskManagementHome: "TaskManagementHome",
   TaskManagementTask: "TaskManagementTask",

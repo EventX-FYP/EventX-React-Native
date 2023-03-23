@@ -38,6 +38,7 @@ export default function App() {
               <Stack.Screen name={ScreenNavigator.ClientProposals} component={Proposals} />
               <Stack.Screen name={ScreenNavigator.TaskManagementHome} component={Home} />
               <Stack.Screen name={ScreenNavigator.TaskManagementTask} component={Task} />
+              <Stack.Screen name={ScreenNavigator.Bid} component={Bid} />
               <Stack.Screen name={ScreenNavigator.PostTestimonials} component={PostReview} />
             </Stack.Navigator>
           </NavigationContainer>
