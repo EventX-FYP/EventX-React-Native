@@ -1,14 +1,16 @@
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { images } from '../../../assets'
-import { AppHelper, CountryStateCityAPI } from '../../../helper'
+import { AppHelper, CountryStateCityAPI, pickImage } from '../../../helper'
 import { TextInput, Button } from 'react-native-paper'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { DateTimePicker, Picker } from 'react-native-ui-lib'
 import { COUNTRY_STATE_CITY_API_KEY } from "@env";
+import { UPDATE_USER } from '../../../store/types'
 
 export const EditProfile = ({ navigation }) => {
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [information, setInformation] = useState({
     name: user.name,
     dob: user.dob,
@@ -49,11 +51,19 @@ export const EditProfile = ({ navigation }) => {
     fetchCities();
   }, [information])
 
+  const handleImage = async () => {
+    const result = await pickImage();
+    if (!result.cancelled) {
+      setInformation({ ...information, picture: result.uri });
+      dispatch({ type: UPDATE_USER, payload: { ...user, picture: result.uri }})
+    }
+  }
+
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
-        <TouchableOpacity activeOpacity={0.8} style={{ alignItems: "center", marginVertical: 20 }}>
-          <Image source={images.BirthdayPlanner} style={styles.imageContainer} />
+        <TouchableOpacity onPress={handleImage} activeOpacity={0.8} style={{ alignItems: "center", marginVertical: 20 }}>
+          <Image source={information.picture ? { uri: information.picture } : images.BirthdayPlanner} style={styles.imageContainer} />
         </TouchableOpacity>
         <View style={{ flex: 1, flexDirection: "column", paddingHorizontal: 20, paddingTop: 10 }}>
           <TextInput label={"Name"} value={information.name} mode={'outlined'} onChangeText={text => setInformation({ ...information, name: text })}

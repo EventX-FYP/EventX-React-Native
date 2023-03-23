@@ -40,10 +40,10 @@ export const Client = ({ navigation }) => {
   const [currentTab, setCurrentTab] = useState("Home");
   
   const sidebarIcons = [
-    { route: ScreenNavigator.SavedPlanner, title: "Saved Planners", type: Icons.Ionicons, name: "home" },
+    { route: ScreenNavigator.SavedPlanner, title: "Saved Planners", type: Icons.Ionicons, name: "save" },
     { route: ScreenNavigator.TaskManagementHome, title: "Tasks", type: Icons.FontAwesome, name: "tasks" },
-    { route: ScreenNavigator.ClientAnalytics, title: "Client Analytics", type: Icons.Ionicons, name: "briefcase" },
-    { route: ScreenNavigator.ClientJobPosting, title: "Client Job Posting", type: Icons.Entypo, name: "briefcase" },
+    { route: ScreenNavigator.ClientAnalytics, title: "Analytics", type: Icons.Ionicons, name: "analytics" },
+    { route: ScreenNavigator.ClientJobPosting, title: "Job Posting", type: Icons.Entypo, name: "briefcase" },
     { route: ScreenNavigator.ClientProposals, title: "Proposals", type: Icons.Ionicons, name: "mail" },
   ]
   const tabs = [

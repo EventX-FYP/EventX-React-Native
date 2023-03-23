@@ -1,58 +1,92 @@
-import { TabController, View, Text } from 'react-native-ui-lib'
+import { TouchableOpacity, StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from './Home/Home'
 import { Notifications } from '../General'
-import {Search} from './Search/Search'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Search } from './Search/Search'
 import { Packages } from './Packages/Packages';
+import { Icon, Icons, ScreenNavigator, AppHelper } from '../../helper';
+import { Sidebar } from '../../components';
+import * as Animatable from 'react-native-animatable';
+import React, { useState, useRef, useEffect } from 'react';
 
 const Tab = createBottomTabNavigator();
 
-export const Planner = ({ navigation }) => {
-  const pages = [
-    { label: 'Planner Home' },
-    { label: 'Search' },
-    { label: 'Packages' },
-    { label: 'Notifications' },
-  ]
-  return (
-    // <View flex>
-    //   <TabController items={pages}>
-    //     <TabController.TabBar enableShadows />
-    //     <View flex>
-    //       <TabController.TabPage index={0}>
-    //         <Home navigation={navigation} />
-    //       </TabController.TabPage>
-    //       <TabController.TabPage index={1}>
-    //         <Search navigation={navigation} />
-    //       </TabController.TabPage>
-    //       <TabController.TabPage index={2}>
-    //         <Text>Hello</Text>
-    //       </TabController.TabPage>
-    //       <TabController.TabPage index={3}>
-    //         <Notifications navigation={navigation} />
-    //       </TabController.TabPage>
-    //     </View>
-    //   </TabController>
-    // </View>
-
-    <Tab.Navigator
-    screenOptions={{
-      headerShown: false,
-      tabBarStyle: {
-        height: 65,
-        bottom: 5,
-        width: "95%",
-        alignSelf: "center",
-        borderRadius: 16,
-        marginTop:30
-      }
-    }}
-    >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Search" component={Search} />
-      <Tab.Screen name="Notifications" component={Notifications} />
-      <Tab.Screen name="Packages" component={Packages} />
+const TabButton = (props) => {
+  const { item, onPress, accessibilityState, setCurrentTab } = props;
+  const focused = accessibilityState.selected;
+  const viewRef = useRef(null);
   
-    </Tab.Navigator>
+  useEffect(() => {
+    if (focused) {
+      viewRef.current?.animate({ 0: { scale: .5, rotate: "0deg" }, 1: { scale: 1.2, rotate: "360deg" }});
+      setCurrentTab(item.label);
+    } else {
+      viewRef.current?.animate({ 0: { scale: 1.2, rotate: "360deg" }, 1: { scale: 1, rotate: "0deg" }});
+    }
+  }, [focused]);
+  
+  return (
+    <TouchableOpacity onPress={onPress} activeOpacity={1} style={styles.container}>
+      <Animatable.View ref={viewRef} duration={500} style={styles.container}>
+        <Icon type={item.type} name={focused ? item.activeIcon : item.inActiveIcon} color={focused ? AppHelper.material.green700 : AppHelper.material.grey600} size={24} />
+      </Animatable.View>
+    </TouchableOpacity>
   )
 }
+
+export const Planner = ({ navigation }) => {
+  const sidebarIcons = [
+    { route: ScreenNavigator.PlannerGetFeatured, title: "Get Featured", type: Icons.Entypo, name: "bell" },
+    { route: ScreenNavigator.ClientAnalytics, title: "Analytics", type: Icons.Ionicons, name: "analytics" },
+    { route: ScreenNavigator.ClientProposals, title: "Proposals", type: Icons.Ionicons, name: "mail" },
+  ]
+
+  const tabs = [
+    { route: ScreenNavigator.PlannerHome, label: 'Home', type: Icons.Ionicons, activeIcon: 'home', inActiveIcon: 'home-outline', component: Home },
+    { route: ScreenNavigator.PlannerSearch, label: 'Search', type: Icons.Ionicons, activeIcon: 'search', inActiveIcon: 'search', component: Search },
+    { route: ScreenNavigator.PlannerPackages, label: 'Packages', type: Icons.Feather, activeIcon: 'package', inActiveIcon: 'package', component: Packages },
+    { route: ScreenNavigator.PlannerNotifications, label: 'Notifications', type: Icons.Ionicons, activeIcon: 'notifications', inActiveIcon: 'notifications-outline', component: Notifications },
+  ]
+
+  const [currentTab, setCurrentTab] = useState(tabs[0].label);
+
+  return (
+    <Sidebar sideBar={sidebarIcons} currentTab={currentTab} setCurrentTab={setCurrentTab} navigation={navigation}>
+      <Tab.Navigator
+        initialRouteName={ScreenNavigator.PlannerHome}
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: {
+            height: 60,
+            bottom: 5,
+            width: "95%",
+            alignSelf: "center",
+            borderRadius: 16,
+            elevation: 0,
+            zIndex: 0,
+          }
+        }}
+      >
+        {tabs.map((item, index) => (
+          <Tab.Screen key={index} name={item.route} component={item.component}
+            options={{
+              tabBarLabel: item.label,
+              tabBarButton: (props) => <TabButton {...props} item={item} setCurrentTab={setCurrentTab} />
+            }}
+          />
+        ))}
+      </Tab.Navigator>
+    </Sidebar>
+  )
+}
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 0,
+    elevation: 0,
+  },
+})

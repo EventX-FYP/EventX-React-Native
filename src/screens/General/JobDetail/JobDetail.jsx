@@ -1,12 +1,12 @@
-import React from 'react'
-import { SafeAreaView, Image, View, Text, StyleSheet, FlatList } from 'react-native'
+import React, { useRef } from 'react'
+import { SafeAreaView, View, Text, TextInput, StyleSheet, FlatList, useWindowDimensions } from 'react-native'
 import { AppHelper } from '../../../helper'
 import moment from 'moment/moment'
 import { TouchableOpacity } from 'react-native'
 import { Chip } from 'react-native-paper';
-import {Bid} from '../../Planner/Bidding/Bid'
+import { BottomSheet } from '../../../components'
 
-const currentDate = new Date().toISOString().slice(0, 10)
+const currentDate = new Date().toISOString().slice(0, 10);
 
 const JobList = [
   {
@@ -24,18 +24,24 @@ const JobList = [
 ]
 
 export const JobDetail = ({ navigation }) => {
+  const jobRef = useRef();
+  const { height } = useWindowDimensions();
+
+  const openBottomSheet = () => jobRef.current.expand();
+  const closeBottomSheet = () => jobRef.current.close();
+
   return (
     
     <SafeAreaView style={styles.container}>
       <View style={styles.row}>
         <View style={styles.col1}>
-          <Text style={styles.majorHeading}> {JobList[0].title}</Text>
+          <Text style={styles.majorHeading}>{JobList[0].title}</Text>
           <Text style={styles.date}>{JobList[0].Date}</Text>
         </View>
 
         <View style={styles.col2}>
-        <Text style={styles.name}>{JobList[0].Name}</Text>
-        <Text style={styles.cityHeading}>{JobList[0].City}</Text>
+          <Text style={styles.name}>{JobList[0].Name}</Text>
+          <Text style={styles.cityHeading}>{JobList[0].City}</Text>
         </View>
       
       </View>
@@ -48,18 +54,36 @@ export const JobDetail = ({ navigation }) => {
           renderItem={({ item }) => <Chip  textStyle={styles.chipTextStyle} style={styles.chipStyle} >{item}</Chip>}/>
       </View>
 
-        <View>
-          <Text style={styles.descriptionHeading}>Description</Text>
-          <Text style={styles.description}>{JobList[0].Content}</Text>
-        </View>
+      <View>
+        <Text style={styles.descriptionHeading}>Description</Text>
+        <Text style={styles.description}>{JobList[0].Content}</Text>
+      </View>
         
      
 
       
-        <TouchableOpacity style={styles.buttonContainer} >
+      <TouchableOpacity onPress={openBottomSheet} style={styles.buttonContainer}>
         <Text style={styles.button}>Bid</Text>
-        </TouchableOpacity>
-        <Bid/>
+      </TouchableOpacity>
+
+      <BottomSheet ref={jobRef} activeHeight={height * 0.6} backgroundColor={AppHelper.material.green50} backDropColor="black">
+        <View style={styles.contentContainer}>
+          <Text>Bidding</Text>
+          <TextInput
+            placeholder="Cover letter..."
+            style={styles.textInput}
+            maxLength={10}
+            textAlignVertical="top"
+            multiline={true}
+          />
+
+          <TextInput placeholder="Estimated Price" style={styles.priceInput} />
+
+          <TouchableOpacity onPress={closeBottomSheet} style={styles.buttonContainer}>
+            <Text style={styles.button}>Send Proposal</Text>
+          </TouchableOpacity>
+        </View>
+      </BottomSheet>
     </SafeAreaView>
      
     
@@ -148,6 +172,27 @@ const styles = StyleSheet.create({
     color:"white",
     fontSize:15,
 
-  }
-
+  },
+  contentContainer: {
+    alignItems: 'center',
+    flex:1,
+    justifyContent:"space-evenly"
+  },
+  textInput: {
+    fontSize: 20,
+    width: "90%",
+    height: 150,
+    borderWidth: 0.5,
+    borderRadius: 15,
+    padding: 10,
+    marginVertical: 15,
+  },
+  priceInput: {
+    fontSize: 20,
+    width: "90%",
+    height: 50,
+    borderWidth: 0.7,
+    borderRadius: 15,
+    padding: 10,
+  },
 })

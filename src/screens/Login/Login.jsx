@@ -30,7 +30,7 @@ export const Login = ({ navigation }) => {
         // await signIn(auth.username, auth.password)
         //     .then(() => navigation.navigate(ScreenNavigator.Client))
         //     .catch((error) => alert("Error", error));
-        navigation.navigate(ScreenNavigator.Client);
+        navigation.navigate(ScreenNavigator.Planner);
         // loginRef.current.expand();
     }
 
