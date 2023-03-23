@@ -1,14 +1,15 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, useWindowDimensions } from 'react-native'
+import React, { useRef, useState } from 'react'
 import { images } from '../../../assets'
 import { Picker } from 'react-native-ui-lib'
 import { AppHelper } from '../../../helper'
+import { BottomSheet } from '../../../components'
 
-const ProposalCard = ({ proposal }) => {
+const ProposalCard = ({ proposal, setClick = () => <></> }) => {
   const color = AppHelper.material.green400;
   const textColor = AppHelper.white;
   return (
-    <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: color, padding: 10, borderRadius: 10, width: "100%", marginBottom: 10, display: "flex", flexDirection: "column", }}>
+    <TouchableOpacity onPress={setClick} activeOpacity={0.8} style={{ backgroundColor: color, padding: 10, borderRadius: 10, width: "100%", marginBottom: 10, display: "flex", flexDirection: "column", }}>
       <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         <Text numberOfLines={2} style={{ fontSize: 18, fontWeight: "bold", color: textColor, maxWidth: "75%" }}>{proposal.title}</Text>
         <Text style={{ fontSize: 16, fontWeight: "bold", color: textColor }}>{proposal.range}</Text>
@@ -19,7 +20,7 @@ const ProposalCard = ({ proposal }) => {
 }
 
 export const Proposals = ({ navigation }) => {
-  const [proposals, setProposals] = React.useState([
+  const [proposals,] = useState([
     {
       id: 1,
       userId: 1,
@@ -43,14 +44,25 @@ export const Proposals = ({ navigation }) => {
     },
   ]);
 
-  const [selectedProposal, setSelectedProposal] = React.useState(null);
+  const [selectedProposal, setSelectedProposal] = useState({ value: "all", label: "All" });
+
+  const proposalRef = useRef();
+  const { height } = useWindowDimensions();
   return (
     <SafeAreaView style={styles.container}>
       <Text style={{ fontSize: 20, fontWeight: "bold" }}>Proposals</Text>
       {
         proposals.length > 0 ? (
           <View style={{ marginTop: 20, alignItems: "center", width: "100%" }}>
-            <Picker placeholder={"Select jobs"} style={[styles.shadowEffect, { width: "100%", borderColor: AppHelper.material.grey300, borderRadius: 15, padding: 10, backgroundColor: "white" }]}>
+            <Picker
+              value={{ 
+                value: selectedProposal.value,
+                label: selectedProposal.label,
+              }}
+              onChange={(e) => setSelectedProposal(e)}
+              placeholder={"Select jobs"}
+              style={[styles.shadowEffect, { width: "100%", borderColor: AppHelper.material.grey300, borderRadius: 15, padding: 10, backgroundColor: "white" }]}
+            >
               <Picker.Item label="All" value="all" />
               <Picker.Item label="Pending" value="pending" />
               <Picker.Item label="Accepted" value="accepted" />
@@ -60,7 +72,7 @@ export const Proposals = ({ navigation }) => {
             <View style={{ width: "100%" , marginVertical: 10 }}>
               {
                 proposals.map(proposal => (
-                  <ProposalCard proposal={proposal} />
+                  <ProposalCard proposal={proposal} setClick={() => proposalRef.current.expand()} />
                 ))
               }
             </View>
@@ -72,6 +84,22 @@ export const Proposals = ({ navigation }) => {
           </View>
         )
       }
+      <BottomSheet ref={proposalRef} activeHeight={height * 0.6} backgroundColor={AppHelper.material.lightGreen50} backDropColor={"black"}>
+        <View style={{ width: "100%", height: "100%", padding: 20, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <View style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Proposal</Text>
+            <Text style={{ fontSize: 16, fontWeight: "semibold", marginTop: 15, }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, impedit debitis recusandae velit id autem? Soluta quaerat sed labore assumenda.</Text>
+          </View>
+          <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
+            <TouchableOpacity onPress={() => proposalRef.current.close()} activeOpacity={0.8} style={{ backgroundColor: AppHelper.material.green500, padding: 10, borderRadius: 10, width: "48%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+              <Text style={{ fontSize: 16, fontWeight: "bold", color: AppHelper.white }}>Accept</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => proposalRef.current.close()} activeOpacity={0.8} style={{ backgroundColor: AppHelper.material.red500, padding: 10, borderRadius: 10, width: "48%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+              <Text style={{ fontSize: 16, fontWeight: "bold", color: AppHelper.white }}>Reject</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </BottomSheet>
     </SafeAreaView>
   )
 }

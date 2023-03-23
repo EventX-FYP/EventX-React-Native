@@ -5,7 +5,7 @@ import { images } from '../../../assets'
 
 const Planner = ({ name, picture }) => {
   return (
-    <TouchableOpacity style={{ display: "flex", flexDirection: "row", padding: 10, width: "90%", backgroundColor: AppHelper.material.lightGreen400, borderTopRightRadius: 50, borderBottomRightRadius: 50 }}>
+    <TouchableOpacity style={{ display: "flex", flexDirection: "row", padding: 10, width: "90%", backgroundColor: AppHelper.material.green400, borderTopRightRadius: 50, borderBottomRightRadius: 50 }}>
       <Image source={picture} style={{ width: 70, height: 70, borderRadius: 20 }} />
       <Text style={{ color: "white", marginLeft: 10, fontWeight: "bold", fontSize: 18, alignSelf: "center" }}>{name}</Text>
     </TouchableOpacity>
@@ -13,7 +13,6 @@ const Planner = ({ name, picture }) => {
 }
 
 export const SavedPlanner = () => {
-  const [count, setCount] = useState(13);
   const [planners, setPlanners] = useState([
     { name: "Planner 1", picture: images.DigitalPlanner },
     { name: "Planner 2", picture: images.DigitalPlanner },
@@ -30,17 +29,18 @@ export const SavedPlanner = () => {
     { name: "Planner 13", picture: images.DigitalPlanner },
     { name: "Planner 14", picture: images.DigitalPlanner },
   ]);
+  const [count, setCount] = useState(planners.length);
   return (
     <SafeAreaView style={styles.container}>
       <Text style={{ fontSize: 24, fontWeight: "bold", paddingHorizontal: 10, }}>My Saved Planners</Text>
-      <View style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "center", marginVertical: 40 }}>
+      {/* <View style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "center", marginVertical: 40 }}>
         <TouchableOpacity style={[styles.activeTab, { width: "40%"}]}>
           <Text style={styles.activeTabText}>Planner 1</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.inActiveTab, { width: "40%"}]}>
           <Text style={styles.inActiveTabText}>Planner 1</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <Text style={{ fontSize: 20, fontWeight: "bold", color: AppHelper.material.green700, paddingHorizontal: 10, marginBottom: 10 }}>{count} Saved</Text>
       <ScrollView contentContainerStyle={{ flex: 1 }}>
         <View style={{ flex: 1, backgroundColor: AppHelper.material.green500, borderTopRightRadius: 80, paddingVertical: 20 }}>
