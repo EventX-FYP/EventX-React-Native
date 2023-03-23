@@ -59,7 +59,7 @@ const InformationBottomSheet = forwardRef(({ navigation, setClick, showModal }, 
 
   return (
     <BottomSheet ref={ref} activeHeight={height * 0.8} backgroundColor={AppHelper.material.lightGreen50} backDropColor={AppHelper.material.green500} useGestureHandler={false} setClick={setClick}>
-      <View style={{ justifyContent: "space-between", height: height * 0.7 }}>
+      <SafeAreaView style={{ justifyContent: "space-between", height: height * 0.7 }}>
         <View style={{ display: "flex", flexDirection: "column", backgroundColor: AppHelper.material.lightGreen50, paddingHorizontal: 10, paddingBottom: 15, borderRadius: 10, marginHorizontal: 15, marginVertical: 20, justifyContent: "space-between" }}>
           <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
             <Icon name={"description"} type={Icons.MaterialIcons} size={20} color={AppHelper.material.grey900}/>
@@ -133,7 +133,7 @@ const InformationBottomSheet = forwardRef(({ navigation, setClick, showModal }, 
           <Icon name={"check"} type={Icons.AntDesign} size={16} color={AppHelper.material.white} />
           <Text style={{ fontSize: 14, fontWeight: "800", color: AppHelper.material.white, marginLeft: 4 }}>Mark as Complete</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     </BottomSheet>
   )
 })

@@ -46,7 +46,7 @@ export const CustomImageCarousal = ({ data, autoPlay, pagination, aspectRatio })
         ref={scrollViewRef}
         onScroll={onScroll}
         onScrollBeginDrag={() => {
-          console.log(autoPlay);
+          // console.log(autoPlay);
           setIsAutoPlay(false);
         }}
         onMomentumScrollEnd={e => {

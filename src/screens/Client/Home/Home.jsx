@@ -1,24 +1,16 @@
 import { View, Text, Icon, Image, Button } from 'react-native-ui-lib';
 import { FlatList, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { fontStyles, inputStyles, ScrollStyles } from '../../../styles';
-import { TextField } from 'react-native-ui-lib/src/incubator';
 import { PlannerCard } from '../../../components';
-import { images } from '../../../assets';
 import { AppHelper } from '../../../helper'
 import { Searchbar } from 'react-native-paper';
 import { useState } from 'react';
+import { planners } from '../../../constants/planners';
 
 
 export const Home = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = query => setSearchQuery(query);
-  const planners = [
-    { name: 'Haroon', categories: ['Birthday', 'Party', 'Wedding', 'Birthday'], image: images.GoogleIcon, earned: 1000, reviews: 10, rating: 4.5, location: 'Lahore', status: 'Online' },
-    { name: 'Haroon', categories: ['Birthday', 'Party'], image: images.GoogleIcon, earned: 1000, reviews: 10, rating: 4.5, location: 'Lahore', status: 'Online' },
-    { name: 'Haroon', categories: ['Birthday', 'Party'], image: images.GoogleIcon, earned: 1000, reviews: 10, rating: 4.5, location: 'Lahore', status: 'Online' },
-    { name: 'Haroon', categories: ['Birthday', 'Party'], image: images.GoogleIcon, earned: 1000, reviews: 10, rating: 4.5, location: 'Lahore', status: 'Online' },
-    { name: 'Haroon', categories: ['Birthday', 'Party'], image: images.GoogleIcon, earned: 1000, reviews: 10, rating: 4.5, location: 'Lahore', status: 'Online' },
-  ]
   return (
     <ScrollView contentContainerStyle={ScrollStyles.scrollContainer}>
       <SafeAreaView style={styles.container}>

@@ -4,3 +4,4 @@ export { Chat } from "./Chat/Chat";
 export { JobDetail } from "./JobDetail/JobDetail";
 export { PackageDetail } from "./PackageDetail/PackageDetail"
 export { PlannerProfile } from "./PlannerProfile/PlannerProfile"
+export { PostReview } from "./PostReview/PostReview"

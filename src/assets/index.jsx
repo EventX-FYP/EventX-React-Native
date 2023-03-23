@@ -60,5 +60,8 @@ export const images = {
         Landscape2: require("./dummy/image-product-2-landscape.jpg"),
         Landscape3: require("./dummy/image-product-3-landscape.jpg"),
         Landscape4: require("./dummy/image-product-4-landscape.jpg"),
+    },
+    AppIcons: {
+        Review: require("./transparent-icons/23.png"),
     }
 };

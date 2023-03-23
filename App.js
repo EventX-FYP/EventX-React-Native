@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Login, Signup, Phases, Planner, Client, ClientProfile, EditProfile, SavedPlanner, Analytics, JobPosting, Proposals } from "./src/screens";
-import { Chat, JobDetail, PlannerProfile } from "./src/screens/General";
+import { Chat, JobDetail, PlannerProfile , PostReview} from "./src/screens/General";
 import { Home, Task } from "./src/screens/TaskManagement";
 import { Provider } from "react-redux";
 import store from "./src/store";
@@ -38,6 +38,7 @@ export default function App() {
               <Stack.Screen name={ScreenNavigator.ClientProposals} component={Proposals} />
               <Stack.Screen name={ScreenNavigator.TaskManagementHome} component={Home} />
               <Stack.Screen name={ScreenNavigator.TaskManagementTask} component={Task} />
+              <Stack.Screen name={ScreenNavigator.PostTestimonials} component={PostReview} />
             </Stack.Navigator>
           </NavigationContainer>
         </Provider>

@@ -35,4 +35,5 @@ export const ScreenNavigator = {
   TaskManagementTaskDetailAdd: "TaskManagementTaskDetailAdd",
   TaskManagementTaskDetailAddSubTask: "TaskManagementTaskDetailAddSubTask",
   TaskManagementTaskDetailAddSubTaskEdit: "TaskManagementTaskDetailAddSubTaskEdit",
+  PostTestimonials: "PostTestimonials",
 }

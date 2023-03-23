@@ -70,7 +70,9 @@ export const Client = ({ navigation }) => {
             bottom: 5,
             width: "95%",
             alignSelf: "center",
-            borderRadius: 16
+            borderRadius: 16,
+            elevation: 0,
+            zIndex: 0,
           }
         }}>
         {

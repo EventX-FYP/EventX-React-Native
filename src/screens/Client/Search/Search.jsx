@@ -1,56 +1,79 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, SafeAreaView, TextInput, FlatList, StyleSheet, useWindowDimensions, Touchable, TouchableOpacity } from 'react-native';
-import { Button } from 'react-native-ui-lib';
+import { View, Text, SafeAreaView, FlatList, StyleSheet, useWindowDimensions, TouchableOpacity } from 'react-native';
 import { fontStyles } from '../../../styles';
 import { images } from '../../../assets';
 import { BottomSheet, CategoryCard } from '../../../components';
 import { Searchbar } from 'react-native-paper';
-import { AppHelper } from "../../../helper";
+import { AppHelper, ScreenNavigator } from "../../../helper";
+import { imageStyles } from '../../../styles';
+import { Image } from 'react-native-ui-lib';
+import { Icon, Icons } from '../../../helper';
+import { planners } from '../../../constants/planners';
+import { categories } from '../../../constants/categories';
 
+const PlannerView = ({ planner, navigation }) => {
+  const { name, categories, image, earned, reviews, rating, location, status, statusColor } = planner.item ? planner.item : planner;
+  const [isHeartPressed, setIsHeartPressed] = useState(false);
+  return (
+    <TouchableOpacity activeOpacity={0.8} style={plannerViewStyles.container} onPress={() => navigation.navigate(ScreenNavigator.PlannerProfileForClient, { name: name, categories: categories, image: image })}>
+      <View style={plannerViewStyles.topRow}>
+        <View style={plannerViewStyles.info}>
+          <Image source={image} style={[imageStyles.circularIcon]} />
+          <View style={plannerViewStyles.infoText}>
+            <View style={plannerViewStyles.infoName}>
+              <Text style={[fontStyles[700], fontStyles.large20]}>{name}</Text>
+              <Text style={[plannerViewStyles.status, fontStyles.medium, { color: statusColor }]}>{status}</Text>
+            </View>
+            <Text style={[fontStyles[100], fontStyles.small, plannerViewStyles.maxLimit]} numberOfLines={1}>
+              {
+                categories.map((category, index) => {
+                  if (index === categories.length - 1) {
+                    return category;
+                  } else {
+                    return category + ' | ';
+                  }
+                })
+              }
+            </Text>
+            <Text style={[fontStyles[100], fontStyles.small]}>{location}</Text>
+          </View>
+        </View>
+        <TouchableOpacity onPress={() => setIsHeartPressed(!isHeartPressed)}>
+          <Icon name={isHeartPressed ? "heart" : "hearto" } type={Icons.AntDesign} size={24} color={AppHelper.material.red400}/>
+        </TouchableOpacity>
+      </View>
+      <View style={plannerViewStyles.bottomRow}>
+        <View style={plannerViewStyles.bottomRowItem}>
+          <Text style={[fontStyles[700], fontStyles.large20]}>{earned}</Text>
+          <Text style={[fontStyles[100], fontStyles.small]}>Earned</Text>
+        </View>
+        <View style={plannerViewStyles.bottomRowItem}>
+          <Text style={[fontStyles[700], fontStyles.large20]}>{reviews}</Text>
+          <Text style={[fontStyles[100], fontStyles.small]}>Reviews</Text>
+        </View>
+        <View style={plannerViewStyles.bottomRowItem}>
+          <Text style={[fontStyles[700], fontStyles.large20]}>{rating}</Text>
+          <Text style={[fontStyles[100], fontStyles.small]}>Rating</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+}
 
 export const Search = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const onChangeSearch = query => setSearchQuery(query);
+  const [filter, setFilter] = useState("Search Categories");
   const searchRef = useRef();
   const { height } = useWindowDimensions();
-  const categories = [
-    {
-      title: "Wedding Planners",
-      image: images.WeddingPlanner,
-    },
-    {
-      title: "Birthday Planners",
-      image: images.BirthdayPlanner,
-    },
-    {
-      title: "Party Planners",
-      image: images.PartyPlanner,
-    },
-    {
-      title: "Financial Planners",
-      image: images.FinancialPlanner,
-    },
-    {
-      title: "Health & Fitness Planners",
-      image: images.HealthFitnessPlanner,
-    },
-    {
-      title: "Work Planners",
-      image: images.WorkPlanner,
-    },
-    {
-      title: "Weekly Planners",
-      image: images.WeeklyPlanner,
-    },
-    {
-      title: "Personal/Life Planners",
-      image: images.PersonalPlanner,
-    },
-    {
-      title: "Digital Planners",
-      image: images.DigitalPlanner,
-    },
-  ]
+  
+  const [plannersList, setPlannersList] = useState(planners);
+  const [categoriesList, setCategoriesList] = useState(categories);
+  
+  const onChangeSearch = query =>  {
+    setSearchQuery(query);
+    setCategoriesList(categories.filter(category => category.title.toLowerCase().includes(query.toLowerCase())));
+    setPlannersList(planners.filter(planner => planner.name.toLowerCase().includes(query.toLowerCase())));
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.searchContainer}>
@@ -65,11 +88,11 @@ export const Search = ({ navigation }) => {
           />
       </View>
       <View style={styles.searchResultContainer}>
-        <Text style={[fontStyles[700], fontStyles.large28]}>Popular Categories</Text>
+        <Text style={[fontStyles[700], fontStyles.large28]}>Popular {filter === "Search Categories" ? "Categories" : "Planners"}</Text>
         <SafeAreaView style={styles.list}>
           <FlatList
-            data={categories}
-            renderItem={({ item }) => <CategoryCard content={item} />}
+            data={filter === "Search Categories" ? categoriesList : plannersList}
+            renderItem={({ item }) => filter === "Search Categories" ? <CategoryCard content={item} /> : <PlannerView navigation={navigation} planner={item} />}
             keyExtractor={(item, index) => index.toString()}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             />
@@ -81,13 +104,21 @@ export const Search = ({ navigation }) => {
             Filters
           </Text>
           
-            <TouchableOpacity style={{ marginTop: 10 }} onPress={() => searchRef.current.close()}>
-              <Text style={[fontStyles[700], fontStyles.large18]}>Get Planners</Text>
-            </TouchableOpacity>
-            <View style={{ width: "80%", marginVertical: 10, borderColor: AppHelper.material.minBlack, borderBottomWidth: 1 }} />
-            <TouchableOpacity onPress={() => searchRef.current.close()}>
-              <Text style={[fontStyles[700], fontStyles.large18]}>Get Categories</Text>
-            </TouchableOpacity>
+          <TouchableOpacity style={{ marginTop: 10 }} onPress={() => {
+            searchRef.current.close();
+            setFilter("Search Planners");
+          }}>
+            <Text style={[fontStyles[700], fontStyles.large18]}>Search Planners</Text>
+          </TouchableOpacity>
+
+          <View style={{ width: "80%", marginVertical: 10, borderColor: AppHelper.material.minBlack, borderBottomWidth: 1 }} />
+          
+          <TouchableOpacity onPress={() => {
+            searchRef.current.close();
+            setFilter("Search Categories");
+          }}>
+            <Text style={[fontStyles[700], fontStyles.large18]}>Search Categories</Text>
+          </TouchableOpacity>
         </SafeAreaView>
       </BottomSheet>
     </SafeAreaView>
@@ -146,4 +177,59 @@ const styles = StyleSheet.create({
     paddingBottom: 22,
 
   }
+});
+
+const plannerViewStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: AppHelper.material.lightGreen50,
+    borderRadius: 10,
+    padding: 10,
+    height: 150,
+    justifyContent: "space-between",
+    shadowColor: AppHelper.material.greenA400,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  topRow: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    // alignItems: "center",
+  },
+  info: {
+    display: "flex",
+    flexDirection: "row",
+    // justifyContent: "space-between",
+    // height: "30%",
+  },
+  infoText: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    marginLeft: 10,
+    height: "55%",
+  },
+  infoName: {
+    display: "flex",
+    flexDirection: "row",
+    // justifyContent: "center",
+    alignItems: "center",
+  },
+  status: {
+    color: AppHelper.material.green500,
+    fontWeight: "bold",
+    marginLeft: 5,
+  },
+  bottomRow: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  maxLimit: {
+    // maxWidth: 120,
+  },
+
 });
