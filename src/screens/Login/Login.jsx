@@ -9,8 +9,9 @@ import { inputStyles } from "../../styles";
 import { ScreenNavigator, AppHelper } from "../../helper";
 import { IOS_CLIENT_ID, ANDROID_CLIENT_ID, EXPO_CLIENT_ID } from "@env";
 import { BottomSheet } from "../../components";
-
 import * as Google from "expo-auth-session/providers/google";
+import { useSelector, useDispatch } from "react-redux";
+import { UPDATE_USER } from "../../store/types";
 
 const googleConfig = {
     expoClientId: EXPO_CLIENT_ID,
@@ -25,18 +26,52 @@ export const Login = ({ navigation }) => {
     const loginRef = useRef();
     const { height } = useWindowDimensions();
 
+    const user = useSelector(state => state.user);
+    const dispatch = useDispatch();
+
 
     const handleLoginButton = async () => {
-        // await signIn(auth.username, auth.password)
-        //     .then(() => navigation.navigate(ScreenNavigator.Client))
-        //     .catch((error) => alert("Error", error));
-        navigation.navigate(ScreenNavigator.Planner);
+        if (auth.username === "" || auth.password === "") {
+            alert("Please enter email and password");
+            return;
+        }
+        if (auth.username === "noono14252@gmail.com" || auth.username === "haroontahirr100@gmail.com") {
+            dispatch({ type: UPDATE_USER, payload: { ...user, type: "client" }})
+            navigation.navigate(ScreenNavigator.Client);
+        }
+        else {
+            dispatch({ type: UPDATE_USER, payload: { ...user, type: "planner" }})
+            navigation.navigate(ScreenNavigator.Planner);
+        }
+        // navigation.navigate(ScreenNavigator.Client);
         // loginRef.current.expand();
     }
 
+    const fetchUserInfo = async (token) => {
+        const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            method: 'GET',
+            headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+            },
+        });
+
+        return await response.json();
+    }
     const handleLoginWithGoogleButton = async () => {
-        await promptAsync()
-            .then((result) => console.log(result));
+        const result = await promptAsync();
+        const { authentication: { accessToken }} = result;
+        const userInfo = await fetchUserInfo(accessToken);
+        if (userInfo.email === "noono14252@gmail.com" || userInfo.email === "haroontahirr100@gmail.com") {
+            dispatch({ type: UPDATE_USER, payload: { ...user, type: "client" }})
+            navigation.navigate(ScreenNavigator.Client);
+        }
+        else {
+            dispatch({ type: UPDATE_USER, payload: { ...user, type: "planner" }})
+            navigation.navigate(ScreenNavigator.Planner);
+        }
+        console.log(userInfo);
     }
 
     const handleSignupButton = () => {

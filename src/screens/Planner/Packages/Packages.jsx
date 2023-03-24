@@ -6,9 +6,11 @@ import {
   View,
   Text,
   FlatList,
+  TouchableOpacity,
 } from 'react-native'
 import { PlannerPackageCard } from '../../../components'
 import {images} from '../../../assets'
+import { AppHelper, Icon, Icons, ScreenNavigator } from '../../../helper'
 
 const categoryName = ['Birthday Package', 'Wedding Package', 'Bridal Showers']
 const packageList = [
@@ -35,37 +37,36 @@ const packageList = [
   },
 ]
 
-export const Packages = () => {
+export const Packages = ({ navigation }) => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <View style={styles.Component}>
-          <Text style={styles.heading}>{categoryName[0]}</Text>
-          <View style={styles.cardHolder}>
-            <FlatList
-              ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
-              data={packageList}
-              renderItem={({ item }) => (
-                <PlannerPackageCard packageContent={item} cardimage={images.DigitalPlanner} />
-              )}
-              horizontal={true}
-            />
-          </View>
-        </View>
-
-        <View style={styles.Component}>
-          <Text style={styles.heading}>{categoryName[1]}</Text>
-          <View style={styles.cardHolder}>
-            <FlatList
-              ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
-              data={packageList}
-              renderItem={({ item }) => (
-                <PlannerPackageCard packageContent={item} cardimage={images.DigitalPlanner} />
-              )}
-              horizontal={true}
-            />
-          </View>
-        </View>
+        {categoryName.map((item, index) => {
+          return (
+            <View key={index} style={styles.Component}>
+              <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingRight: 10 }}>
+                <Text style={styles.heading}>{item}</Text>
+                <TouchableOpacity onPress={() => navigation.navigate(ScreenNavigator.PlannerAddPackages, {name: item})}>
+                  <Icon type={Icons.AntDesign} name="pluscircle" color={AppHelper.material.green500} size={25}/>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.cardHolder}>
+                <FlatList
+                  ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
+                  data={packageList}
+                  renderItem={({ item }) => (
+                    <PlannerPackageCard
+                      packageContent={item}
+                      cardimage={images.DigitalPlanner}
+                      navigation={navigation}
+                    />
+                  )}
+                  horizontal={true}
+                />
+              </View>
+            </View>
+          )
+        })}
       </ScrollView>
     </SafeAreaView>
   )

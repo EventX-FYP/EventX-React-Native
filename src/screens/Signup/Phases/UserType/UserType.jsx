@@ -4,7 +4,7 @@ import { Card, Text } from 'react-native-ui-lib'
 import { images } from '../../../../assets'
 import { AppHelper } from '../../../../helper'
 import { useSelector, useDispatch } from 'react-redux'
-import { User } from '../../../../store/types'
+import { UPDATE_USER } from "../../../../store/types";
 
 export const UserType = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -14,7 +14,7 @@ export const UserType = ({ navigation }) => {
       <Text style={userTypeStyles.title}>Join as a client or planner</Text>
       <View style={userTypeStyles.options}>
         <Card style={user.type === 'Client' ? userTypeStyles.cardClicked : userTypeStyles.card}
-          onPress={() => dispatch({ type: User.UPDATE_USER, payload: { ...user, type: 'Client' }})}
+          onPress={() => dispatch({ type: UPDATE_USER, payload: { ...user, type: 'Client' }})}
         >
           <Text style={user.type === 'Client' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
             Client
@@ -26,7 +26,7 @@ export const UserType = ({ navigation }) => {
           />
         </Card>
         <Card style={user.type === 'Planner' ? userTypeStyles.cardClicked : userTypeStyles.card}
-          onPress={() => dispatch({ type: User.UPDATE_USER, payload: { ...user, type: 'Planner' }})}
+          onPress={() => dispatch({ type: UPDATE_USER, payload: { ...user, type: 'Planner' }})}
         >
           <Text style={user.type === 'Planner' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
             Planner

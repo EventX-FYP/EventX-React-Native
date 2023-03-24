@@ -4,11 +4,12 @@ import { Button, Image, Text } from 'react-native-ui-lib'
 import { PackageCard } from '../../../../components'
 import { fontStyles, inputStyles } from '../../../../styles'
 import { TextField } from 'react-native-ui-lib/src/incubator'
-import { AppHelper } from '../../../../helper'
+import { AppHelper, pickImage } from '../../../../helper'
 import { useSelector, useDispatch } from 'react-redux'
-import { User } from '../../../../store/types'
 import * as ImagePicker from "expo-image-picker"
 import { images } from '../../../../assets'
+import { UPDATE_USER } from "../../../../store/types";
+
 
 export const Package = ({ navigation }) => {
   const user = useSelector((state) => state.user)
@@ -22,19 +23,14 @@ export const Package = ({ navigation }) => {
   });
 
   const pickImagePackage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    })
+    const result = await pickImage();
     if (!result.cancelled) {
-      setPackage({ ..._package, image: result.uri })
-    }
+      setPackage({ ..._package, image: result.uri });
+    } 
   };
 
   const handleSubmitPackage = () => {
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, packages: [...user.packages, _package] }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, packages: [...user.packages, _package] }})
     setPackage({
       name: '',
       image: images.Buyer,
@@ -45,7 +41,7 @@ export const Package = ({ navigation }) => {
 
   const handleRemovePackage = (index) => {
     const newPackages = user.packages.filter((_, i) => i !== index)
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, packages: newPackages }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, packages: newPackages }})
   }
 
 
@@ -55,7 +51,7 @@ export const Package = ({ navigation }) => {
         <View style={userPackagesStyles.uploadPictureContainer}>
           <Image
             style={userPackagesStyles.uploadPicture}
-            source={_package.image}
+            source={_package.image === images.Buyer ? _package.image : {uri: _package.image}}
           />
           <Button
             label="Upload Picture"

@@ -12,3 +12,6 @@ export { Analytics } from "./Client/Analytics/Analytics";
 export { JobPosting } from "./Client/JobPosting/JobPosting";
 export { Proposals } from "./Client/Proposals/Proposals";
 export { GetFeatured } from "./Planner/GetFeatured/GetFeatured";
+export { ActiveJobs } from "./Planner/ActiveJobs/ActiveJobs";
+export { AddPackages } from "./Planner/Packages/AddPackages";
+export { RemovePackages } from "./Planner/Packages/RemovePackages";

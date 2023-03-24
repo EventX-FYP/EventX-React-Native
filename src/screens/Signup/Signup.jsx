@@ -6,18 +6,27 @@ import { styles } from "./styles";
 import { TextField } from "react-native-ui-lib/src/incubator";
 import React from "react";
 import { ScreenNavigator, AppHelper } from "../../helper";
-import { createUser } from "../../firebase";
 import { useSelector, useDispatch } from "react-redux";
-import { User } from "../../store/types";
+import { UPDATE_USER } from "../../store/types";
+import * as Google from "expo-auth-session/providers/google";
+import { IOS_CLIENT_ID, ANDROID_CLIENT_ID, EXPO_CLIENT_ID } from "@env";
+
+const googleConfig = {
+    expoClientId: EXPO_CLIENT_ID,
+    iosClientId: IOS_CLIENT_ID,
+    androidClientId: ANDROID_CLIENT_ID,
+    scopes: ["profile", "email"],
+}
 
 export const Signup = ({ navigation }) => {
+    const [request, response, promptAsync] = Google.useAuthRequest(googleConfig);
     const [auth, setAuth] = React.useState({ username: "", password: "", confirmPassword: "" });
     const [error, setError] = React.useState({ email: "Email is required", password: "Please enter password", confirmPassword: "Please enter confirm password" });
 
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
 
-    const handleSignupButton = async () => {
+    const handleSignupButton = () => {
         if (auth.username === "") {
             alert("Email is required");
             return;
@@ -35,15 +44,33 @@ export const Signup = ({ navigation }) => {
             return;
         }
         
-        // await createUser(auth.username, auth.password)
-        //     .then(() => navigation.navigate(ScreenNavigator.Phases))
-        
-        dispatch({ type: User.UPDATE_USER, payload: { ...user, email: auth.username, password: auth.password }})
+        dispatch({ type: UPDATE_USER, payload: { ...user, email: auth.username, password: auth.password }})
         navigation.navigate(ScreenNavigator.Phases);
     }
 
     const handleLoginButton = () => {
         navigation.navigate(ScreenNavigator.Login);
+    }
+
+    const fetchUserInfo = async (token) => {
+        const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            method: 'GET',
+            headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+            },
+        });
+
+        return await response.json();
+    }
+
+    const handleSignupWithGoogle = async () => {
+        const result = await promptAsync();
+        const { authentication: { accessToken }} = result;
+        const userInfo = await fetchUserInfo(accessToken);
+        dispatch({ type: UPDATE_USER, payload: { ...user, email: userInfo.email, name: userInfo.name, picture: userInfo.picture  }})
+        navigation.navigate(ScreenNavigator.Phases);
     }
 
     return (
@@ -74,7 +101,7 @@ export const Signup = ({ navigation }) => {
                             <Text style={{ color: AppHelper.material.green400 }}>Or</Text>
                             <View style={{ borderBottomColor: AppHelper.material.green300, borderBottomWidth: 1, width: "40%" }} />
                         </View>
-                        <Button style={styles.googleButton} onPress={handleSignupButton}>
+                        <Button style={styles.googleButton} onPress={handleSignupWithGoogle}>
                             <Image source={images.GoogleIcon} style={styles.googleIcon}/>
                             <Text style={styles.googleText}>Signup With Google</Text>
                         </Button>

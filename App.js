@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Login, Signup, Phases, Planner, Client, ClientProfile, EditProfile, SavedPlanner, Analytics, JobPosting, Proposals, GetFeatured } from "./src/screens";
+import { Login, Signup, Phases, Planner, Client, ClientProfile, EditProfile, SavedPlanner, Analytics, JobPosting, Proposals, GetFeatured, ActiveJobs, AddPackages, RemovePackages } from "./src/screens";
 import { Chat, JobDetail, PlannerProfile, PostReview } from "./src/screens/General";
 import { Home, Task } from "./src/screens/TaskManagement";
 import { Provider } from "react-redux";
@@ -41,6 +41,9 @@ export default function App() {
               <Stack.Screen name={ScreenNavigator.Planner} component={Planner} />
               <Stack.Screen name={ScreenNavigator.PlannerProfileForClient} component={PlannerProfile} />
               <Stack.Screen name={ScreenNavigator.PlannerGetFeatured} component={GetFeatured} />
+              <Stack.Screen name={ScreenNavigator.PlannerActiveJobs} component={ActiveJobs} />
+              <Stack.Screen name={ScreenNavigator.PlannerAddPackages} component={AddPackages} />
+              <Stack.Screen name={ScreenNavigator.PlannerRemovePackages} component={RemovePackages} />
 
               <Stack.Screen name={ScreenNavigator.EditProfile} component={EditProfile} />
               <Stack.Screen name={ScreenNavigator.TaskManagementHome} component={Home} />

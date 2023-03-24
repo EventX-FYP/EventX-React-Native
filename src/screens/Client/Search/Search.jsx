@@ -8,7 +8,7 @@ import { AppHelper, ScreenNavigator } from "../../../helper";
 import { imageStyles } from '../../../styles';
 import { Image } from 'react-native-ui-lib';
 import { Icon, Icons } from '../../../helper';
-import { planners } from '../../../constants/planners';
+import { planners, anotherPlanners } from '../../../constants/planners';
 import { categories } from '../../../constants/categories';
 
 const PlannerView = ({ planner, navigation }) => {
@@ -68,6 +68,14 @@ export const Search = ({ navigation }) => {
   
   const [plannersList, setPlannersList] = useState(planners);
   const [categoriesList, setCategoriesList] = useState(categories);
+
+  const [getPlanners] = useState(anotherPlanners.map((_, index) => {
+    if (Math.floor(Math.random() * anotherPlanners.length) % 2 === 0) {
+      return anotherPlanners[index];
+    } else {
+      return planners[index];
+    }
+  }))
   
   const onChangeSearch = query =>  {
     setSearchQuery(query);
@@ -91,7 +99,7 @@ export const Search = ({ navigation }) => {
         <Text style={[fontStyles[700], fontStyles.large28]}>Popular {filter === "Search Categories" ? "Categories" : "Planners"}</Text>
         <SafeAreaView style={styles.list}>
           <FlatList
-            data={filter === "Search Categories" ? categoriesList : plannersList}
+            data={filter === "Search Categories" ? categoriesList : getPlanners}
             renderItem={({ item }) => filter === "Search Categories" ? <CategoryCard content={item} /> : <PlannerView navigation={navigation} planner={item} />}
             keyExtractor={(item, index) => index.toString()}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}

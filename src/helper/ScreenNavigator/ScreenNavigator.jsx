@@ -17,6 +17,9 @@ export const ScreenNavigator = {
   PlannerAnalytics: "PlannerAnalytics",
   PlannerPackages: "PlannerPackages",
   PlannerGetFeatured: "PlannerGetFeatured",
+  PlannerActiveJobs: "PlannerActiveJobs",
+  PlannerAddPackages: "PlannerAddPackages",
+  PlannerRemovePackages: "PlannerRemovePackages",
   
   ClientHome: "ClientHome",
   ClientSearch: "ClientSearch",

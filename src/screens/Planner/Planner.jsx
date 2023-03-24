@@ -39,6 +39,7 @@ export const Planner = ({ navigation }) => {
     { route: ScreenNavigator.PlannerGetFeatured, title: "Get Featured", type: Icons.Entypo, name: "bell" },
     { route: ScreenNavigator.ClientAnalytics, title: "Analytics", type: Icons.Ionicons, name: "analytics" },
     { route: ScreenNavigator.ClientProposals, title: "Proposals", type: Icons.Ionicons, name: "mail" },
+    { route: ScreenNavigator.PlannerActiveJobs, title: "Active Jobs", type: Icons.MaterialIcons, name: "work" },
   ]
 
   const tabs = [

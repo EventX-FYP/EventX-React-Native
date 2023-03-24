@@ -5,12 +5,21 @@ import { PlannerCard } from '../../../components';
 import { AppHelper } from '../../../helper'
 import { Searchbar } from 'react-native-paper';
 import { useState } from 'react';
-import { planners } from '../../../constants/planners';
+import { anotherPlanners, planners } from '../../../constants/planners';
 
 
 export const Home = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = query => setSearchQuery(query);
+
+  const [getPlanners] = useState(anotherPlanners.map((_, index) => {
+    if (Math.floor(Math.random() * anotherPlanners.length) % 2 === 0) {
+      return anotherPlanners[index];
+    } else {
+      return planners[index];
+    }
+  }))
+
   return (
     <ScrollView contentContainerStyle={ScrollStyles.scrollContainer}>
       <SafeAreaView style={styles.container}>
@@ -30,7 +39,7 @@ export const Home = ({ navigation }) => {
             <View>
               <SafeAreaView>
                 <FlatList
-                  data={planners}
+                  data={getPlanners}
                   horizontal={true}
                   ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
                   renderItem={planner => <PlannerCard navigation={navigation} planner={planner} /> }

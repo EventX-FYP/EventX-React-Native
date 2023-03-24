@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import { Chip } from "react-native-ui-lib"
 import { fontStyles } from '../../../../styles'
 import { useSelector, useDispatch } from 'react-redux'
-import { User } from '../../../../store/types'
+import { UPDATE_USER } from "../../../../store/types";
+
 
 export const UserCategories = ({ navigation }) => {
   const [categories, setCategories] = useState([
@@ -85,7 +86,7 @@ export const UserCategories = ({ navigation }) => {
 
   const handleConfirm = () => {
     const selectedCategories = categories.filter((category) => category.selected)
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, categories: selectedCategories}})
+    dispatch({ type: UPDATE_USER, payload: { ...user, categories: selectedCategories}})
   }
 
   return (

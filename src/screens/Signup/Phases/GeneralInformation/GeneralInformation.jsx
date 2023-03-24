@@ -6,9 +6,10 @@ import { fontStyles, inputStyles } from '../../../../styles'
 import { TextField } from 'react-native-ui-lib/src/incubator'
 import { AppHelper, CountryStateCityAPI } from '../../../../helper'
 import { useSelector, useDispatch } from 'react-redux'
-import { User } from '../../../../store/types'
 import * as ImagePicker from "expo-image-picker"
 import { COUNTRY_STATE_CITY_API_KEY } from '@env'
+import { UPDATE_USER } from "../../../../store/types";
+
 
 export const GeneralInformation = ({ navigation }) => {
   const user = useSelector((state) => state.user)
@@ -57,54 +58,54 @@ export const GeneralInformation = ({ navigation }) => {
       quality: 1,
     })
     if (!result.cancelled) {
-      dispatch({ type: User.UPDATE_USER, payload: { ...user, picture: result.uri }})
+      dispatch({ type: UPDATE_USER, payload: { ...user, picture: result.uri }})
       setGeneralInformation({ ...generalInformation, picture: result.uri })
     }
   }
 
   const handleNameChange = (e) => {
     setGeneralInformation({ ...generalInformation, name: e })
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, name: e }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, name: e }})
   }
 
   const handleDobChange = (e) => {
     setGeneralInformation({ ...generalInformation, dob: e })
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, dob: e }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, dob: e }})
   }
 
   const handleContactChange = (e) => {
     setGeneralInformation({ ...generalInformation, contact_number: e })
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, contact_number: e }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, contact_number: e }})
   }
 
   const handleAddressChange = (e) => {
     setGeneralInformation({ ...generalInformation, address: e })
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, address: e }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, address: e }})
   }
 
   const handleCountryChange = (e) => {
     setGeneralInformation({ ...generalInformation, country: { name: e.label, code: e.value }})
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, country: e.label }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, country: e.label }})
   }
 
   const handleStateChange = (e) => {
     setGeneralInformation({ ...generalInformation, state: e.label })
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, state: e.label }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, state: e.label }})
   }
 
   const handleCityChange = (e) => {
     setGeneralInformation({ ...generalInformation, city: e.label })
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, city: e.label }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, city: e.label }})
   }
 
   const handleMaleGenderChange = () => {
     setGeneralInformation({ ...generalInformation, gender: 'Male' });
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, gender: "Male" }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, gender: "Male" }})
   }
 
   const handleFemaleGenderChange = () => {
     setGeneralInformation({ ...generalInformation, gender: "Female" });
-    dispatch({ type: User.UPDATE_USER, payload: { ...user, gender: "Female"}})
+    dispatch({ type: UPDATE_USER, payload: { ...user, gender: "Female"}})
   }
 
   return (
