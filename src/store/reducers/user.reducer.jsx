@@ -6,6 +6,7 @@ const initialState = {
   email: "",
   password: "",
   type: "",
+  picture: "",
   categories: [],
   packages: [],
   dob: "",
@@ -15,8 +16,6 @@ const initialState = {
   city: "",
   state: "",
   country: "",
-  picture: "",
-  location: "",
 };
 
 export const userReducer = (state = initialState, action) => {

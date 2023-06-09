@@ -7,7 +7,7 @@ import { fontStyles } from '../../styles';
 
 export const ChatCard = ({ navigation, data }) => {
   return (
-    <TouchableOpacity style={chatCardStyles.container} onPress={() => navigation.navigate(ScreenNavigator.Chat)}>
+    <TouchableOpacity style={chatCardStyles.container} onPress={() => navigation.navigate(ScreenNavigator.Chat, { name: data.name })}>
       <View style={chatCardStyles.imageContainer}>
         <Avatar source={data?.image} name={data.name} badgeProps={{ backgroundColor: AppHelper.material.green500, size: 12 }} autoColorsConfig />
       </View>
