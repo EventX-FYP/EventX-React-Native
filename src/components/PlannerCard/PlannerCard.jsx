@@ -5,17 +5,16 @@ import { fontStyles, imageStyles } from "../../styles";
 import { AppHelper, Icon, Icons, ScreenNavigator } from "../../helper";
 
 export const PlannerCard = ({ navigation, planner }) => {
-  const { name, categories, image, earned, reviews, rating, location, status } = planner.item ? planner.item : planner;
+  const { name, categories, picture, address } = planner.item ? planner.item : planner;
   const [isHeartPressed, setIsHeartPressed] = useState(false);
   return (
-    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate(ScreenNavigator.PlannerProfileForClient, { name: name, categories: categories, image: image })} style={styles.container}>
+    <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate(ScreenNavigator.PlannerProfileForClient, { planner: planner })} style={styles.container}>
       <View style={styles.topRow}>
         <View style={styles.info}>
-          <Image source={image} style={[imageStyles.circularIcon]} />
+          <Image source={{ uri: picture }} style={[imageStyles.circularIcon]} />
           <View style={styles.infoText}>
             <View style={styles.infoName}>
               <Text numberOfLines={1} style={[fontStyles[700], fontStyles.large20, { maxWidth: 90 }]}>{name}</Text>
-              <Text style={[styles.status, fontStyles.medium]}>{status}</Text>
             </View>
             <Text style={[fontStyles[100], fontStyles.small, styles.maxLimit]} numberOfLines={1}>
               {
@@ -28,26 +27,12 @@ export const PlannerCard = ({ navigation, planner }) => {
                 })
               }
             </Text>
-            <Text style={[fontStyles[100], fontStyles.small]}>{location}</Text>
+            <Text style={[fontStyles[100], fontStyles.small]}>{address}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={() => setIsHeartPressed(!isHeartPressed)}>
-          <Icon name={isHeartPressed ? "heart" : "hearto" } type={Icons.AntDesign} size={24} color={AppHelper.material.red400}/>
+          <Icon name={isHeartPressed ? "heart" : "hearto"} type={Icons.AntDesign} size={24} color={AppHelper.material.red400} />
         </TouchableOpacity>
-      </View>
-      <View style={styles.bottomRow}>
-        <View style={styles.bottomRowItem}>
-          <Text style={[fontStyles[700], fontStyles.large20]}>{earned}</Text>
-          <Text style={[fontStyles[100], fontStyles.small]}>Earned</Text>
-        </View>
-        <View style={styles.bottomRowItem}>
-          <Text style={[fontStyles[700], fontStyles.large20]}>{reviews}</Text>
-          <Text style={[fontStyles[100], fontStyles.small]}>Reviews</Text>
-        </View>
-        <View style={styles.bottomRowItem}>
-          <Text style={[fontStyles[700], fontStyles.large20]}>{rating}</Text>
-          <Text style={[fontStyles[100], fontStyles.small]}>Rating</Text>
-        </View>
       </View>
     </TouchableOpacity>
   );

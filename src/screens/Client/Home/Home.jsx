@@ -1,30 +1,51 @@
 import { View, Text, Icon, Image, Button } from 'react-native-ui-lib';
 import { FlatList, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { fontStyles, inputStyles, ScrollStyles } from '../../../styles';
-import { PlannerCard } from '../../../components';
+import { Loader, PlannerCard } from '../../../components';
 import { AppHelper } from '../../../helper'
 import { Searchbar } from 'react-native-paper';
-import { useState } from 'react';
-import { anotherPlanners, planners } from '../../../constants/planners';
+import { useEffect, useState } from 'react';
+import { useApollo } from '../../../graphql/apollo';
+import { useProgress } from '../../../store/hooks/progress.hook';
+import { GET_PLANNERS } from '../../../graphql/queries';
 
 
 export const Home = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = query => setSearchQuery(query);
 
-  const [getPlanners] = useState(anotherPlanners.map((_, index) => {
-    if (Math.floor(Math.random() * anotherPlanners.length) % 2 === 0) {
-      return anotherPlanners[index];
-    } else {
-      return planners[index];
+  const apolloClient = useApollo();
+  const { startProgress, stopProgress } = useProgress();
+  useEffect(() => {
+    const getAllPlanners = async () => {
+      try {
+        startProgress();
+        const { data } = await apolloClient.query({
+          query: GET_PLANNERS,
+        });
+
+        if (data.getPlanners) {
+          console.log(data.getPlanners);
+          setGetPlanners(data.getPlanners);
+        }
+
+      } catch (err) {
+        console.log(err);
+      } finally {
+        stopProgress();
+      }
     }
-  }))
+    getAllPlanners();
+  }, [])
+
+  const [getPlanners, setGetPlanners] = useState([])
 
   return (
     <ScrollView contentContainerStyle={ScrollStyles.scrollContainer}>
+      <Loader />
       <SafeAreaView style={styles.container}>
         <View style={styles.searchContainer}>
-          <Searchbar placeholder='Search' onChangeText={onChangeSearch} value={searchQuery} style={styles.input} elevation='2'/>
+          <Searchbar placeholder='Search' onChangeText={onChangeSearch} value={searchQuery} style={styles.input} elevation='2' />
         </View>
         <View style={styles.homeContainer}>
           <View style={styles.info}>
@@ -33,7 +54,7 @@ export const Home = ({ navigation }) => {
               <Text style={[fontStyles[100], fontStyles.medium]}>Find planners working in your country</Text>
             </View>
             <Button style={styles.button}>
-              <Image/>
+              <Image />
               <Text style={[fontStyles.bold, fontStyles.large, styles.textColor]}>Show more from this area</Text>
             </Button>
             <View>
@@ -42,7 +63,7 @@ export const Home = ({ navigation }) => {
                   data={getPlanners}
                   horizontal={true}
                   ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-                  renderItem={planner => <PlannerCard navigation={navigation} planner={planner} /> }
+                  renderItem={planner => <PlannerCard navigation={navigation} planner={planner} />}
                 />
               </SafeAreaView>
             </View>
@@ -53,16 +74,16 @@ export const Home = ({ navigation }) => {
               <Text style={[fontStyles[100], fontStyles.medium]}>Established planners with successful client relationships</Text>
             </View>
             <Button style={styles.button}>
-              <Image/>
+              <Image />
               <Text style={[fontStyles.bold, fontStyles.large, styles.textColor]}>See more profiles</Text>
             </Button>
             <View>
               <SafeAreaView>
                 <FlatList
-                  data={planners}
+                  data={getPlanners}
                   horizontal={true}
                   ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-                  renderItem={planner => <PlannerCard navigation={navigation} planner={planner} /> }
+                  renderItem={planner => <PlannerCard navigation={navigation} planner={planner} />}
                 />
               </SafeAreaView>
             </View>
@@ -124,5 +145,5 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
     height: '100%'
   },
-  
+
 });

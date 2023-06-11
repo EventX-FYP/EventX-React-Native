@@ -4,11 +4,13 @@ import { Button, Card, Image, Text, DateTimePicker, Picker } from 'react-native-
 import { images } from '../../../../assets'
 import { fontStyles, inputStyles } from '../../../../styles'
 import { TextField } from 'react-native-ui-lib/src/incubator'
-import { AppHelper, CountryStateCityAPI } from '../../../../helper'
+import { AppHelper, CountryStateCityAPI, cloudinaryUpload, pickImage } from '../../../../helper'
 import { useSelector, useDispatch } from 'react-redux'
 import * as ImagePicker from "expo-image-picker"
 import { COUNTRY_STATE_CITY_API_KEY } from '@env'
-import { UPDATE_USER } from "../../../../store/types";
+import { Loader } from '../../../../components'
+import { useProgress } from '../../../../store/hooks/progress.hook'
+import { UPDATE_USER } from '../../../../store/types'
 
 
 export const GeneralInformation = ({ navigation }) => {
@@ -16,9 +18,9 @@ export const GeneralInformation = ({ navigation }) => {
   const dispatch = useDispatch()
   const [generalInformation, setGeneralInformation] = useState({
     name: user.name,
-    dob: user.dob,
+    dob: user.birthday,
     gender: user.gender,
-    contact_number: user.contact_number,
+    contact_number: user.phone,
     country: user.country,
     city: user.city,
     state: user.state,
@@ -28,190 +30,221 @@ export const GeneralInformation = ({ navigation }) => {
 
   const [countries, setCountries] = useState([])
   const [cities, setCities] = useState([])
+  const { startProgress, stopProgress } = useProgress();
 
   useEffect(() => {
     const fetchCountries = async () => {
-      const response = await CountryStateCityAPI.fetchCountry(COUNTRY_STATE_CITY_API_KEY)
-      setCountries(() => response.map(
-        country => { return { name: country.name, code: country.iso2 }}
-      ))
+      try {
+        startProgress();
+        const response = await CountryStateCityAPI.fetchCountry(COUNTRY_STATE_CITY_API_KEY)
+        setCountries(() => response.map(
+          country => { return { name: country.name, code: country.iso2 } }
+        ))
+      } catch (error) {
+        console.log(error);
+      } finally {
+        stopProgress();
+      }
     }
     fetchCountries()
   }, [])
 
   useEffect(() => {
     const fetchCities = async () => {
-      if (!generalInformation.country?.code) return;
-      const response = await CountryStateCityAPI.fetchCities(generalInformation.country.code, "", COUNTRY_STATE_CITY_API_KEY)
-      setCities(() => response.map(
-        city => { return { name: city.name }}
-      ))
+      try {
+        if (!generalInformation.country?.code && generalInformation.city) return;
+        startProgress();
+        const response = await CountryStateCityAPI.fetchCities(generalInformation.country.code, "", COUNTRY_STATE_CITY_API_KEY)
+        if (response?.length > 0) {
+          setCities(() => response.map(
+            city => { return { name: city.name } }
+          ))
+        }
+      } catch (error) {
+        stopProgress();
+        console.log(error);
+      } finally {
+        stopProgress();
+      }
     }
     fetchCities()
-  }, [generalInformation])
+  }, [generalInformation.country])
+
+  useEffect(() => {
+    stopProgress();
+  }, [])
 
   const pickImageProfile = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    })
+    const result = await pickImage();
     if (!result.cancelled) {
-      dispatch({ type: UPDATE_USER, payload: { ...user, picture: result.uri }})
-      setGeneralInformation({ ...generalInformation, picture: result.uri })
+      try {
+        startProgress();
+        const source = {
+          uri: result.uri,
+          type: `test/${result.uri.split("/")[9]}`,
+          name: `test.${result.uri.split("/")[9]}`,
+        }
+        const cloudinaryUrl = await cloudinaryUpload(source);
+        setGeneralInformation({ ...generalInformation, picture: cloudinaryUrl });
+        dispatch({ type: UPDATE_USER, payload: { ...user, picture: cloudinaryUrl } })
+      } catch (error) {
+        console.log(error);
+      } finally {
+        stopProgress();
+      }
     }
   }
 
   const handleNameChange = (e) => {
     setGeneralInformation({ ...generalInformation, name: e })
-    dispatch({ type: UPDATE_USER, payload: { ...user, name: e }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, name: e } })
   }
 
   const handleDobChange = (e) => {
     setGeneralInformation({ ...generalInformation, dob: e })
-    dispatch({ type: UPDATE_USER, payload: { ...user, dob: e }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, birthday: e } })
   }
 
   const handleContactChange = (e) => {
     setGeneralInformation({ ...generalInformation, contact_number: e })
-    dispatch({ type: UPDATE_USER, payload: { ...user, contact_number: e }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, phone: e } })
   }
 
   const handleAddressChange = (e) => {
     setGeneralInformation({ ...generalInformation, address: e })
-    dispatch({ type: UPDATE_USER, payload: { ...user, address: e }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, address: e } })
   }
 
   const handleCountryChange = (e) => {
-    setGeneralInformation({ ...generalInformation, country: { name: e.label, code: e.value }})
-    dispatch({ type: UPDATE_USER, payload: { ...user, country: e.label }})
+    setGeneralInformation({ ...generalInformation, country: { name: e.label, code: e.value } })
+    dispatch({ type: UPDATE_USER, payload: { ...user, country: e.label } })
   }
 
   const handleStateChange = (e) => {
     setGeneralInformation({ ...generalInformation, state: e.label })
-    dispatch({ type: UPDATE_USER, payload: { ...user, state: e.label }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, state: e.label } })
   }
 
   const handleCityChange = (e) => {
     setGeneralInformation({ ...generalInformation, city: e.label })
-    dispatch({ type: UPDATE_USER, payload: { ...user, city: e.label }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, city: e.label } })
   }
 
   const handleMaleGenderChange = () => {
     setGeneralInformation({ ...generalInformation, gender: 'Male' });
-    dispatch({ type: UPDATE_USER, payload: { ...user, gender: "Male" }})
+    dispatch({ type: UPDATE_USER, payload: { ...user, gender: "Male" } })
   }
 
   const handleFemaleGenderChange = () => {
     setGeneralInformation({ ...generalInformation, gender: "Female" });
-    dispatch({ type: UPDATE_USER, payload: { ...user, gender: "Female"}})
+    dispatch({ type: UPDATE_USER, payload: { ...user, gender: "Female" } })
   }
 
   return (
     <View style={userGeneralInformationStyles.container}>
-        <View style={userGeneralInformationStyles.uploadImageContainer}>
-          <Image style={userGeneralInformationStyles.uploadImage} source={{ uri: generalInformation.picture }} />
-          <Button onPress={pickImageProfile} size={'xSmall'} style={userGeneralInformationStyles.uploadImageButtonIcon}>
-            <Image source={images.CameraIcon} style={userGeneralInformationStyles.icon} />
-          </Button>
-        </View>
-        <ScrollView>
-          <View style={userGeneralInformationStyles.informationContainer}>
-            <View style={userGeneralInformationStyles.inputRow}>
-              <Text style={[fontStyles[700], fontStyles.large]}>Name</Text>
-              <TextField style={inputStyles.inputField} placeholder={'Enter Name'} value={generalInformation.name} onChangeText={handleNameChange} />
-            </View>
-            <View style={userGeneralInformationStyles.inputRow}>
-              <Text style={[fontStyles[700], fontStyles.large]}>Date of Birth</Text>
-              <DateTimePicker
-                style={inputStyles.inputField}
-                dateFormat="DD-MMM-YYYY"
-                placeholder="DD-MMM-YYYY"
-                mode={'date'}
-                value={generalInformation.dob}
-                onChange={handleDobChange}
-              />
-            </View>
-            <View style={userGeneralInformationStyles.inputRow}>
-              <Text style={[fontStyles[700], fontStyles.large]}>Gender</Text>
-              <View style={userGeneralInformationStyles.genderContainer}>
-                <Card style={generalInformation.gender === 'Male' ? userGeneralInformationStyles.genderButtonSelected : userGeneralInformationStyles.genderButton}
-                  onPress={handleMaleGenderChange}
-                >
-                  <Text style={generalInformation.gender === 'Male' ? userGeneralInformationStyles.genderButtonTextSelected : userGeneralInformationStyles.genderButtonText}>Male</Text>
-                </Card>
-                <Card style={generalInformation.gender === 'Female' ? userGeneralInformationStyles.genderButtonSelected : userGeneralInformationStyles.genderButton}
-                  onPress={handleFemaleGenderChange}
-                >
-                  <Text style={generalInformation.gender === 'Female' ? userGeneralInformationStyles.genderButtonTextSelected : userGeneralInformationStyles.genderButtonText}>Female</Text>
-                </Card>
-              </View>
-            </View>
-            <View style={userGeneralInformationStyles.inputRow}>
-              <Text style={[fontStyles[700], fontStyles.large]}>Contact Number</Text>
-              <TextField style={inputStyles.inputField} placeholder={'Enter Contact Number'} value={generalInformation.contact_number} onChangeText={handleContactChange} />
-            </View>
-            <View style={userGeneralInformationStyles.inputRow}>
-              <Text style={[fontStyles[700], fontStyles.large]}>Country</Text>
-              <Picker
-                placeholder={'Select Country'}
-                value={{
-                  label: generalInformation.country.name ?? generalInformation.country,
-                  value: generalInformation.country.code ?? generalInformation.country,
-                }}
-                // value={generalInformation.country.code}
-                enableModalBlur={false}
-                topBarProps={{ title: 'Countries' }}
-                showSearch
-                searchPlaceholder={'Search Country'}
-                onChange={handleCountryChange}
-                mode={Picker.modes.SINGLE}
-                migrateTextField
-                style={inputStyles.inputField}
+      <Loader />
+      <View style={userGeneralInformationStyles.uploadImageContainer}>
+        <Image style={userGeneralInformationStyles.uploadImage} source={{ uri: generalInformation.picture }} />
+        <Button onPress={pickImageProfile} size={'xSmall'} style={userGeneralInformationStyles.uploadImageButtonIcon}>
+          <Image source={images.CameraIcon} style={userGeneralInformationStyles.icon} />
+        </Button>
+      </View>
+      <ScrollView>
+        <View style={userGeneralInformationStyles.informationContainer}>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Name</Text>
+            <TextField style={inputStyles.inputField} placeholder={'Enter Name'} value={generalInformation.name} onChangeText={handleNameChange} />
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Date of Birth</Text>
+            <DateTimePicker
+              style={inputStyles.inputField}
+              dateFormat="DD-MMM-YYYY"
+              placeholder="DD-MMM-YYYY"
+              mode={'date'}
+              value={generalInformation.dob}
+              onChange={handleDobChange}
+            />
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Gender</Text>
+            <View style={userGeneralInformationStyles.genderContainer}>
+              <Card style={generalInformation.gender === 'Male' ? userGeneralInformationStyles.genderButtonSelected : userGeneralInformationStyles.genderButton}
+                onPress={handleMaleGenderChange}
               >
-                {
-                  countries.map((item, index) => (
-                    <Picker.Item
-                      key={index}
-                      label={item.name}
-                      value={item.code}
-                    />
-                  ))
-                }
-              </Picker>
-            </View>
-            <View style={userGeneralInformationStyles.inputRow}>
-              <Text style={[fontStyles[700], fontStyles.large]}>City</Text>
-              <Picker
-                placeholder={'Select City'}
-                value={{
-                  label: generalInformation.city,
-                  value: generalInformation.city,
-                }}
-                enableModalBlur={false}
-                topBarProps={{ title: 'Cities' }}
-                showSearch
-                searchPlaceholder={'Search City'}
-                onChange={handleCityChange}
-                mode={Picker.modes.SINGLE}
-                migrateTextField
-                style={inputStyles.inputField}
+                <Text style={generalInformation.gender === 'Male' ? userGeneralInformationStyles.genderButtonTextSelected : userGeneralInformationStyles.genderButtonText}>Male</Text>
+              </Card>
+              <Card style={generalInformation.gender === 'Female' ? userGeneralInformationStyles.genderButtonSelected : userGeneralInformationStyles.genderButton}
+                onPress={handleFemaleGenderChange}
               >
-                {
-                  cities.map((item, index) => (
-                    <Picker.Item key={index} label={item.name} value={''} />
-                  ))
-                }
-              </Picker>
-            </View>
-            <View style={userGeneralInformationStyles.inputRow}>
-              <Text style={[fontStyles[700], fontStyles.large]}>Address</Text>
-              <TextField style={inputStyles.inputField} placeholder={'Enter Address'} value={generalInformation.address} onChangeText={handleAddressChange} />
+                <Text style={generalInformation.gender === 'Female' ? userGeneralInformationStyles.genderButtonTextSelected : userGeneralInformationStyles.genderButtonText}>Female</Text>
+              </Card>
             </View>
           </View>
-        </ScrollView>
-      </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Contact Number</Text>
+            <TextField style={inputStyles.inputField} placeholder={'Enter Contact Number'} value={generalInformation.contact_number} onChangeText={handleContactChange} />
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Country</Text>
+            <Picker
+              placeholder={'Select Country'}
+              value={{
+                label: generalInformation.country.name ?? generalInformation.country,
+                value: generalInformation.country.code ?? generalInformation.country,
+              }}
+              // value={generalInformation.country.code}
+              enableModalBlur={false}
+              topBarProps={{ title: 'Countries' }}
+              showSearch
+              searchPlaceholder={'Search Country'}
+              onChange={handleCountryChange}
+              mode={Picker.modes.SINGLE}
+              migrateTextField
+              style={inputStyles.inputField}
+            >
+              {
+                countries.map((item, index) => (
+                  <Picker.Item
+                    key={index}
+                    label={item.name}
+                    value={item.code}
+                  />
+                ))
+              }
+            </Picker>
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>City</Text>
+            <Picker
+              placeholder={'Select City'}
+              value={{
+                label: generalInformation.city,
+                value: generalInformation.city,
+              }}
+              enableModalBlur={false}
+              topBarProps={{ title: 'Cities' }}
+              showSearch
+              searchPlaceholder={'Search City'}
+              onChange={handleCityChange}
+              mode={Picker.modes.SINGLE}
+              migrateTextField
+              style={inputStyles.inputField}
+            >
+              {
+                cities.map((item, index) => (
+                  <Picker.Item key={index} label={item.name} value={''} />
+                ))
+              }
+            </Picker>
+          </View>
+          <View style={userGeneralInformationStyles.inputRow}>
+            <Text style={[fontStyles[700], fontStyles.large]}>Address</Text>
+            <TextField style={inputStyles.inputField} placeholder={'Enter Address'} value={generalInformation.address} onChangeText={handleAddressChange} />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   )
 }
 

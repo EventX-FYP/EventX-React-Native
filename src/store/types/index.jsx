@@ -1,3 +1,4 @@
-export * from './isLogged.type';
 export * from './user.type';
-export * from './chat.type';
+export * from './progress.type';
+export * from './packages.type';
+export * from './job.type';

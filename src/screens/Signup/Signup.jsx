@@ -10,6 +10,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { UPDATE_USER } from "../../store/types";
 import * as Google from "expo-auth-session/providers/google";
 import { IOS_CLIENT_ID, ANDROID_CLIENT_ID, EXPO_CLIENT_ID } from "@env";
+import { useApollo } from "../../graphql/apollo";
+import { CHECK_USER_EXISTS } from "../../graphql/queries";
+import { useProgress } from "../../store/hooks/progress.hook";
+import { Loader } from "../../components";
 
 const googleConfig = {
     expoClientId: EXPO_CLIENT_ID,
@@ -26,7 +30,10 @@ export const Signup = ({ navigation }) => {
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
 
-    const handleSignupButton = () => {
+    const apolloClient = useApollo();
+    const { startProgress, stopProgress } = useProgress();
+
+    const handleSignupButton = async () => {
         if (auth.username === "") {
             alert("Email is required");
             return;
@@ -43,8 +50,27 @@ export const Signup = ({ navigation }) => {
             alert("Password and confirm password does not match");
             return;
         }
-        
-        dispatch({ type: UPDATE_USER, payload: { ...user, email: auth.username, password: auth.password }})
+
+        try {
+            startProgress();
+            const { data } = await apolloClient.query({
+                query: CHECK_USER_EXISTS,
+                variables: {
+                    email: auth.username,
+                },
+            });
+
+            if (data.checkUserExists) {
+                alert("User already exists");
+                return;
+            }
+            dispatch({ type: UPDATE_USER, payload: { ...user, email: auth.username, password: auth.password } });
+            navigation.navigate(ScreenNavigator.Phases);
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            stopProgress();
+        }
         navigation.navigate(ScreenNavigator.Phases);
     }
 
@@ -56,9 +82,9 @@ export const Signup = ({ navigation }) => {
         const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
             method: 'GET',
             headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
         });
 
@@ -67,14 +93,37 @@ export const Signup = ({ navigation }) => {
 
     const handleSignupWithGoogle = async () => {
         const result = await promptAsync();
-        const { authentication: { accessToken }} = result;
+        const { authentication: { accessToken } } = result;
         const userInfo = await fetchUserInfo(accessToken);
-        dispatch({ type: UPDATE_USER, payload: { ...user, email: userInfo.email, name: userInfo.name, picture: userInfo.picture  }})
-        navigation.navigate(ScreenNavigator.Phases);
+
+        try {
+            startProgress();
+
+            const { data } = await apolloClient.query({
+                query: CHECK_USER_EXISTS,
+                variables: {
+                    email: userInfo.email,
+                },
+            })
+
+            if (data.checkUserExists) {
+                alert("User already exists");
+                return;
+            }
+
+            dispatch({ type: UPDATE_USER, payload: { ...user, email: userInfo.email, password: "12345678", name: userInfo.name, picture: userInfo.picture } })
+            navigation.navigate(ScreenNavigator.Phases);
+
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            stopProgress();
+        }
     }
 
     return (
         <SafeAreaView style={styles.container}>
+            <Loader />
             <StatusBar backgroundColor={AppHelper.material.green500} />
             <Image source={images.SignupIcon} style={styles.image} />
             <View style={styles.infoContainer}>
@@ -95,20 +144,20 @@ export const Signup = ({ navigation }) => {
                 </View>
                 <View style={styles.loginContainer}>
                     <View style={styles.buttonContainer}>
-                        <Button label="Signup" style={styles.button} onPress={handleSignupButton}/>
+                        <Button label="Signup" style={styles.button} onPress={handleSignupButton} />
                         <View style={styles.horizontalLine}>
                             <View style={{ borderBottomColor: AppHelper.material.green300, borderBottomWidth: 1, width: "40%" }} />
                             <Text style={{ color: AppHelper.material.green400 }}>Or</Text>
                             <View style={{ borderBottomColor: AppHelper.material.green300, borderBottomWidth: 1, width: "40%" }} />
                         </View>
                         <Button style={styles.googleButton} onPress={handleSignupWithGoogle}>
-                            <Image source={images.GoogleIcon} style={styles.googleIcon}/>
+                            <Image source={images.GoogleIcon} style={styles.googleIcon} />
                             <Text style={styles.googleText}>Signup With Google</Text>
                         </Button>
                     </View>
                     <View style={styles.SignupContainer}>
                         <Text>Already have an account?  </Text>
-                        <Button label="Login" onPress={handleLoginButton} link outline color={AppHelper.material.green400}/>
+                        <Button label="Login" onPress={handleLoginButton} link outline color={AppHelper.material.green400} />
                     </View>
                 </View>
             </View>

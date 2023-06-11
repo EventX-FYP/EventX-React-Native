@@ -1,10 +1,13 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Dimensions } from 'react-native'
 import { Card, Text } from 'react-native-ui-lib'
 import { images } from '../../../../assets'
 import { AppHelper } from '../../../../helper'
 import { useSelector, useDispatch } from 'react-redux'
-import { UPDATE_USER } from "../../../../store/types";
+import { UPDATE_USER } from '../../../../store/types'
+
+const windowWidth = Dimensions.get('window').width
+const windowHeight = Dimensions.get('window').height
 
 export const UserType = ({ navigation }) => {
   const dispatch = useDispatch()
@@ -13,22 +16,22 @@ export const UserType = ({ navigation }) => {
     <View style={userTypeStyles.container}>
       <Text style={userTypeStyles.title}>Join as a client or planner</Text>
       <View style={userTypeStyles.options}>
-        <Card style={user.type === 'Client' ? userTypeStyles.cardClicked : userTypeStyles.card}
-          onPress={() => dispatch({ type: UPDATE_USER, payload: { ...user, type: 'Client' }})}
+        <Card style={user.role === 'CLIENT' ? userTypeStyles.cardClicked : userTypeStyles.card}
+          onPress={() => dispatch({ type: UPDATE_USER, payload: { ...user, role: "CLIENT" } })}
         >
-          <Text style={user.type === 'Client' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
+          <Text style={user.role === 'CLIENT' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
             Client
           </Text>
-          
+
           <Card.Section
             imageSource={images.Buyer}
             imageStyle={userTypeStyles.image}
           />
         </Card>
-        <Card style={user.type === 'Planner' ? userTypeStyles.cardClicked : userTypeStyles.card}
-          onPress={() => dispatch({ type: UPDATE_USER, payload: { ...user, type: 'Planner' }})}
+        <Card style={user.role === 'PLANNER' ? userTypeStyles.cardClicked : userTypeStyles.card}
+          onPress={() => dispatch({ type: UPDATE_USER, payload: { ...user, role: "PLANNER" } })}
         >
-          <Text style={user.type === 'Planner' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
+          <Text style={user.role === 'PLANNER' ? userTypeStyles.cardTextWhite : userTypeStyles.cardText}>
             Planner
           </Text>
           <Card.Section

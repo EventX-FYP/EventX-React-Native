@@ -17,16 +17,16 @@ const TabButton = (props) => {
   const { item, onPress, accessibilityState, setCurrentTab } = props;
   const focused = accessibilityState.selected;
   const viewRef = useRef(null);
-  
+
   useEffect(() => {
     if (focused) {
-      viewRef.current?.animate({ 0: { scale: .5, rotate: "0deg" }, 1: { scale: 1.2, rotate: "360deg" }});
+      viewRef.current?.animate({ 0: { scale: .5, rotate: "0deg" }, 1: { scale: 1.2, rotate: "360deg" } });
       setCurrentTab(item.label);
     } else {
-      viewRef.current?.animate({ 0: { scale: 1.2, rotate: "360deg" }, 1: { scale: 1, rotate: "0deg" }});
+      viewRef.current?.animate({ 0: { scale: 1.2, rotate: "360deg" }, 1: { scale: 1, rotate: "0deg" } });
     }
   }, [focused]);
-  
+
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={1} style={styles.container}>
       <Animatable.View ref={viewRef} duration={500} style={styles.container}>
@@ -38,20 +38,20 @@ const TabButton = (props) => {
 
 export const Client = ({ navigation }) => {
   const [currentTab, setCurrentTab] = useState("Home");
-  
+
   const sidebarIcons = [
     { route: ScreenNavigator.SavedPlanner, title: "Saved Planners", type: Icons.Ionicons, name: "save" },
     { route: ScreenNavigator.TaskManagementHome, title: "Tasks", type: Icons.FontAwesome, name: "tasks" },
-    { route: ScreenNavigator.ClientAnalytics, title: "Analytics", type: Icons.Ionicons, name: "analytics" },
+    // { route: ScreenNavigator.ClientAnalytics, title: "Analytics", type: Icons.Ionicons, name: "analytics" },
     { route: ScreenNavigator.ClientJobPosting, title: "Job Posting", type: Icons.Entypo, name: "briefcase" },
     { route: ScreenNavigator.ClientProposals, title: "Proposals", type: Icons.Ionicons, name: "mail" },
   ]
   const tabs = [
-    { route: ScreenNavigator.ClientHome, label: "Home", type: Icons.Ionicons, activeIcon: "home", inActiveIcon: "home-outline", component: Home,  },
-    { route: ScreenNavigator.ClientSearch, label: "Search", type: Icons.Ionicons, activeIcon: "search", inActiveIcon: "search", component: Search,  },
-    { route: ScreenNavigator.ClientJob, label: "Job", type: Icons.Ionicons, activeIcon: "briefcase", inActiveIcon: "briefcase-outline", component: Job,  },
-    { route: ScreenNavigator.ClientMessage, label: "Messages", type: Icons.Ionicons, activeIcon: "chatbubble", inActiveIcon: "chatbubble-outline", component: ChatList,  },
-    { route: ScreenNavigator.ClientNotifications, label: "Notifications", type: Icons.Ionicons, activeIcon: "notifications", inActiveIcon: "notifications-outline", component: Notifications,  },
+    { route: ScreenNavigator.ClientHome, label: "Home", type: Icons.Ionicons, activeIcon: "home", inActiveIcon: "home-outline", component: Home, },
+    { route: ScreenNavigator.ClientSearch, label: "Search", type: Icons.Ionicons, activeIcon: "search", inActiveIcon: "search", component: Search, },
+    { route: ScreenNavigator.ClientJob, label: "Job", type: Icons.Ionicons, activeIcon: "briefcase", inActiveIcon: "briefcase-outline", component: Job, },
+    { route: ScreenNavigator.ClientMessage, label: "Messages", type: Icons.Ionicons, activeIcon: "chatbubble", inActiveIcon: "chatbubble-outline", component: ChatList, },
+    // { route: ScreenNavigator.ClientNotifications, label: "Notifications", type: Icons.Ionicons, activeIcon: "notifications", inActiveIcon: "notifications-outline", component: Notifications,  },
   ]
 
   return (
@@ -60,7 +60,7 @@ export const Client = ({ navigation }) => {
       currentTab={currentTab}
       setCurrentTab={setCurrentTab}
       navigation={navigation}>
-      
+
       <Tab.Navigator
         initialRouteName={ScreenNavigator.ClientHome}
         screenOptions={{

@@ -1,33 +1,32 @@
-import { UPDATE_USER, DELETE_USER, GET_USER, CREATE_USER } from "../types";
+import { SET_USER, UPDATE_USER, LOGOUT_USER, GET_USER } from "../types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
   id: "",
   name: "",
   email: "",
   password: "",
-  type: "",
   picture: "",
+  role: "",
   categories: [],
-  packages: [],
-  dob: "",
+  birthday: "",
   gender: "",
-  contact_number: "",
+  phone: "",
   address: "",
   city: "",
-  state: "",
   country: "",
+  accessToken: "",
+  recommendation: 0.0,
 };
 
 export const userReducer = (state = initialState, action) => {
   switch (action.type) {
+    case SET_USER:
+      return action.payload;
     case UPDATE_USER:
       return action.payload;
-    case DELETE_USER:
-      return {};
-    case GET_USER:
-      return state;
-    case CREATE_USER:
-      return action.payload;
+    case LOGOUT_USER:
+      return initialState;
     default:
       return state;
   }

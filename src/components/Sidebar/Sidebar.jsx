@@ -2,21 +2,26 @@ import { SafeAreaView, StyleSheet, Text, View, Animated, Image, TouchableOpacity
 import React, { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react'
 import { images } from '../../assets'
 import { AppHelper, Icon, Icons, ScreenNavigator } from '../../helper'
+import { useDispatch, useSelector } from 'react-redux';
+import { LOGOUT_USER } from '../../store/types';
+
 
 const bgColor = AppHelper.material.green500;
 let menu, nav;
 
 const TabButton = forwardRef(({ currentTab, setCurrentTab, item }, ref) => {
-  const handleNavigation = (e) => {
+  const dispatch = useDispatch();
+  const handleNavigation = async (e) => {
     e.preventDefault();
     if (item.title === "Log out") {
-      nav.navigate(ScreenNavigator.Login);
+      dispatch({ type: LOGOUT_USER });
+      nav.replace(ScreenNavigator.Login);
       return;
     }
     // if (item.title !== currentTab) {
-      // setCurrentTab(item.title);
-      ref.current.handleMenuButton();
-      nav.navigate(item.route)
+    // setCurrentTab(item.title);
+    ref.current.handleMenuButton();
+    nav.navigate(item.route)
     // }
   }
 
@@ -37,13 +42,15 @@ const TabButton = forwardRef(({ currentTab, setCurrentTab, item }, ref) => {
 
 export const Sidebar = ({ children, sideBar, currentTab, setCurrentTab, navigation }) => {
   const [showMenu, setShowMenu] = useState(false);
-  
+
   menu = showMenu;
   nav = navigation;
-  
+
   const offsetValue = useRef(new Animated.Value(0)).current;
   const scaleValue = useRef(new Animated.Value(1)).current;
   const closeButtonOffset = useRef(new Animated.Value(0)).current;
+
+  const user = useSelector(state => state.user);
 
   const sideBarRef = useRef();
 
@@ -86,8 +93,8 @@ export const Sidebar = ({ children, sideBar, currentTab, setCurrentTab, navigati
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ justifyContent: "flex-start", padding: 15 }}>
-        <Image source={images.Users.Photo} style={{ width: 60, height: 60, borderRadius: 15, marginTop: 8 }} />
-        <Text style={{ fontSize: 20, fontWeight: "bold", color: "white", marginTop: 20 }}>Jane Doe</Text>
+        <Image source={{ uri: user.picture }} style={{ width: 60, height: 60, borderRadius: 15, marginTop: 8 }} />
+        <Text style={{ fontSize: 20, fontWeight: "bold", color: "white", marginTop: 20 }}>{user.name}</Text>
         <TouchableOpacity onPress={() => {
           handleMenuButton();
           navigation.navigate(ScreenNavigator.ClientProfile)
@@ -114,10 +121,10 @@ export const Sidebar = ({ children, sideBar, currentTab, setCurrentTab, navigati
         ],
         borderRadius: menu ? 15 : 0
       }]}>
-        <Animated.View style={{ transform: [{ translateY: closeButtonOffset }], flexDirection: "row", justifyContent: "flex-start"}}>
+        <Animated.View style={{ transform: [{ translateY: closeButtonOffset }], flexDirection: "row", justifyContent: "flex-start" }}>
           <TouchableOpacity onPress={handleMenuButton} style={{ flexDirection: "row", height: 50, paddingLeft: 10 }}>
-            <Icon type={Icons.Ionicons} name={menu ? "close" : "menu" } color="black" size={30} style={{ alignSelf: "center"}} />
-            <Text style={{ alignSelf: "center", fontWeight: "bold", fontSize: 20, marginLeft: 10}}>{currentTab}</Text>
+            <Icon type={Icons.Ionicons} name={menu ? "close" : "menu"} color="black" size={30} style={{ alignSelf: "center" }} />
+            <Text style={{ alignSelf: "center", fontWeight: "bold", fontSize: 20, marginLeft: 10 }}>{currentTab}</Text>
           </TouchableOpacity>
         </Animated.View>
         {children}

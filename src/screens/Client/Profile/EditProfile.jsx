@@ -1,31 +1,35 @@
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { images } from '../../../assets'
-import { AppHelper, CountryStateCityAPI, pickImage } from '../../../helper'
+import { AppHelper, CountryStateCityAPI, convertToDate, pickImage } from '../../../helper'
 import { TextInput, Button } from 'react-native-paper'
-import { useSelector, useDispatch } from 'react-redux'
 import { DateTimePicker, Picker } from 'react-native-ui-lib'
 import { COUNTRY_STATE_CITY_API_KEY } from "@env";
-import { UPDATE_USER } from '../../../store/types'
+import { useSelector } from 'react-redux'
+import { Loader } from '../../../components'
+import { useProgress } from '../../../store/hooks/progress.hook'
+import { useApollo } from '../../../graphql/apollo'
+import { UPDATE_USER } from '../../../graphql/mutations'
 
 export const EditProfile = ({ navigation }) => {
+  const { startProgress, stopProgress } = useProgress();
+  const apolloClient = useApollo();
   const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   const [information, setInformation] = useState({
     name: user.name,
-    dob: user.dob,
+    dob: convertToDate(user.birthday),
     gender: user.gender,
-    contact_number: user.contact_number,
+    contact_number: user.phone,
     country: user.country,
     city: user.city,
     state: user.state,
     address: user.address,
     picture: user.picture,
-    password: user.password,
+    password: "",
   })
 
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -34,7 +38,7 @@ export const EditProfile = ({ navigation }) => {
     const fetchCountries = async () => {
       const response = await CountryStateCityAPI.fetchCountry(COUNTRY_STATE_CITY_API_KEY);
       setCountries(() => response.map(
-        country => { return { name: country.name, code: country.iso2 }}
+        country => { return { name: country.name, code: country.iso2 } }
       ));
     }
     fetchCountries();
@@ -45,7 +49,7 @@ export const EditProfile = ({ navigation }) => {
       if (!information.country?.code) return;
       const response = await CountryStateCityAPI.fetchCities(information.country.code, "", COUNTRY_STATE_CITY_API_KEY);
       setCities(() => response?.map(
-        city => { return { name: city.name }}
+        city => { return { name: city.name } }
       ));
     }
     fetchCities();
@@ -55,13 +59,39 @@ export const EditProfile = ({ navigation }) => {
     const result = await pickImage();
     if (!result.cancelled) {
       setInformation({ ...information, picture: result.uri });
-      dispatch({ type: UPDATE_USER, payload: { ...user, picture: result.uri }})
+    }
+  }
+
+  const handleUpdate = async () => {
+    try {
+      startProgress();
+      const { data } = await apolloClient.mutate({
+        mutation: UPDATE_USER,
+        variables: {
+          data: {
+            ...user,
+            name: information.name,
+            phone: information.contact_number,
+            gender: information.gender,
+            birthday: convertToDate(information.dob),
+            country: information.country,
+            city: information.city,
+            address: information.address,
+          }
+        },
+      })
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      stopProgress();
+      navigation.goBack();
     }
   }
 
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
+        <Loader />
         <TouchableOpacity onPress={handleImage} activeOpacity={0.8} style={{ alignItems: "center", marginVertical: 20 }}>
           <Image source={information.picture ? { uri: information.picture } : images.BirthdayPlanner} style={styles.imageContainer} />
         </TouchableOpacity>
@@ -82,8 +112,8 @@ export const EditProfile = ({ navigation }) => {
             outlineColor={"green"}
             activeOutlineColor={"green"}
             style={[styles.inputBackground, styles.marginTop]}
-            right={<TextInput.Icon icon={!(!!showPassword === true) ? "eye" : "eye-off" } onPress={() => setShowPassword(!showPassword)} /> } />
-          
+            right={<TextInput.Icon icon={!(!!showPassword === true) ? "eye" : "eye-off"} onPress={() => setShowPassword(!showPassword)} />} />
+
           <TextInput label={"Contact Number"} value={information.contact_number} mode={'outlined'} onChangeText={text => setInformation({ ...information, contact_number: text })}
             selectionColor={AppHelper.material.green400}
             underlineColor={"green"}
@@ -92,7 +122,7 @@ export const EditProfile = ({ navigation }) => {
             activeOutlineColor={"green"}
             style={[styles.inputBackground, styles.marginTop]} />
 
-          
+
           <View style={[styles.genderContainer, styles.marginTop]}>
             <TouchableOpacity activeOpacity={0.6} style={information.gender === "Male" ? styles.genderButtonActive : styles.genderButtonInActive} onPress={() => setInformation({ ...information, gender: "Male" })}>
               <Text style={information.gender === "Male" ? styles.activeButtonText : styles.inActiveButtonText}>Male</Text>
@@ -110,8 +140,8 @@ export const EditProfile = ({ navigation }) => {
             placeholder={"Date of Birth"}
             // floatingPlaceholder
             style={[styles.inputBackground, styles.marginTop, { borderColor: "green", borderWidth: 1, borderRadius: 5, padding: 10, height: 50, paddingLeft: 20 }]}
-            />
-          
+          />
+
           <Picker
             placeholder={'Select Country'}
             value={{
@@ -122,18 +152,18 @@ export const EditProfile = ({ navigation }) => {
             topBarProps={{ title: "Countries" }}
             showSearch
             searchPlaceholder={'Search Countries'}
-            onChange={e => setInformation({ ...information, country: { name: e.label, code: e.value }})}
+            onChange={e => setInformation({ ...information, country: { name: e.label, code: e.value } })}
             mode={Picker.modes.SINGLE}
             migrateTextField
             style={[styles.inputBackground, { borderColor: "green", borderWidth: 1, borderRadius: 5, padding: 10, height: 50, paddingLeft: 20 }]}>
 
-              {
-                countries.map((country, index) => {
-                  return (
-                    <Picker.Item key={index} label={country.name} value={country.code} />
-                  )
-                })
-              }
+            {
+              countries.map((country, index) => {
+                return (
+                  <Picker.Item key={index} label={country.name} value={country.code} />
+                )
+              })
+            }
           </Picker>
           <Picker
             placeholder={'Select City'}
@@ -150,15 +180,15 @@ export const EditProfile = ({ navigation }) => {
             migrateTextField
             style={[styles.inputBackground, { borderColor: "green", borderWidth: 1, borderRadius: 5, padding: 10, height: 50, paddingLeft: 20 }]}>
 
-              {
-                cities.map((city, index) => {
-                  return (
-                    <Picker.Item key={index} label={city.name} value={city.name} />
-                  )
-                })
-              }
+            {
+              cities.map((city, index) => {
+                return (
+                  <Picker.Item key={index} label={city.name} value={city.name} />
+                )
+              })
+            }
           </Picker>
-          
+
           <TextInput label={"Address"} value={information.address} mode={'outlined'} onChangeText={text => setInformation({ ...information, address: text })}
             selectionColor={AppHelper.material.green400}
             underlineColor={"green"}
@@ -166,8 +196,8 @@ export const EditProfile = ({ navigation }) => {
             outlineColor={"green"}
             activeOutlineColor={"green"}
             style={[styles.inputBackground]} numberOfLines={1} />
-          
-          <Button mode='contained' style={[styles.marginTop, { borderRadius: 10, backgroundColor: AppHelper.material.green600 }]} onPress={() => navigation.goBack()}>Save</Button>
+
+          <Button mode='contained' style={[styles.marginTop, { borderRadius: 10, backgroundColor: AppHelper.material.green600 }]} onPress={handleUpdate}>Save</Button>
         </View>
       </SafeAreaView>
     </ScrollView>
@@ -205,7 +235,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   genderButtonInActive: {
-    backgroundColor: AppHelper.material.lightGreen100,    
+    backgroundColor: AppHelper.material.lightGreen100,
     width: "40%",
     alignItems: "center",
     borderRadius: 10,

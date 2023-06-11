@@ -36,6 +36,57 @@ const categories = [
     title: "Digital Planners",
     image: images.DigitalPlanner,
   },
-]
+];
 
-export { categories };
+const pickerCategories = [
+  {
+    label: "Wedding",
+    value: "Wedding",
+  },
+  {
+    label: "Birthday",
+    value: "Birthday",
+  },
+  {
+    label: "Party",
+    value: "Party",
+  },
+  {
+    label: "Financial",
+    value: "Financial",
+  },
+  {
+    label: "Health & Fitness",
+    value: "HealthFitness",
+  },
+  {
+    label: "Work",
+    value: "Work",
+  },
+  {
+    label: "Weekly",
+    value: "Weekly",
+  },
+  {
+    label: "Personal/Life",
+    value: "Personal",
+  },
+  {
+    label: "Digital",
+    value: "Digital",
+  },
+];
+
+const allCategories = [
+  "Wedding",
+  "Birthday",
+  "Party",
+  "Financial",
+  "HealthFitness",
+  "Work",
+  "Weekly",
+  "Personal",
+  "Digital",
+];
+
+export { categories, pickerCategories, allCategories };

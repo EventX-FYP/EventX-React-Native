@@ -1,10 +1,19 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ActivityIndicator } from 'react-native-paper'
 import { AppHelper } from '../../helper'
+import { useSelector } from 'react-redux'
+import { useProgress } from '../../store/hooks/progress.hook'
 
-export const Loader = ({ visible }) => {
-  return visible && (
+export const Loader = () => {
+  const progress = useSelector(state => state.progress)
+  const { stopProgress } = useProgress();
+
+  useEffect(() => {
+    stopProgress();
+  }, [])
+
+  return progress && (
     <SafeAreaView style={styles.container}>
       <ActivityIndicator animating={true} color={AppHelper.material.green600} size={'large'} />
     </SafeAreaView>

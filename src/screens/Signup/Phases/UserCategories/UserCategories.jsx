@@ -1,77 +1,67 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import { Chip } from "react-native-ui-lib"
+import { Button, Chip } from "react-native-ui-lib"
 import { fontStyles } from '../../../../styles'
 import { useSelector, useDispatch } from 'react-redux'
-import { UPDATE_USER } from "../../../../store/types";
+import { AppHelper } from '../../../../helper'
+import { UPDATE_USER } from '../../../../store/types'
 
 
 export const UserCategories = ({ navigation }) => {
   const [categories, setCategories] = useState([
     {
       id: 1,
-      name: '👰 Wedding Planning',
+      name: '🎂 Birthday Planning',
       selected: false,
+      dbName: 'Birthday',
     },
     {
       id: 2,
-      name: '🎂 Birthday Planning',
+      name: '👰 Wedding Planning',
       selected: false,
+      dbName: 'Wedding',
     },
     {
       id: 3,
-      name: '🎤 Concert Planning',
+      name: '🎉 Party Planning',
       selected: false,
+      dbName: 'Party'
     },
     {
       id: 4,
-      name: '👔 Corporate Planning',
+      name: '💰 Financial Planning',
       selected: false,
+      dbName: 'Financial',
     },
     {
       id: 5,
-      name: '🎉 Party Planning',
+      name: '🏋️ Health and Fitness Planning',
       selected: false,
+      dbName: "HealthFitness"
     },
     {
       id: 6,
-      name: '🏋️ Health and Fitness Planning',
+      name: '🏢 Work Planning',
       selected: false,
+      dbName: "Work"
     },
     {
       id: 7,
-      name: '✈️ Travel Planning',
+      name: '📅 Weekly Planning',
       selected: false,
+      dbName: "Weekly"
     },
     {
       id: 8,
-      name: '📅 Weekly Planning',
+      name: '👨‍👩‍👧‍👦 Personal Planning',
       selected: false,
+      dbName: "Personal"
     },
     {
       id: 9,
-      name: '💰 Financial Planning',
-      selected: false,
-    },
-    {
-      id: 10,
-      name: '🏠 Home Planning',
-      selected: false,
-    },
-    {
-      id: 11,
-      name: '👩‍💻 Work Planning',
-      selected: false,
-    },
-    {
-      id: 12,
-      name: '👩‍👧 Personal/Life Planning',
-      selected: false,
-    },
-    {
-      id: 13,
       name: '📱 Digital Planning',
       selected: false,
+      dbName: "Digital"
     },
   ])
 
@@ -81,12 +71,10 @@ export const UserCategories = ({ navigation }) => {
   const handleSelectChip = (e) => {
     const category = categories.find((item) => item.name === e.children[3].props.children)
     category.selected = !category.selected
+    console.log(category)
     setCategories([...categories])
-  }
-
-  const handleConfirm = () => {
-    const selectedCategories = categories.filter((category) => category.selected)
-    dispatch({ type: UPDATE_USER, payload: { ...user, categories: selectedCategories}})
+    const selectedCategories = categories.filter((item) => item.selected).map((item) => item.dbName)
+    dispatch({ type: UPDATE_USER, payload: { ...user, categories: selectedCategories } })
   }
 
   return (
@@ -114,11 +102,11 @@ export const UserCategories = ({ navigation }) => {
           }
         </View>
       </View>
-      <Button
+      {/* <Button
         label="Confirm"
         onPress={handleConfirm}
         style={userCategoriesStyles.button}
-      />
+      /> */}
     </View>
   )
 }
@@ -126,7 +114,7 @@ export const UserCategories = ({ navigation }) => {
 const userCategoriesStyles = StyleSheet.create({
   container: {
     display: 'flex',
-    height: '98%',
+    height: '90%',
     width: '100%',
     flexDirection: 'column',
     justifyContent: 'space-between',

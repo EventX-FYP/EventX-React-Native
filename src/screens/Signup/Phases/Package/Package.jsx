@@ -1,123 +1,164 @@
 import React, { useState } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 import { Button, Image, Text } from 'react-native-ui-lib'
-import { PackageCard } from '../../../../components'
+import { Loader, PackageCard } from '../../../../components'
 import { fontStyles, inputStyles } from '../../../../styles'
 import { TextField } from 'react-native-ui-lib/src/incubator'
-import { AppHelper, pickImage } from '../../../../helper'
+import { AppHelper, pickImage, cloudinaryUpload } from '../../../../helper'
 import { useSelector, useDispatch } from 'react-redux'
-import * as ImagePicker from "expo-image-picker"
 import { images } from '../../../../assets'
-import { UPDATE_USER } from "../../../../store/types";
+import { UPDATE_PACKAGE } from '../../../../store/types'
+import { allCategories } from '../../../../constants/categories'
+import { useProgress } from '../../../../store/hooks/progress.hook'
 
 
 export const Package = ({ navigation }) => {
-  const user = useSelector((state) => state.user)
+  const pkg = useSelector((state) => state.pkg)
   const dispatch = useDispatch()
 
+  const { startProgress, stopProgress } = useProgress();
+
   const [_package, setPackage] = useState({
-    name: '',
-    image: images.Buyer,
-    price: '',
+    title: '',
     description: '',
+    picture: pkg.picture ?? images.Buyer,
+    price: '',
+    categories: allCategories.map((item) => item),
   });
 
   const pickImagePackage = async () => {
     const result = await pickImage();
     if (!result.cancelled) {
-      setPackage({ ..._package, image: result.uri });
-    } 
+      startProgress();
+      const source = {
+        uri: result.uri,
+        type: `test/${result.uri.split("/")[9]}`,
+        name: `test.${result.uri.split("/")[9]}`,
+      }
+      // return;
+      const cloudinaryUrl = await cloudinaryUpload(source);
+      setPackage({ ..._package, picture: cloudinaryUrl });
+      dispatch({ type: UPDATE_PACKAGE, payload: { ...pkg, picture: cloudinaryUrl } })
+      stopProgress();
+    }
   };
 
   const handleSubmitPackage = () => {
-    dispatch({ type: UPDATE_USER, payload: { ...user, packages: [...user.packages, _package] }})
+    dispatch({
+      type: UPDATE_PACKAGE, payload: {
+        ...pkg,
+        packages: [...pkg.packages, _package]
+      }
+    })
     setPackage({
-      name: '',
-      image: images.Buyer,
+      title: '',
+      picture: images.Buyer,
       price: '',
       description: '',
+      categories: allCategories.map((item) => item),
     })
   }
 
   const handleRemovePackage = (index) => {
-    const newPackages = user.packages.filter((_, i) => i !== index)
-    dispatch({ type: UPDATE_USER, payload: { ...user, packages: newPackages }})
+    const newPackages = pkg.packages.filter((_, i) => i !== index)
   }
 
 
   return (
     <View style={userPackagesStyles.container}>
-        <Text style={userPackagesStyles.textHeader}>Add Packages</Text>
-        <View style={userPackagesStyles.uploadPictureContainer}>
-          <Image
-            style={userPackagesStyles.uploadPicture}
-            source={_package.image === images.Buyer ? _package.image : {uri: _package.image}}
-          />
-          <Button
-            label="Upload Picture"
-            onPress={pickImagePackage}
-            style={userPackagesStyles.uploadPictureButton}
-          />
-        </View>
-        <View style={userPackagesStyles.inputContainer}>
-          <View style={userPackagesStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>
-              Package Name
-            </Text>
-            <TextField
-              style={inputStyles.inputField}
-              value={_package.name}
-              onChangeText={(value) => setPackage({ ..._package, name: value })}
-            />
-          </View>
-          <View style={userPackagesStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>
-              Package Price
-            </Text>
-            <TextField
-              style={inputStyles.inputField}
-              value={_package.price}
-              onChangeText={(value) =>
-                setPackage({ ..._package, price: value })
-              }
-            />
-          </View>
-          <View style={userPackagesStyles.inputRow}>
-            <Text style={[fontStyles[700], fontStyles.large]}>Package Description</Text>
-            <TextField
-              style={inputStyles.inputField}
-              value={_package.description}
-              onChangeText={(value) =>
-                setPackage({ ..._package, description: value })
-              }
-            />
-          </View>
-        </View>
-        <View>
-          <Button
-            style={userPackagesStyles.button}
-            onPress={handleSubmitPackage}
-            label="Add Package"
-          />
-        </View>
-        {
-          user.packages.length > 0 && (
-            <View style={userPackagesStyles.listPackages}>
-              <ScrollView>
-                {user.packages.map((item, index) => (
-                  <PackageCard
-                    key={index}
-                    name={item.name}
-                    price={item.price}
-                    description={item.description}
-                    image={item.image}
-                  />
-                ))}
-              </ScrollView>
-            </View>
-          )
-        }
+      <Loader />
+      <Text style={userPackagesStyles.textHeader}>Add Packages</Text>
+      <View style={userPackagesStyles.uploadPictureContainer}>
+        <Image
+          style={userPackagesStyles.uploadPicture}
+          source={_package.picture === images.Buyer ? _package.picture : { uri: _package.picture }}
+        />
+        <Button
+          label="Upload Picture"
+          onPress={pickImagePackage}
+          style={userPackagesStyles.uploadPictureButton}
+        />
       </View>
+      <View style={userPackagesStyles.inputContainer}>
+        <View style={userPackagesStyles.inputRow}>
+          <Text style={[fontStyles[700], fontStyles.large]}>
+            Package Name
+          </Text>
+          <TextField
+            style={inputStyles.inputField}
+            value={_package.title}
+            onChangeText={(value) => setPackage({ ..._package, title: value })}
+          />
+        </View>
+        <View style={userPackagesStyles.inputRow}>
+          <Text style={[fontStyles[700], fontStyles.large]}>
+            Package Price
+          </Text>
+          <TextField
+            style={inputStyles.inputField}
+            value={_package.price}
+            onChangeText={(value) =>
+              setPackage({ ..._package, price: value })
+            }
+          />
+        </View>
+        {/* <View style={userPackagesStyles.inputRow}>
+          <Text style={[fontStyles[700], fontStyles.large]}>
+            Package Category
+          </Text>
+          <Picker
+            style={inputStyles.inputField}
+            value={_package.categories}
+            mode={Picker.modes.MULTI}
+            selectionLimit={3}
+            onChange={(value) => setPackage({
+              ..._package, categories: [
+                ..._package.categories, { value }]
+            })}
+            trailingAccessory={false}
+            migrateTextField={true}
+          >
+            {pickerCategories.map((item, index) => (
+              <Picker.Item key={index} value={item.value} label={item.label} />
+            ))}
+          </Picker>
+        </View> */}
+        <View style={userPackagesStyles.inputRow}>
+          <Text style={[fontStyles[700], fontStyles.large]}>Package Description</Text>
+          <TextField
+            style={inputStyles.inputField}
+            value={_package.description}
+            onChangeText={(value) =>
+              setPackage({ ..._package, description: value })
+            }
+          />
+        </View>
+      </View>
+      <View>
+        <Button
+          style={userPackagesStyles.button}
+          onPress={handleSubmitPackage}
+          label="Add Package"
+        />
+      </View>
+      {
+        pkg.packages.length > 0 && (
+          <View style={userPackagesStyles.listPackages}>
+            <ScrollView>
+              {pkg.packages.map((item, index) => (
+                <PackageCard
+                  key={index}
+                  title={item.title}
+                  price={item.price}
+                  description={item.description}
+                  picture={item.picture}
+                />
+              ))}
+            </ScrollView>
+          </View>
+        )
+      }
+    </View>
   )
 }
 

@@ -1,14 +1,13 @@
 import { SafeAreaView, StyleSheet, View, Text, StatusBar, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { AppHelper, Icon, Icons, ScreenNavigator } from '../../../helper'
-import { images } from '../../../assets'
-import { Avatar, Caption, Title, TouchableRipple } from 'react-native-paper'
+import { Avatar, Caption, Snackbar, Title, TouchableRipple } from 'react-native-paper'
 import * as Sharing from "expo-sharing"
 import * as FileSystem from "expo-file-system"
-import { Picker } from 'react-native-ui-lib'
-import { inputStyles } from '../../../styles'
+import { useSelector } from 'react-redux'
 
-export const ClientProfile = ({ navigation }) => {
+export const ClientProfile = ({ route, navigation }) => {
+  const user = useSelector(state => state.user);
   const ShareWithFriends = async () => {
     const shareOptions = {
       mimeType: 'text/plain',
@@ -18,7 +17,7 @@ export const ClientProfile = ({ navigation }) => {
     const fileUri = FileSystem.cacheDirectory + 'dummy.txt'
     const vcard = `Expo Go Testing`
 
-    
+
     try {
       FileSystem.writeAsStringAsync(fileUri, vcard)
         .then(() => console.log('File created!'))
@@ -31,24 +30,21 @@ export const ClientProfile = ({ navigation }) => {
     }
   }
 
-  const status = [
-    { label: "Online", value: "Online" },
-    { label: "Offline", value: "Offline" },
-    { label: "Busy", value: "Busy" },
-    { label: "Away", value: "Away" },
-  ]
-
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const handleStatusChange = (e) => {
     setCurrentIndex(e.value);
   }
 
+  const [snackBarVisible, setSnackBarVisible] = useState(false)
+  const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible)
+  const onDismissSnackBar = () => setSnackBarVisible(false)
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon type={Icons.Feather} name={"arrow-left"} size={25} color={"black"}/>
+          <Icon type={Icons.Feather} name={"arrow-left"} size={25} color={"black"} />
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>Profile</Text>
         <TouchableOpacity onPress={() => navigation.navigate(ScreenNavigator.EditProfile)}>
@@ -65,47 +61,30 @@ export const ClientProfile = ({ navigation }) => {
         borderRadius: 10,
       }]}>
         <View style={{ flexDirection: "row" }}>
-          <Avatar.Image source={images.Users.Profile} size={80} />
+          <Avatar.Image source={{ uri: user.picture }} size={80} />
           <View style={{ marginLeft: 20 }}>
-            <Title style={[styles.title, { marginTop: 15, marginBottom: 5, color: AppHelper.material.darkWhite }]}>Jane Doe</Title>
-            <Caption style={[styles.caption, { color: AppHelper.material.lightWhite }]}>@j_doe</Caption>
+            <Title style={[styles.title, { marginTop: 15, marginBottom: 5, color: AppHelper.material.darkWhite }]}>{user.name}</Title>
+            <Caption style={[styles.caption, { color: AppHelper.material.lightWhite }]}>@{user.name}</Caption>
           </View>
         </View>
-        <TouchableOpacity style={{ alignItems: "center", justifyContent: "center" }}>
-          <Picker 
-            style={[inputStyles.inputFieldWhite, { color: "white" }]}
-            value={{ value: status[currentIndex].value, label: status[currentIndex].label }}
-            enableModalBlur={false}
-            topBarProps={{ title: "Status" }}
-            mode={Picker.modes.SINGLE}
-            onChange={handleStatusChange}>
-            {
-              status.map((item, index) => {
-                return (
-                  <Picker.Item key={index} value={index} label={item.value} />
-                )
-              })
-            }
-          </Picker>
-        </TouchableOpacity>
       </View>
 
       <View style={styles.userInfoSection}>
         <View style={styles.row}>
           <Icon type={Icons.MaterialCommunityIcons} name={"map-marker-radius"} color="#777777" size={20} />
-          <Text style={{ color: "#777777", marginLeft: 20 }}>Lahore, Pakistan</Text>
+          <Text style={{ color: "#777777", marginLeft: 20 }}>{user.city}, {user.country}</Text>
         </View>
         <View style={styles.row}>
           <Icon type={Icons.MaterialCommunityIcons} name={"phone"} color={"#777777"} size={20} />
-          <Text style={{ color: "#777777", marginLeft: 20 }}>+92 123 456 789</Text>
+          <Text style={{ color: "#777777", marginLeft: 20 }}>{user.phone}</Text>
         </View>
         <View style={styles.row}>
           <Icon type={Icons.MaterialCommunityIcons} name={"email"} color={"#777777"} size={20} />
-          <Text style={{ color: "#777777", marginLeft: 20 }}>jane_doe@gmail.com</Text>
+          <Text style={{ color: "#777777", marginLeft: 20 }}>{user.email}</Text>
         </View>
       </View>
 
-      <View style={styles.infoBoxWrapper}>
+      {/* <View style={styles.infoBoxWrapper}>
         <View style={[styles.infoBox, {
           borderRightColor: '#dddddd',
           borderRightWidth: 1
@@ -117,16 +96,16 @@ export const ClientProfile = ({ navigation }) => {
           <Title>12</Title>
           <Caption>Orders</Caption>
         </View>
-      </View>
+      </View> */}
 
       <View style={styles.menuWrapper}>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={onToggleSnackBar}>
           <View style={styles.menuItem}>
             <Icon type={Icons.MaterialCommunityIcons} name={"heart-outline"} color={AppHelper.material.green600} size={25} />
             <Text style={styles.menuItemText}>Your Favorites</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={onToggleSnackBar}>
           <View style={styles.menuItem}>
             <Icon type={Icons.MaterialCommunityIcons} name={"credit-card"} color={AppHelper.material.green600} size={25} />
             <Text style={styles.menuItemText}>Payment</Text>
@@ -138,19 +117,32 @@ export const ClientProfile = ({ navigation }) => {
             <Text style={styles.menuItemText}>Tell Your Friends</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={onToggleSnackBar}>
           <View style={styles.menuItem}>
             <Icon type={Icons.MaterialCommunityIcons} name={"account-check-outline"} color={AppHelper.material.green600} size={25} />
             <Text style={styles.menuItemText}>Support</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={onToggleSnackBar}>
           <View style={styles.menuItem}>
             <Icon type={Icons.Feather} name={"settings"} color={AppHelper.material.green600} size={25} />
             <Text style={styles.menuItemText}>Settings</Text>
           </View>
         </TouchableRipple>
       </View>
+      <Snackbar
+        visible={snackBarVisible}
+        onDismiss={onDismissSnackBar}
+        duration={3000}
+        action={{
+          label: 'Close',
+          onPress: () => {
+            onDismissSnackBar();
+          }
+        }}
+      >
+        This feature is not available yet.
+      </Snackbar>
     </SafeAreaView>
   )
 }

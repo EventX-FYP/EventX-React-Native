@@ -2,9 +2,18 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity
 import React from 'react'
 import { AppHelper, Icon, Icons } from '../../../helper'
 import { images } from '../../../assets';
+import { useProgress } from '../../../store/hooks/progress.hook';
+import { Loader } from '../../../components';
+import { useApollo } from '../../../graphql/apollo';
+import { CREATE_REVIEW } from '../../../graphql/mutations';
+import { useSelector } from 'react-redux';
 
 export const PostReview = ({ route, navigation }) => {
-  const { name } = route.params;
+  const { planner } = route.params;
+  const user = useSelector(state => state.user);
+
+  const { startProgress, stopProgress } = useProgress();
+  const apolloClient = useApollo();
 
   const [review, setReview] = React.useState({
     rating: 0,
@@ -26,10 +35,40 @@ export const PostReview = ({ route, navigation }) => {
     return false;
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (isFormFilled()) {
-      console.log("Review Posted");
-      navigation.goBack();
+      try {
+        startProgress();
+        console.log({
+          data: JSON.stringify({
+            sellerId: planner.id,
+            customerId: user.id,
+            review: review.comment,
+            rating: review.rating,
+          })
+        })
+        const { data } = await apolloClient.mutate({
+          mutation: CREATE_REVIEW,
+          variables: {
+            data: JSON.stringify({
+              sellerId: planner.id,
+              customerId: user.id,
+              review: review.comment,
+              rating: review.rating,
+            })
+          }
+
+        })
+
+        if (data.createReview) {
+          alert("Review posted successfully");
+          navigation.goBack();
+        }
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        stopProgress();
+      }
     } else {
       console.log("Go Back");
       navigation.goBack();
@@ -37,8 +76,9 @@ export const PostReview = ({ route, navigation }) => {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ display: "flex", flexDirection: "column",  padding: 10, }}>
-        <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10, }}>{name}'s Review</Text>
+      <Loader />
+      <View style={{ display: "flex", flexDirection: "column", padding: 10, }}>
+        <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10, }}>{planner.name}'s Review</Text>
         <ScrollView>
           <View style={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 10, }}>
@@ -65,7 +105,7 @@ export const PostReview = ({ route, navigation }) => {
               />
             </View>
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-              <Image source={images.AppIcons.Review} style={{ width: 250, height: 250 }}/>
+              <Image source={images.AppIcons.Review} style={{ width: 250, height: 250 }} />
             </View>
           </View>
 

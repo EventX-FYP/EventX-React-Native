@@ -1,0 +1,2 @@
+export const START_PROGESS = "START_PROGESS";
+export const STOP_PROGESS = "STOP_PROGESS";

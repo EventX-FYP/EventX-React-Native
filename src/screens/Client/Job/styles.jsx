@@ -51,7 +51,10 @@ export const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: AppHelper.material.green600,
-    marginVertical: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 9999,
+    tintColor: "white",
   },
   link: {
     marginVertical: 10,
@@ -78,5 +81,8 @@ export const styles = StyleSheet.create({
   },
   greenText: {
     color: AppHelper.material.green600,
-  }
+  },
+  whiteText: {
+    color: "white",
+  },
 });

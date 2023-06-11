@@ -1,17 +1,20 @@
 import { SafeAreaView, Image, View, useWindowDimensions } from "react-native";
 import { Text, Button } from "react-native-ui-lib";
 import { images } from "../../assets";
-import React, { useRef } from "react";
+import React, { useEffect } from "react";
 import { TextField } from "react-native-ui-lib/src/incubator";
 import { StatusBar, TextInput } from "react-native";
 import { styles } from "./styles";
 import { inputStyles } from "../../styles";
 import { ScreenNavigator, AppHelper } from "../../helper";
-import { IOS_CLIENT_ID, ANDROID_CLIENT_ID, EXPO_CLIENT_ID } from "@env";
-import { BottomSheet } from "../../components";
+import { IOS_CLIENT_ID, ANDROID_CLIENT_ID, EXPO_CLIENT_ID, BACKEND_PORT } from "@env";
 import * as Google from "expo-auth-session/providers/google";
 import { useSelector, useDispatch } from "react-redux";
-import { UPDATE_USER } from "../../store/types";
+import { LOGIN, LOGIN_WITH_GOOGLE } from "../../graphql/queries";
+import { useApollo } from "../../graphql/apollo";
+import { SET_USER, UPDATE_USER } from "../../store/types";
+import { useProgress } from "../../store/hooks/progress.hook";
+import { Loader } from "../../components";
 
 const googleConfig = {
     expoClientId: EXPO_CLIENT_ID,
@@ -23,37 +26,52 @@ const googleConfig = {
 export const Login = ({ navigation }) => {
     const [request, response, promptAsync] = Google.useAuthRequest(googleConfig);
     const [auth, setAuth] = React.useState({ username: "", password: "" });
-    const loginRef = useRef();
     const { height } = useWindowDimensions();
 
     const user = useSelector(state => state.user);
     const dispatch = useDispatch();
 
+    const apolloClient = useApollo();
+    const { startProgress, stopProgress } = useProgress();
 
     const handleLoginButton = async () => {
         if (auth.username === "" || auth.password === "") {
             alert("Please enter email and password");
             return;
         }
-        if (auth.username === "noono14252@gmail.com" || auth.username === "haroontahirr100@gmail.com") {
-            dispatch({ type: UPDATE_USER, payload: { ...user, type: "client" }})
-            navigation.navigate(ScreenNavigator.Client);
-        }
-        else {
-            dispatch({ type: UPDATE_USER, payload: { ...user, type: "planner" }})
-            navigation.navigate(ScreenNavigator.Planner);
-        }
-        // navigation.navigate(ScreenNavigator.Client);
-        // loginRef.current.expand();
-    }
 
+        try {
+            startProgress();
+            const { data } = await apolloClient.query({
+                query: LOGIN,
+                variables: {
+                    email: auth.username,
+                    password: auth.password
+                }
+            });
+
+            if (data.login) {
+                stopProgress();
+                dispatch({ type: SET_USER, payload: data.login });
+                if (data.login.role === "CLIENT") {
+                    navigation.replace(ScreenNavigator.Client);
+                } else {
+                    navigation.replace(ScreenNavigator.Planner);
+                }
+            }
+        } catch (error) {
+            stopProgress();
+            console.log(error);
+            alert(error.message);
+        }
+    }
     const fetchUserInfo = async (token) => {
         const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
             method: 'GET',
             headers: {
-            Accept: 'application/json',
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
             },
         });
 
@@ -61,17 +79,42 @@ export const Login = ({ navigation }) => {
     }
     const handleLoginWithGoogleButton = async () => {
         const result = await promptAsync();
-        const { authentication: { accessToken }} = result;
+        const { authentication: { accessToken } } = result;
         const userInfo = await fetchUserInfo(accessToken);
-        if (userInfo.email === "noono14252@gmail.com" || userInfo.email === "haroontahirr100@gmail.com") {
-            dispatch({ type: UPDATE_USER, payload: { ...user, type: "client" }})
-            navigation.navigate(ScreenNavigator.Client);
+        // console.log(userInfo);
+
+        try {
+            startProgress();
+            const { data } = await apolloClient.query({
+                query: LOGIN_WITH_GOOGLE,
+                variables: {
+                    data: {
+                        email: userInfo.email,
+                        name: userInfo.name,
+                        picture: userInfo.picture,
+                    }
+                }
+            });
+
+            if (data.loginWithGoogle) {
+                stopProgress();
+                dispatch({ type: SET_USER, payload: data.loginWithGoogle })
+                if (data.loginWithGoogle.role === "CLIENT") {
+                    navigation.replace(ScreenNavigator.Client);
+                } else {
+                    navigation.replace(ScreenNavigator.Planner);
+                }
+            }
+        } catch (error) {
+            stopProgress();
+            console.log(error);
+            alert(error.message);
+            if (error.message.includes("User does not exist")) {
+                // console.log({ ...user, email: userInfo.email, password: "12345678", name: userInfo.name, picture: userInfo.picture });
+                dispatch({ type: UPDATE_USER, payload: { ...user, email: userInfo.email, password: "12345678", name: userInfo.name, picture: userInfo.picture } });
+                navigation.navigate(ScreenNavigator.Phases);
+            }
         }
-        else {
-            dispatch({ type: UPDATE_USER, payload: { ...user, type: "planner" }})
-            navigation.navigate(ScreenNavigator.Planner);
-        }
-        console.log(userInfo);
     }
 
     const handleSignupButton = () => {
@@ -85,8 +128,18 @@ export const Login = ({ navigation }) => {
         // console.log(data?.getUserMe);
     }
 
+    useEffect(() => {
+        if (user.isLoggedIn) {
+            if (user.role === "CLIENT") {
+                navigation.replace(ScreenNavigator.Client);
+            } else {
+                navigation.replace(ScreenNavigator.Planner);
+            }
+        }
+    }, [user])
     return (
         <SafeAreaView style={styles.container}>
+            <Loader />
             <StatusBar backgroundColor={AppHelper.material.green500} />
             <Image source={images.LoginIcon} style={styles.image} />
             <View style={styles.infoContainer}>
@@ -100,7 +153,7 @@ export const Login = ({ navigation }) => {
                         <Text style={styles.bold}>Password</Text>
                         <TextInput value={auth.password} onChangeText={(text) => setAuth({ ...auth, password: text })} style={inputStyles.inputField} secureTextEntry />
                     </View>
-                    <Button label="Forgot Password?" style={styles.forgotPassword} onPress={handleForgotPasswordButton} link outline color={AppHelper.material.green500}/>
+                    <Button label="Forgot Password?" style={styles.forgotPassword} onPress={handleForgotPasswordButton} link outline color={AppHelper.material.green500} />
                 </View>
                 <View style={styles.loginContainer}>
                     <View style={styles.buttonContainer}>
@@ -117,15 +170,10 @@ export const Login = ({ navigation }) => {
                     </View>
                     <View style={styles.SignupContainer}>
                         <Text>Don't have an account?  </Text>
-                        <Button label="Signup" onPress={handleSignupButton} link outline color={AppHelper.material.green400}/>
+                        <Button label="Signup" onPress={handleSignupButton} link outline color={AppHelper.material.green400} />
                     </View>
                 </View>
             </View>
-            <BottomSheet ref={loginRef} activeHeight={height * 0.5} backgroundColor={AppHelper.material.green50} backDropColor={'black'}>
-                <View style={{ alignItems: "center" }}>
-                    <Text>Bottom Sheet</Text>
-                </View>
-            </BottomSheet>
         </SafeAreaView>
     );
 }

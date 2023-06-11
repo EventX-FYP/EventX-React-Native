@@ -8,9 +8,9 @@ export const CustomImageCarousal = ({ data, autoPlay, pagination, aspectRatio })
   const interval = useRef();
   const [isAutoPlay, setIsAutoPlay] = useState(autoPlay);
   const [newData] = useState([
-    {key: 'spacer-left'},
+    { key: 'spacer-left' },
     ...data,
-    {key: 'spacer-right'},
+    { key: 'spacer-right' },
   ]);
   const { width } = useWindowDimensions();
   const SIZE = width * 0.7;
@@ -33,7 +33,7 @@ export const CustomImageCarousal = ({ data, autoPlay, pagination, aspectRatio })
         } else {
           _offSet = Math.floor(_offSet + SIZE);
         }
-        scrollViewRef.current.scrollTo({x: _offSet, y: 0});
+        scrollViewRef.current.scrollTo({ x: _offSet, y: 0 });
       }, 2000);
     } else {
       clearInterval(interval.current);
@@ -72,10 +72,10 @@ export const CustomImageCarousal = ({ data, autoPlay, pagination, aspectRatio })
             };
           });
           if (!item.image) {
-            return <View style={{width: SPACER}} key={index} />;
+            return <View style={{ width: SPACER }} key={index} />;
           }
           return (
-            <View style={{width: SIZE}} key={index}>
+            <View style={{ width: SIZE }} key={index}>
               <Animated.View style={[styles.imageContainer, style]}>
                 <Image source={item.image} style={[styles.image, { aspectRatio: aspectRatio ?? 1 }]} />
               </Animated.View>

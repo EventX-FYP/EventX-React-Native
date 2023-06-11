@@ -42,7 +42,12 @@ const ListButton = ({ icon, iconBg, text, value, navigation }) => {
 export const Home = ({ navigation }) => {
   const [currentTab, setCurrentTab] = useState("Home");
   const sidebarIcons = [
-    { route: ScreenNavigator.TaskManagementHome, title: "Home", type: Icons.Ionicons, name: "home" },
+    { route: ScreenNavigator.ClientHome, title: "Home", type: Icons.Ionicons, name: "home" },
+    { route: ScreenNavigator.SavedPlanner, title: "Saved Planners", type: Icons.Ionicons, name: "save" },
+    { route: ScreenNavigator.TaskManagementHome, title: "Tasks", type: Icons.FontAwesome, name: "tasks" },
+    { route: ScreenNavigator.ClientAnalytics, title: "Analytics", type: Icons.Ionicons, name: "analytics" },
+    { route: ScreenNavigator.ClientJobPosting, title: "Job Posting", type: Icons.Entypo, name: "briefcase" },
+    { route: ScreenNavigator.ClientProposals, title: "Proposals", type: Icons.Ionicons, name: "mail" },
   ]
   const InfoIcons = [
     { type: Icons.MaterialCommunityIcons, name: "file" },
@@ -80,11 +85,11 @@ export const Home = ({ navigation }) => {
             </View>
             <View style={{ paddingHorizontal: 15, paddingVertical: 20, borderRadius: 12, backgroundColor: "white", marginTop: 20, alignItems: "center" }}>
               <ListButton icon={ListIcons[0]} value={"41"} text="Birthday Planner Required difiubi" iconBg={AppHelper.material.cyan500} navigation={navigation} />
-              <View style={styles.separator}/>
+              <View style={styles.separator} />
               <ListButton icon={ListIcons[1]} value={"28"} text="I need Wedding Organizer" iconBg={AppHelper.material.red600} navigation={navigation} />
-              <View style={styles.separator}/>
+              <View style={styles.separator} />
               <ListButton icon={ListIcons[2]} value={"6"} text="I need Birthday Planner" iconBg={AppHelper.material.deepPurple300} navigation={navigation} />
-              <View style={styles.separator}/>
+              <View style={styles.separator} />
               <ListButton icon={ListIcons[3]} value={"14"} text="I need Party Organizer" iconBg={AppHelper.material.yellow700} navigation={navigation} />
             </View>
           </View>
