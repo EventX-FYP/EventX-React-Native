@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, StyleSheet, Image, Pressable } from 'react-native'
+import { View, Text, SafeAreaView, StyleSheet, Image, Pressable, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { AppHelper, ScreenNavigator } from '../../helper'
 
@@ -6,25 +6,25 @@ const description =
   "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic"
 
 export const PlannerPackageCard = ({ packageContent, cardimage, navigation }) => {
-  const { description, packagePrice, title } = packageContent;
+  const { description, price, title } = packageContent;
   const image = cardimage;
   return (
-    <Pressable onPress={() => navigation.navigate(ScreenNavigator.PlannerRemovePackages, { ...packageContent, image: image })}>
+    <TouchableOpacity activeOpacity={0.8}>
       <SafeAreaView style={styles.container}>
-        <Image style={styles.cardImg} source={image}></Image>
+        <Image style={styles.cardImg} source={{ uri: image }}></Image>
         <View style={styles.cardContent}>
           <Text numberOfLines={1} style={styles.title}>
             {title}
           </Text>
           <Text numberOfLines={1} style={styles.price}>
-            {packagePrice}
+            {price}
           </Text>
           <Text style={styles.description} numberOfLines={4}>
             {description}
           </Text>
         </View>
       </SafeAreaView>
-    </Pressable>
+    </TouchableOpacity>
   )
 }
 
@@ -38,13 +38,6 @@ const styles = StyleSheet.create({
     borderBottomEndRadius: 20,
     borderWidth: 1,
     overflow: 'hidden',
-    // shadowColor: AppHelper.material.black,
-    // shadowOffset: {
-    //   width: 5,
-    //   height: 2,
-    // },
-    // shadowRadius: 25,
-    // shadowOpacity:0.25
   },
   cardImg: {
     width: '100%',

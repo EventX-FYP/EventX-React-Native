@@ -7,7 +7,8 @@ import { Searchbar } from 'react-native-paper';
 import { useEffect, useState } from 'react';
 import { useApollo } from '../../../graphql/apollo';
 import { useProgress } from '../../../store/hooks/progress.hook';
-import { GET_PLANNERS } from '../../../graphql/queries';
+import { GET_PLANNERS, GET_RECOMMENDED_PLANNERS } from '../../../graphql/queries';
+import { useSelector } from 'react-redux';
 
 
 export const Home = ({ navigation }) => {
@@ -16,6 +17,8 @@ export const Home = ({ navigation }) => {
 
   const apolloClient = useApollo();
   const { startProgress, stopProgress } = useProgress();
+  const user = useSelector(state => state.user);
+
   useEffect(() => {
     const getAllPlanners = async () => {
       try {
@@ -35,10 +38,33 @@ export const Home = ({ navigation }) => {
         stopProgress();
       }
     }
+
+    const getRecommendedPlanners = async () => {
+      try {
+        startProgress();
+        const { data } = await apolloClient.query({
+          query: GET_RECOMMENDED_PLANNERS,
+          variables: {
+            userId: user.id,
+          }
+        });
+
+        if (data.getPlanners) {
+          console.log(data.getPlanners);
+          setRecommendedPlanners(data.getPlanners);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+        stopProgress();
+      }
+    }
     getAllPlanners();
+    getRecommendedPlanners();
   }, [])
 
   const [getPlanners, setGetPlanners] = useState([])
+  const [recommdedPlanners, setRecommendedPlanners] = useState([])
 
   return (
     <ScrollView contentContainerStyle={ScrollStyles.scrollContainer}>
@@ -48,35 +74,38 @@ export const Home = ({ navigation }) => {
           <Searchbar placeholder='Search' onChangeText={onChangeSearch} value={searchQuery} style={styles.input} elevation='2' />
         </View>
         <View style={styles.homeContainer}>
-          <View style={styles.info}>
-            <View>
-              <Text style={[fontStyles.bold, fontStyles.large24]}>Top Planners in Pakistan</Text>
-              <Text style={[fontStyles[100], fontStyles.medium]}>Find planners working in your country</Text>
-            </View>
-            <Button style={styles.button}>
+          {recommdedPlanners.length > 0 && (
+            <View style={styles.info}>
+              <View>
+                <Text style={[fontStyles.bold, fontStyles.large24]}>Top Planners For You</Text>
+                <Text style={[fontStyles[100], fontStyles.medium]}>Find planners working in your country</Text>
+              </View>
+              {/* <Button style={styles.button}>
               <Image />
               <Text style={[fontStyles.bold, fontStyles.large, styles.textColor]}>Show more from this area</Text>
-            </Button>
-            <View>
-              <SafeAreaView>
-                <FlatList
-                  data={getPlanners}
-                  horizontal={true}
-                  ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
-                  renderItem={planner => <PlannerCard navigation={navigation} planner={planner} />}
-                />
-              </SafeAreaView>
+            </Button> */}
+              <View>
+                <SafeAreaView>
+                  <FlatList
+                    data={recommdedPlanners}
+                    horizontal={true}
+                    ItemSeparatorComponent={() => <View style={{ width: 10 }} />}
+                    renderItem={planner => <PlannerCard navigation={navigation} planner={planner} />}
+                  />
+                </SafeAreaView>
+              </View>
             </View>
-          </View>
+          )}
+
           <View style={styles.info}>
             <View>
               <Text style={[fontStyles.bold, fontStyles.large24]}>Planners with high job success scores</Text>
               <Text style={[fontStyles[100], fontStyles.medium]}>Established planners with successful client relationships</Text>
             </View>
-            <Button style={styles.button}>
+            {/* <Button style={styles.button}>
               <Image />
               <Text style={[fontStyles.bold, fontStyles.large, styles.textColor]}>See more profiles</Text>
-            </Button>
+            </Button> */}
             <View>
               <SafeAreaView>
                 <FlatList

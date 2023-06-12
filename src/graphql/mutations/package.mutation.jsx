@@ -1,11 +1,11 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_PACKAGE = gql`
-	mutation createPackage($data: PackageInput!) {
+	mutation createPackage($data: String!) {
 		createPackage(data: $data) {
 			id
-			createdAt
-			updatedAt
+			# createdAt
+			# updatedAt
 			title
 			description
 			price

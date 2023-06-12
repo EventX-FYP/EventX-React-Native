@@ -7,16 +7,16 @@ import { fontStyles } from '../../styles';
 
 export const ChatCard = ({ navigation, data }) => {
   return (
-    <TouchableOpacity style={chatCardStyles.container} onPress={() => navigation.navigate(ScreenNavigator.Chat, { name: data.name })}>
+    <TouchableOpacity style={chatCardStyles.container} onPress={() => navigation.navigate(ScreenNavigator.Chat, { data: data })}>
       <View style={chatCardStyles.imageContainer}>
-        <Avatar source={data?.image} name={data.name} badgeProps={{ backgroundColor: AppHelper.material.green500, size: 12 }} autoColorsConfig />
+        <Avatar source={{ uri: data.picture }} name={data.name} badgeProps={{ backgroundColor: AppHelper.material.green500, size: 12 }} autoColorsConfig />
       </View>
       <View style={chatCardStyles.informationContainer}>
         <Text style={[fontStyles[700], fontStyles.large18]}>{data.name}</Text>
-        <Text style={[fontStyles[200], fontStyles.medium]}>{data.lastMessage}</Text>
+        {/* <Text style={[fontStyles[200], fontStyles.medium]}>{data.lastMessage}</Text> */}
       </View>
       <View style={chatCardStyles.timeContainer}>
-        <Text style={[fontStyles.large]}>{data.date}</Text>
+        {/* <Text style={[fontStyles.large]}>{data.date}</Text> */}
       </View>
     </TouchableOpacity>
   )

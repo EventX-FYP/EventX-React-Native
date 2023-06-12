@@ -115,3 +115,24 @@ export const GET_USERS_WITH_IDS = gql`
     }
   }
 `;
+
+export const GET_RECOMMENDED_PLANNERS = gql`
+  query getRecommendedPlanners($userId: String!) {
+    getRecommendedPlanners(userId: $userId) {
+      id
+      name
+      email
+      password
+      picture
+      role
+      categories
+      birthday
+      gender
+      phone
+      address
+      city
+      country
+      accessToken
+    }
+  }
+`

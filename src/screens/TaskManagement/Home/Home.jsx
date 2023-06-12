@@ -1,7 +1,11 @@
 import { SafeAreaView, StyleSheet, TouchableOpacity, View, Text, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Sidebar } from '../../../components';
 import { Icons, ScreenNavigator, Icon, AppHelper } from '../../../helper';
+import { useProgress } from '../../../store/hooks/progress.hook';
+import { useSelector } from 'react-redux';
+import { useApollo } from '../../../graphql/apollo';
+import { GET_ALL_BOARDS } from '../../../graphql/queries';
 
 
 const InfoButton = ({ color, text, value, height, icon }) => {
@@ -20,9 +24,9 @@ const InfoButton = ({ color, text, value, height, icon }) => {
   )
 }
 
-const ListButton = ({ icon, iconBg, text, value, navigation }) => {
+const ListButton = ({ icon, iconBg, text, value, navigation, board }) => {
   return (
-    <TouchableOpacity activeOpacity={0.8} style={{ width: "100%" }} onPress={() => navigation.navigate(ScreenNavigator.TaskManagementTask)}>
+    <TouchableOpacity activeOpacity={0.8} style={{ width: "100%" }} onPress={() => navigation.navigate(ScreenNavigator.TaskManagementTask, { board })}>
       <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
         <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
           <View style={{ backgroundColor: iconBg, padding: 6, paddingHorizontal: 8, borderRadius: 50 }}>
@@ -62,11 +66,44 @@ export const Home = ({ navigation }) => {
     { type: Icons.Ionicons, name: "tv" },
     { type: Icons.Ionicons, name: "ios-home" },
   ]
+
+  const { startProgress, stopProgress } = useProgress();
+  const user = useSelector(state => state.user);
+  const apolloClient = useApollo();
+
+  const [boards, setBoards] = useState([]);
+
+  useEffect(() => {
+    const getBoards = async () => {
+      try {
+        startProgress();
+        const { data } = await apolloClient.query({
+          query: GET_ALL_BOARDS,
+          variables: {
+            userId: user.id
+          }
+        });
+
+        if (data.getAllBoards) {
+          console.log(data.getAllBoards);
+          setBoards(data.getAllBoards);
+        }
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        stopProgress();
+      }
+    }
+
+    getBoards();
+  }, []);
+
+
   return (
     <Sidebar sideBar={sidebarIcons} currentTab={currentTab} setCurrentTab={setCurrentTab} navigation={navigation}>
       <ScrollView style={[styles.container, { padding: 10 }]}>
         <SafeAreaView >
-          <View style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+          {/* <View style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
             <View style={{ display: "flex", flexDirection: "row" }}>
               <InfoButton value={8} text={"Scheduled"} color={AppHelper.material.blue700} height={110} icon={InfoIcons[0]} />
               <InfoButton value={5} text={"Today"} color={AppHelper.material.red700} height={110} icon={InfoIcons[1]} />
@@ -75,22 +112,25 @@ export const Home = ({ navigation }) => {
               <InfoButton value={10} text={"Important"} color={AppHelper.material.orange700} height={110} icon={InfoIcons[2]} />
               <InfoButton value={23} text={"All Tasks"} color={AppHelper.material.green700} height={110} icon={InfoIcons[3]} />
             </View>
-          </View>
+          </View> */}
           <View style={{ display: "flex", flexDirection: "column", marginVertical: 15, marginHorizontal: 10, flex: 1 }}>
             <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
               <Text style={{ fontSize: 22, fontWeight: "bold", color: AppHelper.material.grey900 }}>My Works</Text>
-              <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: AppHelper.material.green600, padding: 8, borderRadius: 50 }}>
+              {/* <TouchableOpacity activeOpacity={0.8} style={{ backgroundColor: AppHelper.material.green600, padding: 8, borderRadius: 50 }}>
                 <Icon name="add" type={Icons.MaterialIcons} size={18} color="white" />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View style={{ paddingHorizontal: 15, paddingVertical: 20, borderRadius: 12, backgroundColor: "white", marginTop: 20, alignItems: "center" }}>
-              <ListButton icon={ListIcons[0]} value={"41"} text="Birthday Planner Required difiubi" iconBg={AppHelper.material.cyan500} navigation={navigation} />
+              {boards && boards.map((board, index) => (
+                <ListButton key={index} icon={ListIcons[0]} value={""} text={board.name} iconBg={AppHelper.material.cyan500} navigation={navigation} board={board} />
+              ))}
+              {/* <ListButton icon={ListIcons[0]} value={"41"} text="Birthday Planner Required difiubi" iconBg={AppHelper.material.cyan500} navigation={navigation} />
               <View style={styles.separator} />
               <ListButton icon={ListIcons[1]} value={"28"} text="I need Wedding Organizer" iconBg={AppHelper.material.red600} navigation={navigation} />
               <View style={styles.separator} />
               <ListButton icon={ListIcons[2]} value={"6"} text="I need Birthday Planner" iconBg={AppHelper.material.deepPurple300} navigation={navigation} />
               <View style={styles.separator} />
-              <ListButton icon={ListIcons[3]} value={"14"} text="I need Party Organizer" iconBg={AppHelper.material.yellow700} navigation={navigation} />
+              <ListButton icon={ListIcons[3]} value={"14"} text="I need Party Organizer" iconBg={AppHelper.material.yellow700} navigation={navigation} /> */}
             </View>
           </View>
         </SafeAreaView>

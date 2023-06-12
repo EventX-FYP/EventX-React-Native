@@ -1,11 +1,11 @@
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from './Home/Home'
-import { Notifications } from '../General'
+import { ChatList, Notifications } from '../General'
 import { Search } from './Search/Search'
 import { Packages } from './Packages/Packages';
 import { Icon, Icons, ScreenNavigator, AppHelper } from '../../helper';
-import { Sidebar } from '../../components';
+import { Loader, Sidebar } from '../../components';
 import * as Animatable from 'react-native-animatable';
 import React, { useState, useRef, useEffect } from 'react';
 
@@ -15,16 +15,16 @@ const TabButton = (props) => {
   const { item, onPress, accessibilityState, setCurrentTab } = props;
   const focused = accessibilityState.selected;
   const viewRef = useRef(null);
-  
+
   useEffect(() => {
     if (focused) {
-      viewRef.current?.animate({ 0: { scale: .5, rotate: "0deg" }, 1: { scale: 1.2, rotate: "360deg" }});
+      viewRef.current?.animate({ 0: { scale: .5, rotate: "0deg" }, 1: { scale: 1.2, rotate: "360deg" } });
       setCurrentTab(item.label);
     } else {
-      viewRef.current?.animate({ 0: { scale: 1.2, rotate: "360deg" }, 1: { scale: 1, rotate: "0deg" }});
+      viewRef.current?.animate({ 0: { scale: 1.2, rotate: "360deg" }, 1: { scale: 1, rotate: "0deg" } });
     }
   }, [focused]);
-  
+
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={1} style={styles.container}>
       <Animatable.View ref={viewRef} duration={500} style={styles.container}>
@@ -36,23 +36,26 @@ const TabButton = (props) => {
 
 export const Planner = ({ navigation }) => {
   const sidebarIcons = [
-    { route: ScreenNavigator.PlannerGetFeatured, title: "Get Featured", type: Icons.Entypo, name: "bell" },
-    { route: ScreenNavigator.ClientAnalytics, title: "Analytics", type: Icons.Ionicons, name: "analytics" },
-    { route: ScreenNavigator.ClientProposals, title: "Proposals", type: Icons.Ionicons, name: "mail" },
-    { route: ScreenNavigator.PlannerActiveJobs, title: "Active Jobs", type: Icons.MaterialIcons, name: "work" },
+    { route: ScreenNavigator.TaskManagementHome, title: "Tasks", type: Icons.FontAwesome, name: "tasks" },
+    // { route: ScreenNavigator.PlannerGetFeatured, title: "Get Featured", type: Icons.Entypo, name: "bell" },
+    // { route: ScreenNavigator.ClientAnalytics, title: "Analytics", type: Icons.Ionicons, name: "analytics" },
+    // { route: ScreenNavigator.ClientProposals, title: "Proposals", type: Icons.Ionicons, name: "mail" },
+    // { route: ScreenNavigator.PlannerActiveJobs, title: "Active Jobs", type: Icons.MaterialIcons, name: "work" },
   ]
 
   const tabs = [
     { route: ScreenNavigator.PlannerHome, label: 'Home', type: Icons.Ionicons, activeIcon: 'home', inActiveIcon: 'home-outline', component: Home },
-    { route: ScreenNavigator.PlannerSearch, label: 'Search', type: Icons.Ionicons, activeIcon: 'search', inActiveIcon: 'search', component: Search },
+    // { route: ScreenNavigator.PlannerSearch, label: 'Search', type: Icons.Ionicons, activeIcon: 'search', inActiveIcon: 'search', component: Search },
     { route: ScreenNavigator.PlannerPackages, label: 'Packages', type: Icons.Feather, activeIcon: 'package', inActiveIcon: 'package', component: Packages },
-    { route: ScreenNavigator.PlannerNotifications, label: 'Notifications', type: Icons.Ionicons, activeIcon: 'notifications', inActiveIcon: 'notifications-outline', component: Notifications },
+    { route: ScreenNavigator.ClientMessage, label: "Messages", type: Icons.Ionicons, activeIcon: "chatbubble", inActiveIcon: "chatbubble-outline", component: ChatList, },
+    // { route: ScreenNavigator.PlannerNotifications, label: 'Notifications', type: Icons.Ionicons, activeIcon: 'notifications', inActiveIcon: 'notifications-outline', component: Notifications },
   ]
 
   const [currentTab, setCurrentTab] = useState(tabs[0].label);
 
   return (
     <Sidebar sideBar={sidebarIcons} currentTab={currentTab} setCurrentTab={setCurrentTab} navigation={navigation}>
+      <Loader />
       <Tab.Navigator
         initialRouteName={ScreenNavigator.PlannerHome}
         screenOptions={{

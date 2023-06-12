@@ -8,7 +8,7 @@ import { ScreenNavigator, AppHelper } from '../../helper'
 
 export const JobCard = ({ job, onPress }) => {
   // console.log(job)
-  const { title, City, Category, Content, Name, Date } = job?.item
+  const { title, location, categories, description, Name, Date } = job?.item
     ? job.item
     : job
   return (
@@ -21,34 +21,19 @@ export const JobCard = ({ job, onPress }) => {
           </Text>
 
           <Text style={styles.CardCity} numberOfLines={1}>
-            {City}
+            {location}
           </Text>
         </View>
 
         <View style={styles.CategoryRow}>
           <Text numberOfLines={1} style={styles.CategoryText}>
-            {Category}
+            {categories.join(', ')}
           </Text>
         </View>
 
         <View style={styles.Description}>
           <Text style={styles.DescriptionContent} numberOfLines={3}>
-            {Content}
-          </Text>
-        </View>
-
-        <View style={styles.Row}>
-          <Text style={styles.SecondLastRowHeading}>Posted By:</Text>
-          <Text style={styles.SecondLastRowHeading}>Deadline:</Text>
-        </View>
-
-        <View style={styles.Row}>
-          <Text numberOfLines={1} style={styles.SecondLastRowHeading}>
-            {Name}
-          </Text>
-
-          <Text numberOfLines={1} style={styles.SecondLastRowHeading}>
-            {Date}
+            {description}
           </Text>
         </View>
       </View>

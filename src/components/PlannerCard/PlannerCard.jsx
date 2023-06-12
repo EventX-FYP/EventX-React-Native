@@ -30,9 +30,9 @@ export const PlannerCard = ({ navigation, planner }) => {
             <Text style={[fontStyles[100], fontStyles.small]}>{address}</Text>
           </View>
         </View>
-        <TouchableOpacity onPress={() => setIsHeartPressed(!isHeartPressed)}>
+        {/* <TouchableOpacity onPress={() => setIsHeartPressed(!isHeartPressed)}>
           <Icon name={isHeartPressed ? "heart" : "hearto"} type={Icons.AntDesign} size={24} color={AppHelper.material.red400} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </TouchableOpacity>
   );

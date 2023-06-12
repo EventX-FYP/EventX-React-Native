@@ -4,7 +4,11 @@ import { AppHelper } from '../../../helper'
 import moment from 'moment/moment'
 import { TouchableOpacity } from 'react-native'
 import { Chip } from 'react-native-paper';
-import { BottomSheet } from '../../../components'
+import { BottomSheet, Loader } from '../../../components'
+import { useProgress } from '../../../store/hooks/progress.hook'
+import { useApollo } from '../../../graphql/apollo'
+import { CREATE_BID } from '../../../graphql/mutations'
+import { useSelector } from 'react-redux'
 
 const currentDate = new Date().toISOString().slice(0, 10);
 
@@ -23,45 +27,94 @@ const JobList = [
   },
 ]
 
-export const JobDetail = ({ navigation }) => {
+export const JobDetail = ({ route, navigation }) => {
   const jobRef = useRef();
   const { height } = useWindowDimensions();
+
+  const { item } = route.params;
 
   const openBottomSheet = () => jobRef.current.expand();
   const closeBottomSheet = () => jobRef.current.close();
 
+  const { startProgress, stopProgress } = useProgress();
+  const apolloClient = useApollo();
+  const user = useSelector(state => state.user);
+
+  const [info, setInfo] = React.useState({
+    coverLetter: "",
+    price: ""
+  });
+
+  const handlePlaceBid = async () => {
+    if (!info.coverLetter || !info.price) {
+      alert("Please fill all the fields");
+      return;
+    }
+    try {
+      startProgress();
+
+      console.log({
+        data: {
+          contractId: item.id,
+          sellerId: user.id,
+          price: parseInt(info.price),
+          description: info.coverLetter,
+        },
+      });
+      const { data } = await apolloClient.mutate({
+        mutation: CREATE_BID,
+        variables: {
+          data: JSON.stringify({
+            contractId: item.id,
+            sellerId: user.id,
+            price: parseInt(info.price),
+            description: info.coverLetter,
+          }),
+        },
+      });
+
+      if (data.createBid) {
+        alert("Bid Placed Successfully");
+      }
+
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      stopProgress();
+      closeBottomSheet();
+    }
+  };
+
   return (
-    
+
     <SafeAreaView style={styles.container}>
+      <Loader />
       <View style={styles.row}>
         <View style={styles.col1}>
-          <Text style={styles.majorHeading}>{JobList[0].title}</Text>
-          <Text style={styles.date}>{JobList[0].Date}</Text>
+          <Text style={styles.majorHeading}>{item.title}</Text>
+          {/* <Text style={styles.date}>{JobList[0].Date}</Text> */}
         </View>
 
         <View style={styles.col2}>
-          <Text style={styles.name}>{JobList[0].Name}</Text>
-          <Text style={styles.cityHeading}>{JobList[0].City}</Text>
+          {/* <Text style={styles.name}>{JobList[0].Name}</Text> */}
+          <Text style={styles.cityHeading}>{item.location}</Text>
         </View>
-      
+
       </View>
 
       <View style={styles.chipContainer}>
         <FlatList
-          data={JobList[0].Category}
+          data={item.categories}
           ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
           horizontal={true}
-          renderItem={({ item }) => <Chip  textStyle={styles.chipTextStyle} style={styles.chipStyle} >{item}</Chip>}/>
+          renderItem={({ item }) => <Chip textStyle={styles.chipTextStyle} style={styles.chipStyle} >{item}</Chip>} />
       </View>
 
       <View>
         <Text style={styles.descriptionHeading}>Description</Text>
-        <Text style={styles.description}>{JobList[0].Content}</Text>
+        <Text style={styles.description}>{item.description}</Text>
       </View>
-        
-     
 
-      
       <TouchableOpacity onPress={openBottomSheet} style={styles.buttonContainer}>
         <Text style={styles.button}>Bid</Text>
       </TouchableOpacity>
@@ -74,27 +127,29 @@ export const JobDetail = ({ navigation }) => {
             style={styles.textInput}
             maxLength={10}
             textAlignVertical="top"
+            onChangeText={(text) => setInfo({ ...info, coverLetter: text })}
+            value={info.coverLetter}
             multiline={true}
           />
 
-          <TextInput placeholder="Estimated Price" style={styles.priceInput} />
+          <TextInput placeholder="Estimated Price" style={styles.priceInput} value={info.price} onChangeText={(text) => setInfo({ ...info, price: text })} />
 
-          <TouchableOpacity onPress={closeBottomSheet} style={styles.buttonContainer}>
+          <TouchableOpacity onPress={handlePlaceBid} style={styles.buttonContainer}>
             <Text style={styles.button}>Send Proposal</Text>
           </TouchableOpacity>
         </View>
       </BottomSheet>
     </SafeAreaView>
-     
-    
-    
 
-    
+
+
+
+
   )
 }
 
 const styles = StyleSheet.create({
-  parent:{
+  parent: {
     flex: 1,
   },
   container: {
@@ -111,72 +166,72 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    flex:0.5,
+    flex: 0.5,
     justifyContent: 'space-between'
   },
   cityHeading: {
     fontSize: 18,
   },
   name: {
-   
+
     color: AppHelper.gray,
   },
   date: {
-   
+
     color: AppHelper.gray,
   },
   description: {
     color: AppHelper.gray,
     fontSize: 15,
-    marginVertical:25
+    marginVertical: 25
   },
-  button:{
+  button: {
     backgroundColor: AppHelper.material.green400,
-    paddingHorizontal:15,
-    color:"white",
+    paddingHorizontal: 15,
+    color: "white",
     fontWeight: 'bold',
-    fontSize:20,
-    paddingVertical:10,
-    borderRadius:20,
-    width:'90%',
-    textAlign:"center",
+    fontSize: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    width: '90%',
+    textAlign: "center",
   },
-  descriptionContainer:{
-     
+  descriptionContainer: {
+
     justifyContent: 'space-evenly'
   },
-  buttonContainer:{
-    justifyContent:"center",
-    alignItems:"center"
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center"
   },
-  col1:{
+  col1: {
     maxWidth: '60%',
     justifyContent: 'space-evenly',
   },
-  col2:{
+  col2: {
     maxWidth: '30%',
-    alignItems:"center",
-    justifyContent: 'space-evenly' 
+    alignItems: "center",
+    justifyContent: 'space-evenly'
   },
-  descriptionHeading:{
+  descriptionHeading: {
     fontSize: 25,
-    marginVertical:20
+    marginVertical: 20
   },
-  chipContainer:{
+  chipContainer: {
 
   },
-  chipStyle:{
-    backgroundColor:AppHelper.material.green300,
+  chipStyle: {
+    backgroundColor: AppHelper.material.green500,
   },
-  chipTextStyle:{
-    color:"white",
-    fontSize:15,
+  chipTextStyle: {
+    color: "white",
+    fontSize: 15,
 
   },
   contentContainer: {
     alignItems: 'center',
-    flex:1,
-    justifyContent:"space-evenly"
+    flex: 1,
+    justifyContent: "space-evenly"
   },
   textInput: {
     fontSize: 20,

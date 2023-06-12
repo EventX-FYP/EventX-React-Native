@@ -38,15 +38,23 @@ export const PostReview = ({ route, navigation }) => {
   const handleSubmit = async () => {
     if (isFormFilled()) {
       try {
-        startProgress();
-        console.log({
-          data: JSON.stringify({
-            sellerId: planner.id,
-            customerId: user.id,
-            review: review.comment,
-            rating: review.rating,
-          })
-        })
+        // startProgress();
+
+        const formData = new FormData();
+        formData.append("sentence", review.comment);
+        let result;
+        try {
+          const response = await fetch("http://localhost:8080/sentiment", {
+            method: "POST",
+            body: formData,
+            redirect: "follow"
+          });
+          result = await response.json();
+
+        } catch (error) {
+          console.log(error);
+        }
+
         const { data } = await apolloClient.mutate({
           mutation: CREATE_REVIEW,
           variables: {
@@ -55,6 +63,7 @@ export const PostReview = ({ route, navigation }) => {
               customerId: user.id,
               review: review.comment,
               rating: review.rating,
+              sentiment: result?.label === "POSTIVE" ? 1 : result?.label === "NEGAIVE" ? -1 : 0,
             })
           }
 
@@ -67,7 +76,7 @@ export const PostReview = ({ route, navigation }) => {
       } catch (error) {
         alert(error.message);
       } finally {
-        stopProgress();
+        // stopProgress();
       }
     } else {
       console.log("Go Back");
@@ -76,7 +85,7 @@ export const PostReview = ({ route, navigation }) => {
   }
   return (
     <SafeAreaView style={styles.container}>
-      <Loader />
+      {/* <Loader /> */}
       <View style={{ display: "flex", flexDirection: "column", padding: 10, }}>
         <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10, }}>{planner.name}'s Review</Text>
         <ScrollView>

@@ -3,10 +3,15 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, Text, TouchableOpacity } from 'react-native-ui-lib'
 import { StyleSheet, Image } from 'react-native'
 import { JobCard } from '../../../components'
-import {images} from '../../../assets/index'
-import { ScreenNavigator} from "../../../helper";
+import { images } from '../../../assets/index'
+import { ScreenNavigator } from "../../../helper";
 
 import moment from 'moment/moment'
+import { GET_CONTRACTS } from '../../../graphql/queries'
+import { useProgress } from '../../../store/hooks/progress.hook'
+import { useApollo } from '../../../graphql/apollo'
+import { useEffect, useState } from 'react'
+import { useIsFocused } from '@react-navigation/native'
 
 const TopJobs = 'Top Jobs'
 const JobsNear = 'Jobs Near You'
@@ -57,50 +62,57 @@ export const Home = ({ navigation }) => {
     navigation.navigate(ScreenNavigator.JobDetail, { item });
   };
 
+  const { startProgress, stopProgress } = useProgress();
+  const apolloClient = useApollo();
+
+  const [contracts, setContracts] = useState([]);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    const getContracts = async () => {
+      try {
+        startProgress();
+
+        const { data } = await apolloClient.query({
+          query: GET_CONTRACTS,
+        });
+
+        if (data.getContracts) {
+          setContracts(data.getContracts);
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        stopProgress();
+      }
+    }
+
+    isFocused && getContracts();
+  }, []);
+
   return (
-    <SafeAreaView style={{flex:1}}>
-      <ScrollView style={styles.container} >
-        <TouchableOpacity>
-          <View style={styles.Search}>
-              <Text>Search</Text>
-              <Image style={styles.SearchImage} source={images.SearchIcon} />
-          </View>
-        </TouchableOpacity>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView style={styles.container}>
         <View style={styles.ViewHolder}>
           <View style={styles.Component}>
-            <Text style={styles.heading}>{TopJobs}</Text>
-            <View>
-              <FlatList
-                ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
-                data={JobList}
-                renderItem={({item}) => <JobCard job={item} onPress={() => handlePress(item)}/>}
-                horizontal={true}
-              />
-            </View>
-          </View>
-
-          <View style={styles.Component}>
-            <Text style={styles.heading}>{JobsNear}</Text>
-            <View>
-              <FlatList
-                ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
-                data={JobList}
-                renderItem={({item}) => <JobCard job={item} />}
-                horizontal={true}
-              />
-            </View>
-          </View>
-
-          <View style={styles.Component}>
-            <Text style={styles.heading}>{ReccomendedJobs}</Text>
-            <View>
-              <FlatList
-                ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
-                data={JobList}
-                renderItem={({item}) => <JobCard job={item} />}
-                horizontal={true}
-              />
-            </View>
+            {contracts.length > 0 ?
+              <>
+                <Text style={styles.heading}>{TopJobs}</Text>
+                <View>
+                  <FlatList
+                    ItemSeparatorComponent={() => <View style={{ width: 40 }} />}
+                    data={contracts}
+                    renderItem={({ item }) => <JobCard job={item} onPress={() => handlePress(item)} />}
+                    horizontal={true}
+                  />
+                </View>
+              </>
+              : <>
+                <Text style={styles.heading}>
+                  No Jobs Available
+                </Text>
+              </>
+            }
           </View>
         </View>
       </ScrollView>
@@ -110,8 +122,8 @@ export const Home = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal:20,
-    paddingTop:15,
+    paddingHorizontal: 20,
+    paddingTop: 15,
     // flex:1
   },
   heading: {
@@ -124,20 +136,20 @@ const styles = StyleSheet.create({
   Component: {
     justifyContent: 'space-evenly',
     height: 270,
-    marginBottom:5
+    marginBottom: 5
   },
-  Search:{
-    flexDirection:"row",
-    justifyContent:"space-between",
-    alignItems:"center",
-    paddingHorizontal:20,
-    paddingVertical:10,
-    backgroundColor:"white",
-    borderWidth:1,
-    borderRadius:15,
+  Search: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderRadius: 15,
   },
-  SearchImage:{
-    width:30,
-    height:30
+  SearchImage: {
+    width: 30,
+    height: 30
   }
 })

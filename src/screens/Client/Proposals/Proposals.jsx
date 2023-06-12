@@ -2,17 +2,19 @@ import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, useWindowDimens
 import React, { useEffect, useRef, useState } from 'react'
 import { images } from '../../../assets'
 import { Picker } from 'react-native-ui-lib'
-import { AppHelper, FalseError } from '../../../helper'
+import { AppHelper, FalseError, ScreenNavigator } from '../../../helper'
 import { BottomSheet, Loader } from '../../../components'
 import { useApollo } from '../../../graphql/apollo'
 import { useProgress } from '../../../store/hooks/progress.hook'
 import { useDispatch, useSelector } from 'react-redux'
 import { GET_ALL_BIDS, GET_ALL_CONTRACTS } from '../../../graphql/queries'
 import { SET_JOB } from '../../../store/types'
+import { ACCEPT_BID } from '../../../graphql/mutations'
 
 const ProposalCard = ({ proposal, setClick = () => <></> }) => {
   const color = AppHelper.material.green400;
   const textColor = AppHelper.white;
+  console.log(proposal);
   return (
     <TouchableOpacity onPress={setClick} activeOpacity={0.8} style={{ backgroundColor: color, padding: 10, borderRadius: 10, width: "100%", marginBottom: 10, display: "flex", flexDirection: "column", }}>
       <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
@@ -34,26 +36,9 @@ export const Proposals = ({ navigation }) => {
   const [allJobs, setAllJobs] = useState(null)
 
   useEffect(() => {
-    const getProposals = async () => {
-      try {
-        const { data } = await apolloClient.query({
-          query: GET_ALL_BIDS,
-          variables: {
-            contractId: selectedProposal.value,
-          }
-        });
-
-        if (data.getAllBids) {
-          setProposals(data.getAllBids);
-        }
-      } catch (error) {
-        if (!FalseError(error.message)) {
-          alert(error.message);
-        }
-      }
-    }
     const getContracts = async () => {
       try {
+        startProgress();
         const { data } = await apolloClient.query({
           query: GET_ALL_CONTRACTS,
           variables: {
@@ -62,30 +47,17 @@ export const Proposals = ({ navigation }) => {
         });
 
         if (data.getAllContracts) {
-          console.log(data.getAllContracts)
           setAllJobs(data.getAllContracts)
           dispatch({ type: SET_JOB, payload: data.getAllContracts });
-          console.log(job);
         }
       } catch (error) {
         alert(error.message);
+      } finally {
+        stopProgress();
       }
     }
-    startProgress();
-    if (job !== null) {
-      getProposals().then(() => stopProgress()).catch((error) => alert(error.message));
-    } else {
-      getContracts()
-        .then(() => getProposals())
-        .catch((error) => alert(error.message));
-    }
-    stopProgress();
+    getContracts();
   }, [])
-
-  useEffect(() => {
-    console.log(allJobs, 85)
-    console.log(job, 86)
-  }, [allJobs])
 
   const [proposals, setProposals] = useState([]);
 
@@ -93,6 +65,69 @@ export const Proposals = ({ navigation }) => {
 
   const proposalRef = useRef();
   const { height } = useWindowDimensions();
+
+  const handleSelectProposal = async (e) => {
+    setSelectedProposal(e);
+
+    try {
+      startProgress();
+      const { data } = await apolloClient.query({
+        query: GET_ALL_BIDS,
+        variables: {
+          contractId: e.value,
+        }
+      });
+
+      if (data.getAllBids) {
+        setProposals(data.getAllBids);
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      stopProgress();
+    }
+  }
+
+  const [selectedJob, setSelectedJob] = useState({
+    id: "",
+    title: "",
+    description: "",
+    price: "",
+    sellerId: "",
+    buyerId: "",
+    status: "",
+    createdAt: "",
+    updatedAt: "",
+  });
+  const onProposalPress = (proposal) => {
+    proposalRef.current.expand();
+    setSelectedJob(proposal);
+  }
+
+  const handleAcceptProposal = async () => {
+    try {
+      startProgress();
+      const { data } = await apolloClient.mutate({
+        mutation: ACCEPT_BID,
+        variables: {
+          sellerId: selectedJob.sellerId,
+          contractId: selectedJob.contractId,
+        }
+      });
+
+      if (data.acceptBid) {
+        alert("Bid accepted successfully.");
+        proposalRef.current.close();
+        navigation.replace(ScreenNavigator.Client)
+      }
+
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      stopProgress();
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Loader />
@@ -105,7 +140,7 @@ export const Proposals = ({ navigation }) => {
                 value: selectedProposal.value,
                 label: selectedProposal.label,
               }}
-              onChange={(e) => setSelectedProposal(e)}
+              onChange={handleSelectProposal}
               placeholder={"Select jobs"}
               style={[styles.shadowEffect, { width: "100%", borderColor: AppHelper.material.grey300, borderRadius: 15, padding: 10, backgroundColor: "white" }]}
             >
@@ -123,7 +158,7 @@ export const Proposals = ({ navigation }) => {
               <View style={{ width: "100%", marginVertical: 10 }}>
                 {
                   proposals.map(proposal => (
-                    <ProposalCard proposal={{ ...proposal, title: selectedProposal.label }} setClick={() => proposalRef.current.expand()} />
+                    <ProposalCard proposal={{ ...proposal, title: selectedProposal.label }} setClick={() => onProposalPress(proposal)} />
                   ))
                 }
               </View>
@@ -145,14 +180,14 @@ export const Proposals = ({ navigation }) => {
         <View style={{ width: "100%", height: "100%", padding: 20, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
           <View style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>Proposal</Text>
-            <Text style={{ fontSize: 16, fontWeight: "semibold", marginTop: 15, }}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore, impedit debitis recusandae velit id autem? Soluta quaerat sed labore assumenda.</Text>
+            <Text style={{ fontSize: 16, fontWeight: "semibold", marginTop: 15, }}>{selectedJob.description}</Text>
           </View>
           <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: 10 }}>
-            <TouchableOpacity onPress={() => proposalRef.current.close()} activeOpacity={0.8} style={{ backgroundColor: AppHelper.material.green500, padding: 10, borderRadius: 10, width: "48%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+            <TouchableOpacity onPress={handleAcceptProposal} activeOpacity={0.8} style={{ backgroundColor: AppHelper.material.green500, padding: 10, borderRadius: 10, width: "48%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
               <Text style={{ fontSize: 16, fontWeight: "bold", color: AppHelper.white }}>Accept</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => proposalRef.current.close()} activeOpacity={0.8} style={{ backgroundColor: AppHelper.material.red500, padding: 10, borderRadius: 10, width: "48%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <Text style={{ fontSize: 16, fontWeight: "bold", color: AppHelper.white }}>Reject</Text>
+              <Text style={{ fontSize: 16, fontWeight: "bold", color: AppHelper.white }}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>

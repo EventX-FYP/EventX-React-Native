@@ -21,7 +21,7 @@ export const GET_CONTRACTS = gql`
 		getContracts {
 			id
 			customerId
-			sellerId
+			# sellerId
 			title
 			description
 			budget

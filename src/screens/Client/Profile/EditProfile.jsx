@@ -5,7 +5,7 @@ import { AppHelper, CountryStateCityAPI, convertToDate, pickImage } from '../../
 import { TextInput, Button } from 'react-native-paper'
 import { DateTimePicker, Picker } from 'react-native-ui-lib'
 import { COUNTRY_STATE_CITY_API_KEY } from "@env";
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Loader } from '../../../components'
 import { useProgress } from '../../../store/hooks/progress.hook'
 import { useApollo } from '../../../graphql/apollo'
@@ -26,12 +26,15 @@ export const EditProfile = ({ navigation }) => {
     address: user.address,
     picture: user.picture,
     password: "",
+    newPassword: "",
   })
 
   const [showPassword, setShowPassword] = useState(false);
 
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
+
+  const dispatch = useDispatch();
   const [cities, setCities] = useState([]);
 
   useEffect(() => {
@@ -65,6 +68,19 @@ export const EditProfile = ({ navigation }) => {
   const handleUpdate = async () => {
     try {
       startProgress();
+      console.log({
+        ...user,
+        name: information.name,
+        phone: information.contact_number,
+        gender: information.gender,
+        birthday: information.dob,
+        country: information.country,
+        city: information.city,
+        address: information.address,
+        picture: information.picture,
+        password: information.password,
+        newPassword: information.newPassword,
+      });
       const { data } = await apolloClient.mutate({
         mutation: UPDATE_USER,
         variables: {
@@ -73,18 +89,25 @@ export const EditProfile = ({ navigation }) => {
             name: information.name,
             phone: information.contact_number,
             gender: information.gender,
-            birthday: convertToDate(information.dob),
+            birthday: information.dob,
             country: information.country,
             city: information.city,
             address: information.address,
+            picture: information.picture,
+            password: information.password,
+            newPassword: information.newPassword,
           }
         },
       })
+
+      if (data?.updateUser) {
+        dispatch({ type: "SET_USER", payload: data?.updateUser });
+        alert("Profile updated successfully");
+      }
     } catch (error) {
       alert(error.message);
     } finally {
       stopProgress();
-      navigation.goBack();
     }
   }
 
@@ -104,13 +127,24 @@ export const EditProfile = ({ navigation }) => {
             activeOutlineColor={"green"}
             style={[styles.inputBackground]} />
 
-          <TextInput label={"Password"} value={information.password} mode={'outlined'} onChangeText={text => setInformation({ ...information, password: text })}
+          <TextInput label={"Old Password"} value={information.password} mode={'outlined'} onChangeText={text => setInformation({ ...information, password: text })}
             secureTextEntry={!(!!showPassword === true)}
             selectionColor={AppHelper.material.green400}
             underlineColor={"green"}
             activeUnderlineColor={"green"}
             outlineColor={"green"}
             activeOutlineColor={"green"}
+            editable={false}
+            style={[styles.inputBackground, styles.marginTop]}
+            right={<TextInput.Icon icon={!(!!showPassword === true) ? "eye" : "eye-off"} onPress={() => setShowPassword(!showPassword)} />} />
+          <TextInput label={"New Password"} value={information.password} mode={'outlined'} onChangeText={text => setInformation({ ...information, newPassword: text })}
+            secureTextEntry={!(!!showPassword === true)}
+            selectionColor={AppHelper.material.green400}
+            underlineColor={"green"}
+            activeUnderlineColor={"green"}
+            outlineColor={"green"}
+            activeOutlineColor={"green"}
+            editable={false}
             style={[styles.inputBackground, styles.marginTop]}
             right={<TextInput.Icon icon={!(!!showPassword === true) ? "eye" : "eye-off"} onPress={() => setShowPassword(!showPassword)} />} />
 

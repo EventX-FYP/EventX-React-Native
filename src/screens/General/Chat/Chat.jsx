@@ -1,31 +1,101 @@
 import { Image, Pressable, SafeAreaView, StyleSheet, Text, View, TextInput, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { images } from '../../../assets'
 import { AppHelper } from '../../../helper'
 import { fontStyles } from '../../../styles'
 import { messages } from '../../../constants/messages'
+import { Loader } from '../../../components'
+import { useProgress } from '../../../store/hooks/progress.hook'
+import { useApollo } from '../../../graphql/apollo'
+import { GET_CHATS } from '../../../graphql/queries'
+import { useSelector } from 'react-redux'
+import { CREATE_MESSAGE } from '../../../graphql/mutations'
 
 export const Chat = ({ navigation, route }) => {
   const [message, setMessage] = useState("");
-  const { name } = route.params;
+  const { data } = route.params;
+  const { startProgress, stopProgress } = useProgress();
+  const apolloClient = useApollo();
+
+  const [_messages, setMessages] = useState();
+  const user = useSelector(state => state.user);
+
+  useEffect(() => {
+    const getMessages = async () => {
+      try {
+        startProgress();
+
+        console.log(data.id, user.id);
+        const res = await apolloClient.query({
+          query: GET_CHATS,
+          variables: {
+            senderId: data.id,
+            receiverId: user.id,
+          }
+        });
+
+        if (res.data.getChats) {
+          console.log(res.data.getChats);
+          setMessages(res.data.getChats);
+        }
+
+      } catch (error) {
+        alert(error.message);
+      } finally {
+        stopProgress();
+      }
+    }
+
+    getMessages();
+  }, [])
+
+  const handleSendMessage = async () => {
+    try {
+      startProgress();
+
+      const res = await apolloClient.mutate({
+        mutation: CREATE_MESSAGE,
+        variables: {
+          data: JSON.stringify({
+            contractId: _messages[0].contractId,
+            senderId: data.id,
+            receiverId: user.id,
+            text: message,
+          })
+        }
+      });
+
+      if (res.data.createMessage) {
+        setMessage("");
+        setMessages([..._messages, res.data.createMessage]);
+      }
+
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      stopProgress();
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
+      <Loader />
       <View style={styles.chat}>
         <View style={styles.chatHeader}>
           <Pressable onPress={() => navigation.goBack()}>
             <images.SVG.ArrowLeft width={20} height={25} />
           </Pressable>
-          <Text style={[fontStyles[700], fontStyles.large18]}>{name}</Text>
+          <Text style={[fontStyles[700], fontStyles.large18]}>{data.name}</Text>
           <View />
         </View>
 
         <View style={styles.chatBody}>
           <ScrollView>
             {
-              messages.map((item, index) => (
-                <View key={index} style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: item.isMe ? "flex-end" : "flex-start", padding: 10 }}>
-                  <View style={{ width: "auto", maxWidth: "80%", backgroundColor: item.isMe ? AppHelper.material.green600 : "#fefefe", borderRadius: 10, padding: 10 }}>
-                    <Text style={{ color: item.isMe ? "#fff" : "#000" }}>{item.message}</Text>
+              _messages && _messages?.map((item, index) => (
+                <View key={index} style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center", justifyContent: item.receiverId === user.id ? "flex-end" : "flex-start", padding: 10 }}>
+                  <View style={{ width: "auto", maxWidth: "80%", backgroundColor: item.receiverId === user.id ? AppHelper.material.green600 : "#fefefe", borderRadius: 10, padding: 10 }}>
+                    <Text style={{ color: item.receiverId === user.id ? "#fff" : "#000" }}>{item.text}</Text>
                   </View>
                 </View>
               ))
@@ -35,22 +105,17 @@ export const Chat = ({ navigation, route }) => {
 
       </View>
       <View style={styles.sendMessageContainer}>
-        <Pressable style={styles.iconOutline}>
+        {/* <Pressable style={styles.iconOutline}>
           <images.SVG.EmojiIcon width={25} height={25}/>
         </Pressable>
         <Pressable style={styles.iconOutline}>
           <images.SVG.AttachmentIcon width={25} height={25}/>
-        </Pressable>
+        </Pressable> */}
         <View style={styles.inputContainer}>
-          <TextInput style={{ flex: 1, fontSize: 18, padding: 5 }} placeholder="Type a message" value={message} onChangeText={setMessage} multiline/>
+          <TextInput style={{ flex: 1, fontSize: 18, padding: 5 }} placeholder="Type a message" value={message} onChangeText={setMessage} multiline />
         </View>
-        <Pressable style={styles.iconOutlineGreen}>
-          {
-            message.length === 0 ?
-              <images.SVG.MicrophoneIcon width={20} height={20} />
-              :
-              <images.SVG.PaperPlaneHorizontalIcon width={20} height={20}/>
-          }
+        <Pressable style={styles.iconOutlineGreen} onPress={handleSendMessage}>
+          <images.SVG.PaperPlaneHorizontalIcon width={20} height={20} />
         </Pressable>
       </View>
     </SafeAreaView>
@@ -161,7 +226,7 @@ const styles = StyleSheet.create({
   },
   isNotMeColor: {
     backgroundColor: AppHelper.material.grey300,
-    borderRadius: 10, 
+    borderRadius: 10,
     padding: 10,
     justifyContent: "flex-start",
     alignItems: "flex-start",
